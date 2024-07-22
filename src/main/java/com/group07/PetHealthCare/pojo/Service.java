@@ -13,9 +13,9 @@ import java.util.Set;
 @Table(name = "services")
 public class Service {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "ServiceID", nullable = false)
-    private Integer id;
+    private String id;
 
     @Column(name = "name", length = 100)
     private String name;

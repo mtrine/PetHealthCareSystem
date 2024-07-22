@@ -14,9 +14,9 @@ import java.util.Set;
 @Table(name = "pet")
 public class Pet {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "petID", nullable = false)
-    private Integer id;
+    private String id;
 
     @Column(name = "name", length = 100)
     private String name;

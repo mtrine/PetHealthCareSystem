@@ -1,9 +1,6 @@
 package com.group07.PetHealthCare.pojo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,8 +10,9 @@ import lombok.Setter;
 @Table(name = "species")
 public class Species {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "speciesID", nullable = false)
-    private Integer id;
+    private String id;
 
     @Column(name = "name", length = 100)
     private String name;

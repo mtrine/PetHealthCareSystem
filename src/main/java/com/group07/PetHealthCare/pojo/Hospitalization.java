@@ -13,9 +13,9 @@ import java.time.LocalDate;
 @Table(name = "hospitalization")
 public class Hospitalization {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "HospitalizationID", nullable = false)
-    private Integer id;
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "petID")

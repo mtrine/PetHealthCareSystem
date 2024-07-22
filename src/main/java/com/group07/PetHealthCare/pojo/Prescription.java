@@ -13,9 +13,9 @@ import java.util.Set;
 @Table(name = "prescription")
 public class Prescription {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "PrescriptionID", nullable = false)
-    private Integer id;
+    private String id;
 
     @Column(name = "prescriptionDate")
     private LocalDate prescriptionDate;

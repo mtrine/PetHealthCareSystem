@@ -10,9 +10,9 @@ import lombok.Setter;
 @Table(name = "cages")
 public class Cage {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "cageID", nullable = false)
-    private Integer id;
+    private String id;
 
     @Column(name = "numberCage")
     private Integer numberCage;

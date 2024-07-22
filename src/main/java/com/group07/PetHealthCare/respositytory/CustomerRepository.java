@@ -4,7 +4,13 @@ import com.group07.PetHealthCare.pojo.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface CustomerRepository extends JpaRepository<Customer, Integer> {
+import java.util.Optional;
 
+@Repository
+public interface CustomerRepository extends JpaRepository<Customer, String> {
+
+    boolean existsByEmail(String email);
+    boolean existsByPhoneNumber(String phone);
+
+    Optional<Customer> findCustomerByEmail(String email);
 }
