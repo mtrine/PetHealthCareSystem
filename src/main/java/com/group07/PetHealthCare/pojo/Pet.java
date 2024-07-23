@@ -24,11 +24,11 @@ public class Pet {
     @Column(name = "age")
     private Integer age;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "speciesID")
     private Species species;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerID")
     private Customer customer;
 
