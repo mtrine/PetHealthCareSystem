@@ -1,6 +1,8 @@
 package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.CustomerCreationRequest;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.pojo.Customer;
 import com.group07.PetHealthCare.respositytory.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ public class CustomerService {
     public Customer createCustomer(CustomerCreationRequest request){
 
         if (customerRepository.existsByEmail(request.getEmail()) || customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
-            throw new RuntimeException("User already exists");
+            throw new AppException(ErrorCode.CUSTOME_EXISTED);
         }
 
         // Tạo đối tượng Customer mới
@@ -36,10 +38,10 @@ public class CustomerService {
     public Optional<Customer> loginCustomer(CustomerCreationRequest request){
         Optional<Customer> customer=customerRepository.findCustomerByEmail(request.getEmail());
         if(!customer.isPresent()){
-            throw new RuntimeException("Email incorrect");
+            throw new AppException(ErrorCode.EMAIL_INCORRECT);
         }
         if(!request.getPassword().equals(customer.get().getPassword())){
-            throw new RuntimeException("Password incorrect");
+            throw new AppException(ErrorCode.PASS_INCORRECT);
         }
         return customer;
     }

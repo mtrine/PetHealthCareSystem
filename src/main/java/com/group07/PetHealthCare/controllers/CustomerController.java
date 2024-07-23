@@ -1,5 +1,6 @@
 package com.group07.PetHealthCare.controllers;
 
+import com.group07.PetHealthCare.dto.request.ApiResponse;
 import com.group07.PetHealthCare.dto.request.CustomerCreationRequest;
 import com.group07.PetHealthCare.pojo.Customer;
 import com.group07.PetHealthCare.service.CustomerService;
@@ -17,8 +18,11 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping("/register")
-    public Customer createCustomer(@RequestBody @Valid CustomerCreationRequest customer) {
-        return customerService.createCustomer(customer);
+    public ApiResponse<Customer>  createCustomer(@RequestBody @Valid CustomerCreationRequest customer) {
+        ApiResponse<Customer> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(customerService.createCustomer(customer));
+        return apiResponse;
     }
 
     @GetMapping
@@ -27,8 +31,10 @@ public class CustomerController {
     }
 
     @PostMapping("/login")
-    public Optional<Customer> loginCustomer(@RequestBody CustomerCreationRequest customer){
-        return customerService.loginCustomer(customer);
+    public ApiResponse<Optional<Customer>> loginCustomer(@RequestBody CustomerCreationRequest customer){
+        ApiResponse<Optional<Customer>> apiResponse= new ApiResponse<>();
+        apiResponse.setResult(customerService.loginCustomer(customer));
+        return apiResponse;
     }
     @GetMapping("/{userID}")
     public Optional<Customer> getCustomerById(@PathVariable("userID") String userID) {
