@@ -1,5 +1,6 @@
 package com.group07.PetHealthCare.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,10 +31,11 @@ public class Pet {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerID")
+    @JsonIgnore
     private Customer customer;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<VaccinePet> petVaccines = new HashSet<>();
+    private Set<VaccinePet> petVaccines = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "petID")
     private Set<Prescription> prescriptions = new LinkedHashSet<>();

@@ -1,5 +1,6 @@
 package com.group07.PetHealthCare.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group07.PetHealthCare.dto.request.CustomerCreationRequest;
 import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.exception.ErrorCode;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 
 @Service
+
 public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
@@ -21,7 +23,7 @@ public class CustomerService {
         if (customerRepository.existsByEmail(request.getEmail()) || customerRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new AppException(ErrorCode.CUSTOME_EXISTED);
         }
-
+        ObjectMapper objectMapper = new ObjectMapper();
         // Tạo đối tượng Customer mới
         Customer customer = new Customer();
         customer.setName(request.getName());
@@ -36,6 +38,7 @@ public class CustomerService {
     }
 
     public Optional<Customer> loginCustomer(CustomerCreationRequest request){
+        ObjectMapper objectMapper = new ObjectMapper();
         Optional<Customer> customer=customerRepository.findCustomerByEmail(request.getEmail());
         if(!customer.isPresent()){
             throw new AppException(ErrorCode.EMAIL_INCORRECT);
