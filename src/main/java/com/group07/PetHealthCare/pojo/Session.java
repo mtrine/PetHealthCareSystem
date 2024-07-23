@@ -1,9 +1,6 @@
 package com.group07.PetHealthCare.pojo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,8 +12,9 @@ import java.time.Instant;
 @Table(name = "sessions")
 public class Session {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "sessionID", nullable = false)
-    private Integer id;
+    private String id;
 
     @Column(name = "time")
     private Instant time;

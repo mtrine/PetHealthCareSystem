@@ -12,9 +12,9 @@ import java.time.LocalDate;
 @Table(name = "payment")
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "PaymentID", nullable = false)
-    private Integer id;
+    private String id;
 
     @Column(name = "paymentDate")
     private LocalDate paymentDate;

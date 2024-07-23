@@ -1,5 +1,6 @@
 package com.group07.PetHealthCare.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,9 +15,9 @@ import java.util.Set;
 @Table(name = "pet")
 public class Pet {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "petID", nullable = false)
-    private Integer id;
+    private String id;
 
     @Column(name = "name", length = 100)
     private String name;
@@ -24,16 +25,17 @@ public class Pet {
     @Column(name = "age")
     private Integer age;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "speciesID")
     private Species species;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customerID")
+    @JsonIgnore
     private Customer customer;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<VaccinePet> petVaccines = new HashSet<>();
+    private Set<VaccinePet> petVaccines = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "petID")
     private Set<Prescription> prescriptions = new LinkedHashSet<>();
