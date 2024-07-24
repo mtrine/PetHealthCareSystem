@@ -16,7 +16,9 @@ public class Session {
     @Column(name = "sessionID", nullable = false)
     private String id;
 
-    @Column(name = "time")
-    private Instant time;
+    @Column(name = "startTime")
+    private Instant startTime;
 
+    @Column(name = "endTime")
+    private Instant endTime;
 }

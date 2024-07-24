@@ -17,11 +17,11 @@ public class Appointment {
     @Column(name = "appointmentID", nullable = false)
     private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sessionID")
     private Session session ;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "veterinarianID")
     private Veterinarian veterinarian;
 
@@ -31,9 +31,13 @@ public class Appointment {
     @Column(name = "deposit", precision = 10, scale = 2)
     private BigDecimal deposit;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "petID")
     private Pet pet;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customerID")
+    private Customer customer;
 
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AppointmentService> appointmentServices;

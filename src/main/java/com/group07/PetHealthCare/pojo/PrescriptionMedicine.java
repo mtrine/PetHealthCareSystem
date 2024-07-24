@@ -12,12 +12,12 @@ import java.sql.Date;
 @Table(name = "prescription_medicine")
 public class PrescriptionMedicine {
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "prescriptionID",nullable = false)
     private Prescription prescription;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "medicineID",nullable = false)
     private Medicine medicine;
 

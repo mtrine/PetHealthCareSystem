@@ -12,12 +12,12 @@ import java.sql.Date;
 @Table(name = "appointment_service")
 public class AppointmentService {
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "appointmentID", nullable = false)
     private Appointment appointment;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "serviceID", nullable = false)
     private Service service;
 

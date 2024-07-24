@@ -17,11 +17,11 @@ public class Hospitalization {
     @Column(name = "HospitalizationID", nullable = false)
     private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "petID")
     private Pet petID;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cageID")
     private Cage cage;
 

@@ -25,11 +25,11 @@ public class Payment {
     @Column(name = "paymentMethod", length = 50)
     private String paymentMethod;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "appointmentID")
     private Appointment appointment;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "prescriptionID")
     private Prescription prescription;
 }

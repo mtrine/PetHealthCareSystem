@@ -13,12 +13,12 @@ import java.time.LocalDate;
 @Table(name = "vaccine_pet")
 public class VaccinePet {
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "petID", nullable = false)
     private Pet pet;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vaccineID", nullable = false)
     private Vaccine vaccine;
 

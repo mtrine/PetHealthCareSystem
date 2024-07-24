@@ -40,4 +40,6 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private Set<Reviews> reviews = new LinkedHashSet<>();
+
+
 }
