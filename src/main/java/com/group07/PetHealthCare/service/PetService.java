@@ -37,8 +37,15 @@ public class PetService {
     }
 
     public Set<Pet> getPetsByCustomerId(String customerId) {
-        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Customer not found"));
-        return customer.getPets();
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        Set<Pet> pets = customer.getPets();
+        if (pets.isEmpty()) {
+            throw new RuntimeException("Pet not found");
+        }
+
+        return pets;
     }
 
     public Pet updatePet(String id, PetUpdateRequest request) {

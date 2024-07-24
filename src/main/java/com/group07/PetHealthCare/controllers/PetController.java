@@ -26,22 +26,48 @@ public class PetController {
     @GetMapping("/{customerId}")
     public ApiResponse<Set<Pet>> getPetsByCustomerId(@PathVariable String customerId) {
         ApiResponse<Set<Pet>> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(petService.getPetsByCustomerId(customerId));
+        try {
+            Set<Pet> pets = petService.getPetsByCustomerId(customerId);
+
+            if (pets.isEmpty()) {
+                // Thiết lập thông báo lỗi và không có kết quả
+                apiResponse.setMessage("Pet not found");
+            } else {
+                // Thiết lập kết quả và thông báo thành công
+                apiResponse.setResult(pets);
+                apiResponse.setMessage("Pets retrieved successfully");
+            }
+        } catch (RuntimeException e) {
+            // Xử lý lỗi và thiết lập thông báo lỗi
+            apiResponse.setMessage(e.getMessage());
+            apiResponse.setResult(null);
+        }
         return apiResponse;
     }
 
     @PutMapping("/{id}")
     public ApiResponse<Pet> updatePet(@PathVariable String id, @RequestBody PetUpdateRequest request) {
         ApiResponse<Pet> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(petService.updatePet(id, request));
+        try {
+            Pet updatedPet = petService.updatePet(id, request);
+            apiResponse.setResult(updatedPet);
+            apiResponse.setMessage("Pet updated successfully");
+        } catch (RuntimeException e) {
+            apiResponse.setMessage(e.getMessage());
+            apiResponse.setResult(null);
+        }
         return apiResponse;
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deletePet(@PathVariable String id) {
         ApiResponse<Void> apiResponse = new ApiResponse<>();
-        petService.deletePet(id);
-        apiResponse.setResult(null);
+        try {
+            petService.deletePet(id);
+            apiResponse.setMessage("Pet deleted successfully");
+        } catch (RuntimeException e) {
+            apiResponse.setMessage(e.getMessage());
+        }
         return apiResponse;
     }
 }
