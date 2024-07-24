@@ -10,8 +10,40 @@ import lombok.Setter;
 @Setter
 public class PetCreationRequest {
 
+    @Getter
     private String name;
-    private Integer age;
+    private int age;
     private String speciesID;
     private String customerID;
+
+    // Getters and Setters
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getSpeciesID() {
+        return speciesID;
+    }
+
+    public void setSpeciesID(String speciesID) {
+        this.speciesID = speciesID;
+    }
+
+    public String getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(String customerID) {
+        this.customerID = customerID;
+    }
+
 }

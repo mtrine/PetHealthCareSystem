@@ -41,5 +41,8 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private Set<Reviews> reviews = new LinkedHashSet<>();
 
+    public Set<Pet> getPets() {
+        return pets;
+    }
 
 }

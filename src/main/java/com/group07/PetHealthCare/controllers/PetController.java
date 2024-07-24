@@ -2,13 +2,13 @@ package com.group07.PetHealthCare.controllers;
 
 import com.group07.PetHealthCare.dto.request.ApiResponse;
 import com.group07.PetHealthCare.dto.request.PetCreationRequest;
+import com.group07.PetHealthCare.dto.request.PetUpdateRequest;
 import com.group07.PetHealthCare.pojo.Pet;
 import com.group07.PetHealthCare.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping("/v1/pets")
@@ -23,4 +23,25 @@ public class PetController {
         return apiResponse;
     }
 
+    @GetMapping("/{customerId}")
+    public ApiResponse<Set<Pet>> getPetsByCustomerId(@PathVariable String customerId) {
+        ApiResponse<Set<Pet>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(petService.getPetsByCustomerId(customerId));
+        return apiResponse;
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<Pet> updatePet(@PathVariable String id, @RequestBody PetUpdateRequest request) {
+        ApiResponse<Pet> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(petService.updatePet(id, request));
+        return apiResponse;
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> deletePet(@PathVariable String id) {
+        ApiResponse<Void> apiResponse = new ApiResponse<>();
+        petService.deletePet(id);
+        apiResponse.setResult(null);
+        return apiResponse;
+    }
 }
