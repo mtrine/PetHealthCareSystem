@@ -1,10 +1,9 @@
 package com.group07.PetHealthCare.dto.request;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
-public class CustomerCreationRequest {
+public class UserCreationRequest {
     @Size(min = 2, message = "NAME_INVALID")
     private String name;
 
