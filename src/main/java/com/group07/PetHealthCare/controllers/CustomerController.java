@@ -17,25 +17,25 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @PostMapping("/register")
-    public ApiResponse<Customer>  createCustomer(@RequestBody @Valid UserCreationRequest customer) {
-        ApiResponse<Customer> apiResponse = new ApiResponse<>();
-
-        apiResponse.setResult(customerService.createCustomer(customer));
-        return apiResponse;
-    }
+//    @PostMapping("/register")
+//    public ApiResponse<Customer>  createCustomer(@RequestBody @Valid UserCreationRequest customer) {
+//        ApiResponse<Customer> apiResponse = new ApiResponse<>();
+//
+//        apiResponse.setResult(customerService.createCustomer(customer));
+//        return apiResponse;
+//    }
 
     @GetMapping
     public List<Customer> getAllCustomers() {
         return customerService.getAllCustomers();
     }
 
-    @PostMapping("/login")
-    public ApiResponse<Optional<Customer>> loginCustomer(@RequestBody UserCreationRequest customer){
-        ApiResponse<Optional<Customer>> apiResponse= new ApiResponse<>();
-        apiResponse.setResult(customerService.loginCustomer(customer));
-        return apiResponse;
-    }
+//    @PostMapping("/login")
+//    public ApiResponse<Optional<Customer>> loginCustomer(@RequestBody UserCreationRequest customer){
+//        ApiResponse<Optional<Customer>> apiResponse= new ApiResponse<>();
+//        apiResponse.setResult(customerService.loginCustomer(customer));
+//        return apiResponse;
+//    }
     @GetMapping("/{userID}")
     public Optional<Customer> getCustomerById(@PathVariable("userID") String userID) {
         return customerService.getCustomerById(userID);
