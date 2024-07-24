@@ -1,7 +1,7 @@
 package com.group07.PetHealthCare.controllers;
 
 import com.group07.PetHealthCare.dto.request.ApiResponse;
-import com.group07.PetHealthCare.dto.request.CustomerCreationRequest;
+import com.group07.PetHealthCare.dto.request.UserCreationRequest;
 import com.group07.PetHealthCare.pojo.Customer;
 import com.group07.PetHealthCare.service.CustomerService;
 import jakarta.validation.Valid;
@@ -18,7 +18,7 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping("/register")
-    public ApiResponse<Customer>  createCustomer(@RequestBody @Valid CustomerCreationRequest customer) {
+    public ApiResponse<Customer>  createCustomer(@RequestBody @Valid UserCreationRequest customer) {
         ApiResponse<Customer> apiResponse = new ApiResponse<>();
 
         apiResponse.setResult(customerService.createCustomer(customer));
@@ -31,7 +31,7 @@ public class CustomerController {
     }
 
     @PostMapping("/login")
-    public ApiResponse<Optional<Customer>> loginCustomer(@RequestBody CustomerCreationRequest customer){
+    public ApiResponse<Optional<Customer>> loginCustomer(@RequestBody UserCreationRequest customer){
         ApiResponse<Optional<Customer>> apiResponse= new ApiResponse<>();
         apiResponse.setResult(customerService.loginCustomer(customer));
         return apiResponse;
