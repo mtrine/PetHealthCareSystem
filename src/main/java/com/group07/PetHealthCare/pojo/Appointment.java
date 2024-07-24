@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.Set;
 
 @Getter
@@ -28,6 +29,9 @@ public class Appointment {
     @Column(name = "status", length = 50)
     private String status;
 
+    @Column(name = "appointmentDate")
+    private Date appointmentDate;
+
     @Column(name = "deposit", precision = 10, scale = 2)
     private BigDecimal deposit;
 
@@ -35,9 +39,9 @@ public class Appointment {
     @JoinColumn(name = "petID")
     private Pet pet;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customerID")
-    private Customer customer;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "customerID")
+//    private Customer customer;
 
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AppointmentService> appointmentServices;

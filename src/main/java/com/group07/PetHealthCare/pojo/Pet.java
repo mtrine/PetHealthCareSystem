@@ -40,4 +40,6 @@ public class Pet {
     @OneToMany(mappedBy = "petID")
     private Set<Prescription> prescriptions = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "pet")
+    private Set<Appointment> appointments= new LinkedHashSet<>();
 }
