@@ -10,7 +10,7 @@
         @ExceptionHandler(value = RuntimeException.class)
         ResponseEntity<ApiResponse> handleRuntimeException(RuntimeException e) {
             ApiResponse apiResponse=new ApiResponse();
-            apiResponse.setMessage(ErrorCode.UNCATEGORIZED.getMessage());
+            apiResponse.setMessage(e.getMessage());
             apiResponse.setCode(ErrorCode.UNCATEGORIZED.getCode());
             return ResponseEntity.badRequest().body(apiResponse);
         }
