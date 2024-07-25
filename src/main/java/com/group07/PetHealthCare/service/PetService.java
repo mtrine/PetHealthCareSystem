@@ -41,9 +41,6 @@ public class PetService {
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
         Set<Pet> pets = customer.getPets();
-        if (pets.isEmpty()) {
-            throw new RuntimeException("Pet not found");
-        }
 
         return pets;
     }

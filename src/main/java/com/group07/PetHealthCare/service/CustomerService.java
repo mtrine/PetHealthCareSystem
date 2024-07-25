@@ -1,5 +1,7 @@
 package com.group07.PetHealthCare.service;
 
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.pojo.Customer;
 import com.group07.PetHealthCare.respositytory.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,18 @@ public class CustomerService {
     }
 
     public Optional<Customer> getCustomerById(String id) {
+        Optional<Customer> customer = customerRepository.findById(id);
+        if(!customer.isPresent()){
+            throw new AppException(ErrorCode.NOT_FOUND);
+        }
         return customerRepository.findById(id);
     }
 
     public void deleteCustomersById(String id){
+        Optional<Customer> customer = customerRepository.findById(id);
+        if(!customer.isPresent()){
+            throw new AppException(ErrorCode.NOT_FOUND);
+        }
         customerRepository.deleteById(id);
     }
 }
