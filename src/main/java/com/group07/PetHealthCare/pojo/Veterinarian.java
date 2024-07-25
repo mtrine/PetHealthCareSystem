@@ -14,7 +14,7 @@ import java.util.Set;
 public class Veterinarian extends User {
 
     @Column(name = "isFulltime")
-    private Boolean isFulltime;
+    private Boolean isFulltime=false;
 
     @OneToMany(mappedBy = "veterinarian")
     private Set<Appointment> appointments = new LinkedHashSet<>();

@@ -11,5 +11,5 @@ import lombok.Setter;
 public class Staff extends User {
 
     @Column(name = "isAdmin")
-    private Boolean isAdmin;
+    private Boolean isAdmin=false;
 }
