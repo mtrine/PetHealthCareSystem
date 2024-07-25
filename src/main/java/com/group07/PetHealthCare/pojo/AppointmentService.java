@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
-
 @Getter
 @Setter
 @Entity
@@ -19,7 +17,7 @@ public class AppointmentService {
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "serviceID", nullable = false)
-    private Service service;
+    private Services service;
 
     @Column(name = "quantity")
     private Integer quantity = 0;
