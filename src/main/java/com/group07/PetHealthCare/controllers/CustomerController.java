@@ -40,4 +40,9 @@ public class CustomerController {
     public Optional<Customer> getCustomerById(@PathVariable("userID") String userID) {
         return customerService.getCustomerById(userID);
     }
+
+    @DeleteMapping("/{userID}")
+    public void deleteCustomer (@PathVariable("userID") String userID){
+        customerService.deleteCustomersById(userID);
+    }
 }
