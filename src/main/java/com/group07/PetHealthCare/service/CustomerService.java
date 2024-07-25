@@ -1,9 +1,5 @@
 package com.group07.PetHealthCare.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.group07.PetHealthCare.dto.request.UserCreationRequest;
-import com.group07.PetHealthCare.exception.AppException;
-import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.pojo.Customer;
 import com.group07.PetHealthCare.respositytory.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +20,10 @@ public class CustomerService {
 
     public Optional<Customer> getCustomerById(String id) {
         return customerRepository.findById(id);
+    }
+
+    public void deleteCustomersById(String id){
+        customerRepository.deleteById(id);
     }
 }
 
