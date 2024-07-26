@@ -20,24 +20,25 @@ public class VeterinarianController {
     private VeterinarianService veterinarianService;
 
     @GetMapping
-    public List<Veterinarian> getAllCustomers() {
-        return veterinarianService.getAllVeterinarian();
+    public ApiResponse<List<Veterinarian>> getAllCustomers() {
+        ApiResponse<List<Veterinarian>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(veterinarianService.getAllVeterinarian());
+        return apiResponse;
     }
 
-    //    @PostMapping("/login")
-//    public ApiResponse<Optional<Customer>> loginCustomer(@RequestBody UserCreationRequest customer){
-//        ApiResponse<Optional<Customer>> apiResponse= new ApiResponse<>();
-//        apiResponse.setResult(customerService.loginCustomer(customer));
-//        return apiResponse;
-//    }
     @GetMapping("/{veterinarianID}")
-    public Optional<Veterinarian> getVeterinarianById(@PathVariable("veterinarianID") String veterinarianID) {
-        return veterinarianService.getVeterinarianById(veterinarianID);
+    public ApiResponse<Optional<Veterinarian>> getVeterinarianById(@PathVariable("veterinarianID") String veterinarianID) {
+            ApiResponse<Optional<Veterinarian>> apiResponse = new ApiResponse<>();
+            apiResponse.setResult(veterinarianService.getVeterinarianById(veterinarianID));
+            return apiResponse;
     }
 
     @DeleteMapping("/{veterinarianID}")
-    public void deleteVeterinarian (@PathVariable("veterinarianID") String veterinarianID){
+    public ApiResponse<String> deleteVeterinarian (@PathVariable("veterinarianID") String veterinarianID){
         veterinarianService.deleteVeterinarianById(veterinarianID);
+        ApiResponse<String> apiResponse = new ApiResponse<>();
+        apiResponse.setResult("Delete success");
+        return apiResponse;
     }
 }
 

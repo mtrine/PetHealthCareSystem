@@ -17,32 +17,26 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-//    @PostMapping("/register")
-//    public ApiResponse<Customer>  createCustomer(@RequestBody @Valid UserCreationRequest customer) {
-//        ApiResponse<Customer> apiResponse = new ApiResponse<>();
-//
-//        apiResponse.setResult(customerService.createCustomer(customer));
-//        return apiResponse;
-//    }
-
     @GetMapping
-    public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+    public ApiResponse<List<Customer>> getAllCustomers() {
+        ApiResponse<List<Customer>> apiResponse=new ApiResponse<>();
+        apiResponse.setResult(customerService.getAllCustomers());
+        return apiResponse;
     }
 
-//    @PostMapping("/login")
-//    public ApiResponse<Optional<Customer>> loginCustomer(@RequestBody UserCreationRequest customer){
-//        ApiResponse<Optional<Customer>> apiResponse= new ApiResponse<>();
-//        apiResponse.setResult(customerService.loginCustomer(customer));
-//        return apiResponse;
-//    }
+
     @GetMapping("/{userID}")
-    public Optional<Customer> getCustomerById(@PathVariable("userID") String userID) {
-        return customerService.getCustomerById(userID);
+    public ApiResponse<Optional<Customer>> getCustomerById(@PathVariable("userID") String userID) {
+        ApiResponse<Optional<Customer>> apiResponse=new ApiResponse<>();
+        apiResponse.setResult(customerService.getCustomerById(userID));
+        return apiResponse;
     }
 
     @DeleteMapping("/{userID}")
-    public void deleteCustomer (@PathVariable("userID") String userID){
+    public ApiResponse<String> deleteCustomer (@PathVariable("userID") String userID){
         customerService.deleteCustomersById(userID);
+        ApiResponse<String> apiResponse=new ApiResponse<>();
+        apiResponse.setResult("Deleted successfully");
+        return apiResponse;
     }
 }
