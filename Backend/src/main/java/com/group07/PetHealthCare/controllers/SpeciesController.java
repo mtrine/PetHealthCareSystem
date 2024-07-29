@@ -1,7 +1,7 @@
 package com.group07.PetHealthCare.controllers;
 
 import com.group07.PetHealthCare.dto.request.ApiResponse;
-import com.group07.PetHealthCare.dto.request.SpeciesCreationRequest;
+import com.group07.PetHealthCare.dto.request.SpeciesRequest;
 import com.group07.PetHealthCare.pojo.Species;
 import com.group07.PetHealthCare.service.SpeciesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class SpeciesController {
     private SpeciesService speciesService;
 
     @PostMapping
-    public ApiResponse<Species> getSpeciesService(@RequestBody SpeciesCreationRequest request) {
+    public ApiResponse<Species> getSpeciesService(@RequestBody SpeciesRequest request) {
         ApiResponse<Species> apiResponse = new ApiResponse<>();
         apiResponse.setResult(speciesService.addSpecies(request));
         return apiResponse;

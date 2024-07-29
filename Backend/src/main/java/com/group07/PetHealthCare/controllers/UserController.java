@@ -1,8 +1,7 @@
 package com.group07.PetHealthCare.controllers;
 
 import com.group07.PetHealthCare.dto.request.ApiResponse;
-import com.group07.PetHealthCare.dto.request.UserCreationRequest;
-import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.dto.request.UserRequest;
 import com.group07.PetHealthCare.pojo.User;
 import com.group07.PetHealthCare.service.UserService;
 import jakarta.validation.Valid;
@@ -19,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ApiResponse<User>  registerUser(@RequestBody @Valid UserCreationRequest user) {
+    public ApiResponse<User>  registerUser(@RequestBody @Valid UserRequest user) {
             ApiResponse<User> apiResponse= new ApiResponse<>();
             User registeredUser = userService.register(user);
             apiResponse.setResult(registeredUser);
@@ -27,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ApiResponse<User>  login(@RequestBody @Valid UserCreationRequest user) {
+    public ApiResponse<User>  login(@RequestBody @Valid UserRequest user) {
         ApiResponse<User> apiResponse= new ApiResponse<>();
         apiResponse.setResult(userService.login(user));
         return apiResponse;

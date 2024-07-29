@@ -1,12 +1,8 @@
 package com.group07.PetHealthCare.controllers;
 
 import com.group07.PetHealthCare.dto.request.ApiResponse;
-import com.group07.PetHealthCare.dto.request.UserCreationRequest;
-import com.group07.PetHealthCare.pojo.Customer;
 import com.group07.PetHealthCare.pojo.Veterinarian;
-import com.group07.PetHealthCare.service.CustomerService;
 import com.group07.PetHealthCare.service.VeterinarianService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;

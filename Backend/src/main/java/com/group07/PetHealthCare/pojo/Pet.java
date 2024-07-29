@@ -37,9 +37,6 @@ public class Pet {
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VaccinePet> petVaccines = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "petID")
-    private Set<Prescription> prescriptions = new LinkedHashSet<>();
-
     @OneToMany(mappedBy = "pet")
     private Set<Appointment> appointments= new LinkedHashSet<>();
 }

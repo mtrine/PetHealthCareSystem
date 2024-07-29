@@ -1,6 +1,6 @@
 package com.group07.PetHealthCare.service;
 
-import com.group07.PetHealthCare.dto.request.UserCreationRequest;
+import com.group07.PetHealthCare.dto.request.UserRequest;
 import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.pojo.Customer;
@@ -24,7 +24,7 @@ public class UserService {
     @Autowired
     private StaffRepository staffRepository;
 
-    public User register(UserCreationRequest request) {
+    public User register(UserRequest request) {
         Optional<Customer> existingCustomer = customerRepository.findByEmail(request.getEmail());
         if (existingCustomer.isPresent()) {
             throw new AppException(ErrorCode.USER_EXISTED);
@@ -63,7 +63,7 @@ public class UserService {
         }
     }
 
-    public User login(UserCreationRequest request) {
+    public User login(UserRequest request) {
         User user;
         switch (request.getRole()) {
             case "Customer":
