@@ -1,5 +1,7 @@
 package com.group07.PetHealthCare.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,5 +27,6 @@ public class Services {
     private BigDecimal unitPrice;
 
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private Set<Appointment> appointments= new LinkedHashSet<>();
 }

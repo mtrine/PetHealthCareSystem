@@ -1,5 +1,7 @@
 package com.group07.PetHealthCare.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,16 +19,11 @@ public class Appointment {
     @Column(name = "appointmentID", nullable = false)
     private String id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sessionID")
-    private Session session ;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "veterinarianID")
-    private Veterinarian veterinarian;
-
     @Column(name = "status", length = 50)
     private String status;
+
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "appointmentDate")
     private Date appointmentDate;
@@ -36,13 +33,16 @@ public class Appointment {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "petID")
+    @JsonBackReference
     private Pet pet;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "serviceID")
+   @JsonManagedReference
     private Services service;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "VeterianSchedulesId")
+    @JsonManagedReference
     private Veterinarianschedule veterinarianschedule;
 }

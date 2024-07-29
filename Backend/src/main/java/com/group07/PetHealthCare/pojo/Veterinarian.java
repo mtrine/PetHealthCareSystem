@@ -17,10 +17,6 @@ public class Veterinarian extends User {
     @Column(name = "isFulltime")
     private Boolean isFulltime=false;
 
-    @OneToMany(mappedBy = "veterinarian")
-    @JsonManagedReference
-    private Set<Appointment> appointments = new LinkedHashSet<>();
-
     @OneToMany(mappedBy = "veterinarian", cascade = CascadeType.ALL, orphanRemoval = true   )
     @JsonManagedReference
     private  Set<Veterinarianschedule> veterinarianschedules = new LinkedHashSet<>();
