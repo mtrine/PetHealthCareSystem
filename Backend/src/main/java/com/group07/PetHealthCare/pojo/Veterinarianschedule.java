@@ -40,5 +40,6 @@ public class Veterinarianschedule {
     private Boolean isPublished;
 
     @OneToOne(mappedBy = "veterinarianschedule")
+    @JsonBackReference
     private Appointment appointment;
 }
