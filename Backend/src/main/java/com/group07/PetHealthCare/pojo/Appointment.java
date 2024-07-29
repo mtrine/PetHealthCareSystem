@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -39,10 +38,11 @@ public class Appointment {
     @JoinColumn(name = "petID")
     private Pet pet;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "customerID")
-//    private Customer customer;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "serviceID")
+    private Services service;
 
-    @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AppointmentService> appointmentServices;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "VeterianSchedulesId")
+    private Veterinarianschedule veterinarianschedule;
 }

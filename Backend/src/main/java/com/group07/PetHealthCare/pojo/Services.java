@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
@@ -14,7 +15,7 @@ import java.util.Set;
 public class Services {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "ServiceID", nullable = false)
+    @Column(name = "serviceID", nullable = false)
     private String id;
 
     @Column(name = "name", length = 100)
@@ -24,5 +25,5 @@ public class Services {
     private BigDecimal unitPrice;
 
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AppointmentService> appointmentServices;
+    private Set<Appointment> appointments= new LinkedHashSet<>();
 }

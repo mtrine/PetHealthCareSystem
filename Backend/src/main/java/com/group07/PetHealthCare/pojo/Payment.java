@@ -29,7 +29,4 @@ public class Payment {
     @JoinColumn(name = "appointmentID")
     private Appointment appointment;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "prescriptionID")
-    private Prescription prescription;
 }

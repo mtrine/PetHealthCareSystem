@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserCreationRequest {
+public class UserRequest {
     @Size(min = 2, message = "NAME_INVALID")
     private String name;
 
