@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -22,11 +23,11 @@ public class Hospitalization {
     private Pet petID;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cageID")
+    @JoinColumn(name = "cageNumber")
     private Cage cage;
 
     @Column(name = "visitTime")
-    private Instant visitTime;
+    private LocalTime visitTime;
 
     @Column(name = "healthCondition")
     private String healthCondition;

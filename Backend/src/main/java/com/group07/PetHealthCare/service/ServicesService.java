@@ -14,7 +14,7 @@ public class ServicesService {
     {
         Services service = new Services();
         service.setName(request.getName());
-        service.setUnitPrice(request.getUnit_price());
+        service.setUnitPrice(request.getUnitPrice());
         return IServiceRepository.save(service);
     }
 }
