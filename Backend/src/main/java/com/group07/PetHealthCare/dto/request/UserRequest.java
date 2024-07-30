@@ -15,7 +15,7 @@ public class UserRequest {
     private String email;
     private String phoneNumber;
     private String address;
-    private String sex;
+    private Boolean sex;
     @Size(min = 6, message = "PASS_INVALID")
     private String password;
     private String role;

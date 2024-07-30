@@ -6,6 +6,8 @@ import com.group07.PetHealthCare.respositytory.ISessionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SessionsService {
     @Autowired
@@ -18,5 +20,9 @@ public class SessionsService {
 
         return ISessionsRepository.save(session);
 
+    }
+
+    public List<Session> getAllSession(){
+        return ISessionsRepository.findAll();
     }
 }

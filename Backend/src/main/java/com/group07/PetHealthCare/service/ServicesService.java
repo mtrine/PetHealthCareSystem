@@ -6,6 +6,8 @@ import com.group07.PetHealthCare.respositytory.IServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ServicesService {
     @Autowired
@@ -16,5 +18,9 @@ public class ServicesService {
         service.setName(request.getName());
         service.setUnitPrice(request.getUnitPrice());
         return IServiceRepository.save(service);
+    }
+
+    public List<Services> getAllServices(){
+        return IServiceRepository.findAll();
     }
 }

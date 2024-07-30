@@ -32,14 +32,12 @@ public class CustomerService {
         return ICustomerRepository.findById(id);
     }
 
-    @Transactional
     public void deleteCustomersById(String id){
         Optional<Customer> customer = ICustomerRepository.findById(id);
         if(!customer.isPresent()){
             throw new AppException(ErrorCode.NOT_FOUND);
         }
         ICustomerRepository.deleteById(id);
-
     }
 }
 

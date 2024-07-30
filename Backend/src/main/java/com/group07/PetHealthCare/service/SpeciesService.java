@@ -6,6 +6,8 @@ import com.group07.PetHealthCare.respositytory.ISpeciesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SpeciesService {
     @Autowired
@@ -15,5 +17,8 @@ public class SpeciesService {
         Species newSpecies =  new Species();
         newSpecies.setName(species.getName());
         return ISpeciesRepository.save(newSpecies);
+    }
+    public List<Species> getAllSpecies() {
+        return ISpeciesRepository.findAll();
     }
 }

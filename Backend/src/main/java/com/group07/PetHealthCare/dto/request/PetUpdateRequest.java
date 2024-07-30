@@ -9,6 +9,7 @@ public class PetUpdateRequest {
     private String id;
     private String name;
     private int age;
+    private Boolean gender;
     private String speciesID;
     private String customerID;
 }

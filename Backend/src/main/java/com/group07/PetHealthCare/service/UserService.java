@@ -9,6 +9,7 @@ import com.group07.PetHealthCare.pojo.User;
 import com.group07.PetHealthCare.pojo.Veterinarian;
 import com.group07.PetHealthCare.respositytory.ICustomerRepository;
 import com.group07.PetHealthCare.respositytory.IStaffRepository;
+import com.group07.PetHealthCare.respositytory.IUserRepository;
 import com.group07.PetHealthCare.respositytory.IVeterinarianRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import java.util.Optional;
 @Service
 public class UserService {
     @Autowired
+    private IUserRepository IUserRepository;
+    @Autowired
     private ICustomerRepository ICustomerRepository;
     @Autowired
     private IVeterinarianRepository IVeterinarianRepository;
@@ -25,7 +28,7 @@ public class UserService {
     private IStaffRepository IStaffRepository;
 
     public User register(UserRequest request) {
-        Optional<Customer> existingCustomer = ICustomerRepository.findByEmail(request.getEmail());
+        Optional<User> existingCustomer = IUserRepository.findByEmail(request.getEmail());
         if (existingCustomer.isPresent()) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
@@ -84,4 +87,29 @@ public class UserService {
         }
         return user;
     }
+
+    public User updateInforUser(String id, UserRequest request) {
+        User user = IUserRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+
+        // Update only the fields present in the request
+        if (request.getName() != null) {
+            user.setName(request.getName());
+        }
+        if (request.getPhoneNumber() != null) {
+            user.setPhoneNumber(request.getPhoneNumber());
+        }
+        if (request.getAddress() != null) {
+            user.setAddress(request.getAddress());
+        }
+        if (request.getPassword() != null) {
+            user.setPassword(request.getPassword());
+        }
+        if (request.getSex() != null) {
+            user.setSex(request.getSex());
+        }
+
+        // Save the updated user
+        return IUserRepository.save(user);
+    }
+
 }

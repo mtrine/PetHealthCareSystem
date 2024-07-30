@@ -6,10 +6,7 @@ import com.group07.PetHealthCare.pojo.User;
 import com.group07.PetHealthCare.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/users")
@@ -30,5 +27,12 @@ public class UserController {
         ApiResponse<User> apiResponse= new ApiResponse<>();
         apiResponse.setResult(userService.login(user));
         return apiResponse;
+    }
+
+    @PutMapping("/{userId}")
+    public ApiResponse<User>  updateUser(@PathVariable("userd") String userId, @RequestBody @Valid UserRequest request) {
+       ApiResponse<User> apiResponse= new ApiResponse<>();
+       apiResponse.setResult(userService.updateInforUser(userId,request));
+       return apiResponse;
     }
 }
