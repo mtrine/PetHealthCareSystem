@@ -29,4 +29,10 @@ public class Payment {
     @JoinColumn(name = "appointmentID")
     private Appointment appointment;
 
+    @Column(name = "totalAmount")
+    private Double totalAmount;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "hospitalizationID", nullable = true)
+    private Hospitalization hospitalization;
 }

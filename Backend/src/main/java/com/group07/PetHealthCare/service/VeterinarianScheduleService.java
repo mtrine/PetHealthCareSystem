@@ -4,29 +4,29 @@ import com.group07.PetHealthCare.dto.request.VeterinarianScheduleRequest;
 import com.group07.PetHealthCare.pojo.Session;
 import com.group07.PetHealthCare.pojo.Veterinarian;
 import com.group07.PetHealthCare.pojo.Veterinarianschedule;
-import com.group07.PetHealthCare.respositytory.SessionsRepository;
-import com.group07.PetHealthCare.respositytory.VeterinarianRepository;
-import com.group07.PetHealthCare.respositytory.VeterinarianscheduleRepository;
+import com.group07.PetHealthCare.respositytory.ISessionsRepository;
+import com.group07.PetHealthCare.respositytory.IVeterinarianRepository;
+import com.group07.PetHealthCare.respositytory.IVeterinarianscheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class VeterinarianScheduleService {
     @Autowired
-    VeterinarianscheduleRepository veterinarianscheduleRepository;
+    IVeterinarianscheduleRepository IVeterinarianscheduleRepository;
 
     @Autowired
-    VeterinarianRepository veterinarianRepository;
+    IVeterinarianRepository IVeterinarianRepository;
 
     @Autowired
-    SessionsRepository sessionsRepository;
+    ISessionsRepository ISessionsRepository;
 
 
     public Veterinarianschedule addSchedule(VeterinarianScheduleRequest request) {
         // Retrieve related entities
-        Veterinarian veterinarian = veterinarianRepository.findById(request.getVeterinarianId())
+        Veterinarian veterinarian = IVeterinarianRepository.findById(request.getVeterinarianId())
                 .orElseThrow(() -> new RuntimeException("Veterinarian not found"));
-        Session session = sessionsRepository.findById(request.getSessionId())
+        Session session = ISessionsRepository.findById(request.getSessionId())
                 .orElseThrow(() -> new RuntimeException("Session not found"));
 
         // Create new Veterinarianschedule instance
@@ -42,7 +42,7 @@ public class VeterinarianScheduleService {
         veterinarianschedule.setIsPublished(false); // Set default publication status
 
         // Save and return the new schedule
-        return veterinarianscheduleRepository.save(veterinarianschedule);
+        return IVeterinarianscheduleRepository.save(veterinarianschedule);
     }
 
 }
