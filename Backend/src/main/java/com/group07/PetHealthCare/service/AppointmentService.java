@@ -32,6 +32,8 @@ public class AppointmentService {
         }
         appointment.setPet(pet);
         appointment.setService(service);
+        appointment.setStatus(request.getStatus());
+        appointment.setDeposit(request.getDeposit());
         appointment.setAppointmentDate(request.getAppointmentDate());
         appointment.setDescription(request.getDescription());
         appointment.setVeterinarianschedule(veterinarianschedule);

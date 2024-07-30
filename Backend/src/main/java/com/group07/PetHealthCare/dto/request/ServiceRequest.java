@@ -9,5 +9,5 @@ import java.math.BigDecimal;
 @Setter
 public class ServiceRequest {
     private String name;
-    private BigDecimal unit_price;
+    private BigDecimal unitPrice;
 }

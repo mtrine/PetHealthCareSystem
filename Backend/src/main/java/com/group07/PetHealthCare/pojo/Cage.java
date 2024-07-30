@@ -10,14 +10,14 @@ import lombok.Setter;
 @Table(name = "cages")
 public class Cage {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "cageID", nullable = false)
-    private String id;
-
-    @Column(name = "numberCage")
-    private Integer numberCage;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cageNumber")
+    private Integer cageNumber;
 
     @Column(name = "status", length = 50)
     private String status;
+
+    @Column(name = "unitPrice")
+    private Double unitPrice;
 
 }
