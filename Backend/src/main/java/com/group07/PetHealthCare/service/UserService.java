@@ -7,9 +7,9 @@ import com.group07.PetHealthCare.pojo.Customer;
 import com.group07.PetHealthCare.pojo.Staff;
 import com.group07.PetHealthCare.pojo.User;
 import com.group07.PetHealthCare.pojo.Veterinarian;
-import com.group07.PetHealthCare.respositytory.CustomerRepository;
-import com.group07.PetHealthCare.respositytory.StaffRepository;
-import com.group07.PetHealthCare.respositytory.VeterinarianRepository;
+import com.group07.PetHealthCare.respositytory.ICustomerRepository;
+import com.group07.PetHealthCare.respositytory.IStaffRepository;
+import com.group07.PetHealthCare.respositytory.IVeterinarianRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +18,14 @@ import java.util.Optional;
 @Service
 public class UserService {
     @Autowired
-    private CustomerRepository customerRepository;
+    private ICustomerRepository ICustomerRepository;
     @Autowired
-    private VeterinarianRepository veterinarianRepository;
+    private IVeterinarianRepository IVeterinarianRepository;
     @Autowired
-    private StaffRepository staffRepository;
+    private IStaffRepository IStaffRepository;
 
     public User register(UserRequest request) {
-        Optional<Customer> existingCustomer = customerRepository.findByEmail(request.getEmail());
+        Optional<Customer> existingCustomer = ICustomerRepository.findByEmail(request.getEmail());
         if (existingCustomer.isPresent()) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
@@ -55,11 +55,11 @@ public class UserService {
 
         // Save user based on role
         if (newUser instanceof Customer) {
-            return customerRepository.save((Customer) newUser);
+            return ICustomerRepository.save((Customer) newUser);
         } else if (newUser instanceof Staff) {
-            return staffRepository.save((Staff) newUser);
+            return IStaffRepository.save((Staff) newUser);
         } else {
-            return veterinarianRepository.save((Veterinarian) newUser);
+            return IVeterinarianRepository.save((Veterinarian) newUser);
         }
     }
 
@@ -67,13 +67,13 @@ public class UserService {
         User user;
         switch (request.getRole()) {
             case "Customer":
-                user= customerRepository.findByEmail(request.getEmail()).get();
+                user= ICustomerRepository.findByEmail(request.getEmail()).get();
                 break;
             case "Staff":
-                user = staffRepository.findByEmail(request.getEmail()).get();
+                user = IStaffRepository.findByEmail(request.getEmail()).get();
                 break;
             case "Veterinarian":
-                user = veterinarianRepository.findByEmail(request.getEmail()).get();
+                user = IVeterinarianRepository.findByEmail(request.getEmail()).get();
                 break;
             default:
                 throw new AppException(ErrorCode.INVALID_ROLE);

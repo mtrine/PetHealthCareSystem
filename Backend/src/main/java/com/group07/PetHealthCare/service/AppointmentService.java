@@ -12,21 +12,21 @@ import java.util.Objects;
 @Service
 public class AppointmentService {
     @Autowired
-    private AppointmentRepository appointmentRepository;
+    private IAppointmentRepository IAppointmentRepository;
     @Autowired
-    private PetRepository petRepository;
+    private IPetRepository IPetRepository;
     @Autowired
-    private ServiceRepository serviceRepository;
+    private IServiceRepository IServiceRepository;
     @Autowired
-    private VeterinarianscheduleRepository veterinarianscheduleRepository;
+    private IVeterinarianscheduleRepository IVeterinarianscheduleRepository;
 
     public Appointment addAppointment(AppointmentRequest request) {
         Appointment appointment = new Appointment();
 
         // Fetch the necessary entities
-        Pet pet = petRepository.findById(request.getPetId()).orElseThrow(() -> new RuntimeException("Pet not found"));
-        Services service = serviceRepository.findById(request.getServiceId()).orElseThrow(() -> new RuntimeException("Service not found"));
-        Veterinarianschedule veterinarianschedule=veterinarianscheduleRepository.findById(request.getVeterinarianScheduleId()).orElseThrow(() -> new RuntimeException("Veterinarian Schedule not found"));
+        Pet pet = IPetRepository.findById(request.getPetId()).orElseThrow(() -> new RuntimeException("Pet not found"));
+        Services service = IServiceRepository.findById(request.getServiceId()).orElseThrow(() -> new RuntimeException("Service not found"));
+        Veterinarianschedule veterinarianschedule= IVeterinarianscheduleRepository.findById(request.getVeterinarianScheduleId()).orElseThrow(() -> new RuntimeException("Veterinarian Schedule not found"));
         if(!Objects.equals(veterinarianschedule.getStatus(), "Empty")){
             throw new RuntimeException("The schedule has been set");
         }
@@ -37,10 +37,10 @@ public class AppointmentService {
         appointment.setVeterinarianschedule(veterinarianschedule);
         veterinarianschedule.setStatus("Scheduled");
         // Save the appointment to the database
-        return appointmentRepository.save(appointment);
+        return IAppointmentRepository.save(appointment);
     }
 
     public List<Appointment> getAllAppointments() {
-        return appointmentRepository.findAll();
+        return IAppointmentRepository.findAll();
     }
 }

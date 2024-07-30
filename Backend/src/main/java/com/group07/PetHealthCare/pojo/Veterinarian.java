@@ -1,5 +1,6 @@
 package com.group07.PetHealthCare.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,6 +19,6 @@ public class Veterinarian extends User {
     private Boolean isFulltime=false;
 
     @OneToMany(mappedBy = "veterinarian", cascade = CascadeType.ALL, orphanRemoval = true   )
-    @JsonManagedReference
+     @JsonBackReference
     private  Set<Veterinarianschedule> veterinarianschedules = new LinkedHashSet<>();
 }

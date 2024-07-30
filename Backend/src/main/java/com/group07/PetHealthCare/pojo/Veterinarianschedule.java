@@ -1,6 +1,7 @@
 package com.group07.PetHealthCare.pojo;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.group07.PetHealthCare.enumData.DayOfWeek;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -28,7 +29,7 @@ public class Veterinarianschedule {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "VeterinarianId", nullable = false)
-    @JsonBackReference
+    @JsonManagedReference
     private Veterinarian veterinarian;
 
     @Enumerated(EnumType.STRING)

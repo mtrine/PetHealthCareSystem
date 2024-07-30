@@ -3,8 +3,8 @@ package com.group07.PetHealthCare.service;
 import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.pojo.Customer;
-import com.group07.PetHealthCare.respositytory.CustomerRepository;
-import com.group07.PetHealthCare.respositytory.PetRepository;
+import com.group07.PetHealthCare.respositytory.ICustomerRepository;
+import com.group07.PetHealthCare.respositytory.IPetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,28 +17,28 @@ import java.util.Optional;
 
 public class CustomerService {
     @Autowired
-    private CustomerRepository customerRepository;
+    private ICustomerRepository ICustomerRepository;
     @Autowired
-    private PetRepository petRepository;
+    private IPetRepository IPetRepository;
     public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+        return ICustomerRepository.findAll();
     }
 
     public Optional<Customer> getCustomerById(String id) {
-        Optional<Customer> customer = customerRepository.findById(id);
+        Optional<Customer> customer = ICustomerRepository.findById(id);
         if(!customer.isPresent()){
             throw new AppException(ErrorCode.NOT_FOUND);
         }
-        return customerRepository.findById(id);
+        return ICustomerRepository.findById(id);
     }
 
     @Transactional
     public void deleteCustomersById(String id){
-        Optional<Customer> customer = customerRepository.findById(id);
+        Optional<Customer> customer = ICustomerRepository.findById(id);
         if(!customer.isPresent()){
             throw new AppException(ErrorCode.NOT_FOUND);
         }
-        customerRepository.deleteById(id);
+        ICustomerRepository.deleteById(id);
 
     }
 }

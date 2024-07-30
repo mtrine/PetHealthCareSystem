@@ -1,10 +1,9 @@
 package com.group07.PetHealthCare.respositytory;
 
-import com.group07.PetHealthCare.pojo.Session;
+import com.group07.PetHealthCare.pojo.Services;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SessionsRepository extends JpaRepository<Session, String> {
-
+public interface IServiceRepository extends JpaRepository<Services,String> {
 }
