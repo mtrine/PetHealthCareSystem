@@ -43,6 +43,7 @@ public class Appointment {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "veterinarianID")
+    @JsonManagedReference
     private Veterinarian veterinarian;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -29,8 +29,8 @@ public class UserController {
         return apiResponse;
     }
 
-    @PutMapping("/{userId}")
-    public ApiResponse<User>  updateUser(@PathVariable("userd") String userId, @RequestBody @Valid UserRequest request) {
+    @PatchMapping("/{userId}")
+    public ApiResponse<User>  updateUser(@PathVariable("userId") String userId, @RequestBody @Valid UserRequest request) {
        ApiResponse<User> apiResponse= new ApiResponse<>();
        apiResponse.setResult(userService.updateInforUser(userId,request));
        return apiResponse;

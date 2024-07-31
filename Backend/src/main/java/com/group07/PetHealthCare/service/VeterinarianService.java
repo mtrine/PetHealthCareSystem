@@ -1,6 +1,6 @@
 package com.group07.PetHealthCare.service;
 
-import com.group07.PetHealthCare.dto.request.VeterinarianRequest;
+
 import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.pojo.Veterinarian;
@@ -35,8 +35,4 @@ public class VeterinarianService {
         IVeterinarianRepository.deleteById(Id);
     }
 
-    public void changeFullTime(String id){
-        Veterinarian veterinarian= IVeterinarianRepository.findById(id).orElseThrow(() -> new RuntimeException("Veterinarian not found"));;
-        veterinarian.setIsFulltime(!veterinarian.getIsFulltime());
-    }
 }

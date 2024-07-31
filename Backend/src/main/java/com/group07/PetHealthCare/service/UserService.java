@@ -108,7 +108,22 @@ public class UserService {
             user.setSex(request.getSex());
         }
 
-        // Save the updated user
+        // Update specific fields based on user type
+        if (user instanceof Customer) {
+            Customer customer = (Customer) user;
+            // Update specific fields for Customer if needed
+        } else if (user instanceof Veterinarian) {
+            Veterinarian veterinarian = (Veterinarian) user;
+            if (request.getIsFulltime() != null) {
+                veterinarian.setIsFulltime(request.getIsFulltime());
+            }
+        } else if (user instanceof Staff) {
+            Staff staff = (Staff) user;
+            if (request.getIsAdmin() != null) {
+                staff.setIsAdmin(request.getIsAdmin());
+            }
+        }
+
         return IUserRepository.save(user);
     }
 

@@ -37,12 +37,5 @@ public class VeterinarianController {
         return apiResponse;
     }
 
-    @PatchMapping("/{veterinarianID}")
-    public ApiResponse<String> updateIsFullTime(@PathVariable("veterinarianID") String veterinarianID){
-        veterinarianService.changeFullTime(veterinarianID);
-        ApiResponse<String> apiResponse = new ApiResponse<>();
-        apiResponse.setResult("Update fulltime success");
-        return apiResponse;
-    }
 }
 

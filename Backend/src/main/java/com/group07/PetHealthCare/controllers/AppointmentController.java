@@ -33,30 +33,23 @@ public class AppointmentController {
             return apiResponse;
     }
 
-    @PostMapping("/assignVeterinarian/{appointmentId}")
-    public ApiResponse<Appointment> assignVeterinarianToAppointment(
-            @PathVariable("appointmentId") String appointmentId,
-            @RequestBody String requestBody) {
-        // Parse the veterinarianId from the JSON request body
-        ObjectMapper objectMapper = new ObjectMapper();
-        String veterinarianId;
-        try {
-            JsonNode jsonNode = objectMapper.readTree(requestBody);
-            veterinarianId = jsonNode.get("veterinarianId").asText();
-        } catch (Exception e) {
-            throw new RuntimeException("Invalid JSON format", e);
-        }
-
-        System.out.println("veterinarianId: " + veterinarianId);
-        ApiResponse<Appointment> apiResponse = new ApiResponse<>();
-        Appointment appointment = appointmentService.assignVeterinarianToAppointment(appointmentId, veterinarianId);
-        apiResponse.setResult(appointment);
+    @GetMapping("/{veterinarianId}")
+    public ApiResponse<List<Appointment>> getAppointmentByVeterinarianId(@PathVariable("veterinarianId") String veterinarianId) {
+        ApiResponse<List<Appointment>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(appointmentService.getAppointmentByVeterinarianId(veterinarianId));
         return apiResponse;
     }
+
     @GetMapping
     public ApiResponse<List<Appointment>> getAllAppointments() {
         ApiResponse<List<Appointment>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(appointmentService.getAllAppointments());
+        return apiResponse;
+    }
+    @PatchMapping("/{appointmentId}")
+    public ApiResponse<Appointment> changeInforAppointment(@PathVariable("appointmentId") String appointmentId,AppointmentRequest request){
+        ApiResponse<Appointment> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(appointmentService.changeInforAppointment(appointmentId,request));
         return apiResponse;
     }
 }

@@ -82,29 +82,55 @@ public class AppointmentService {
 
         return IAppointmentRepository.save(appointment);
     }
-    public Appointment assignVeterinarianToAppointment(String appointmentId, String veterinarianId) {
-        // Kiểm tra lịch hẹn có hợp lệ không
-        Optional<Appointment> appointmentOpt = IAppointmentRepository.findById(appointmentId);
-        if (appointmentOpt.isEmpty()) {
-            throw new RuntimeException("Appointment Invalid");
-        }
-
-        // Kiểm tra bác sĩ có hợp lệ không
-        Optional<Veterinarian> veterinarianOpt = IVeterinarianRepository.findById(veterinarianId);
-        if (veterinarianOpt.isEmpty()) {
-            throw new RuntimeException("Veterinarian not found");
-        }
-
-        // Cập nhật bác sĩ cho lịch hẹn
-        Appointment appointment = appointmentOpt.get();
-        appointment.setVeterinarian(veterinarianOpt.get());
-
-        return IAppointmentRepository.save(appointment);
-    }
 
     public List<Appointment> getAllAppointments() {
         return IAppointmentRepository.findAll();
     }
 
+    public List<Appointment> getAppointmentByVeterinarianId(String veterinarianId) {
+        return IAppointmentRepository.findByVeterinarianId(veterinarianId);
+    }
+
+    public Appointment changeInforAppointment(String appointmentId, AppointmentRequest request) {
+        Appointment appointment = IAppointmentRepository.findById(appointmentId).orElseThrow(()->new RuntimeException("Appointment not found"));
+        if (request.getStatus() != null) {
+            appointment.setStatus(request.getStatus());
+        }
+        if (request.getDescription() != null) {
+            appointment.setDescription(request.getDescription());
+        }
+        if (request.getAppointmentDate() != null) {
+            appointment.setAppointmentDate(request.getAppointmentDate());
+        }
+        if (request.getDeposit() != null) {
+            appointment.setDeposit(request.getDeposit());
+        }
+
+        // Update related entities if IDs are present in request
+        if (request.getPetId() != null) {
+            Pet pet = IPetRepository.findById(request.getPetId())
+                    .orElseThrow(() -> new RuntimeException("Pet not found"));
+            appointment.setPet(pet);
+        }
+
+        if (request.getServiceId() != null) {
+            Services service = IServiceRepository.findById(request.getServiceId())
+                    .orElseThrow(() -> new RuntimeException("Service not found"));
+            appointment.setService(service);
+        }
+
+        if (request.getVeterinarianId() != null) {
+            Veterinarian veterinarian = IVeterinarianRepository.findById(request.getVeterinarianId())
+                    .orElseThrow(() -> new RuntimeException("Veterinarian not found"));
+            appointment.setVeterinarian(veterinarian);
+        }
+
+        if (request.getSessionId() != null) {
+            Session session = ISessionsRepository.findById(request.getSessionId())
+                    .orElseThrow(() -> new RuntimeException("Session not found"));
+            appointment.setSession(session);
+        }
+        return IAppointmentRepository.save(appointment);
+    }
 }
 
