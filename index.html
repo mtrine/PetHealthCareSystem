@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./assets/font/boxicons-2.1.4/css/boxicons.min.css">
+</head>
+
+<body>
+    <div id="main">
+        <header id="header">
+            <div class="logo">
+                <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
+            </div>
+            <ul class="nav">
+                <li><a href="#" onclick="showModal()">TRANG CHỦ</a></li>
+                <li><a href="#" onclick="showModal()">DỊCH VỤ</a></li>
+                <li><a href="#" onclick="showModal()">BẢNG GIÁ</a></li>
+            </ul>
+            <div class="header-btn">
+                <i class='bx bx-user-circle'></i>
+                <ul class="sub-nav">
+                    <li><a href="login.html">Đăng nhập</a></li>
+                    <li><a href="register.html">Đăng ký</a></li>
+                </ul>
+            </div>
+
+        </header>
+        <div id="slider">
+            <div class="slider-container">
+                <div class="slide">
+                    <img src="./assets/img/homepage.png" alt="Slide 1">
+                </div>
+                <div class="slide">
+                    <img src="./assets/img/homepage1.png" alt="Slide 2">
+                </div>
+            </div>
+        </div>
+        <div id="about-us">
+            <!-- Phần trên -->
+            <div class="top-section">
+                <img src="./assets/img/about_us.png" alt="About Us Image" class="about-us-img">
+                <div class="divider"></div>
+                <div class="about-us-text">About Us</div>
+            </div>
+
+            <!-- Phần dưới -->
+            <div class="bottom-section">
+                <div class="rectangle1">
+                    <p>Phòng khám thú y của chúng tôi tự hào là địa chỉ uy tín và chuyên nghiệp, luôn sẵn sàng chăm sóc
+                        sức khỏe cho thú cưng của bạn. Với đội ngũ bác sĩ thú y giàu kinh nghiệm và tâm huyết, chúng tôi
+                        cung cấp các dịch vụ đa dạng từ khám và điều trị bệnh, tiêm phòng, phẫu thuật, đến chăm sóc răng
+                        miệng và làm đẹp cho thú cưng. Phòng khám được trang bị hiện đại, đảm bảo các quy trình y tế
+                        được thực hiện an toàn và hiệu quả. Chúng tôi cam kết mang đến sự chăm sóc tốt nhất, giúp thú
+                        cưng của bạn luôn khỏe mạnh và hạnh phúc. Hãy đến với chúng tôi để trải nghiệm dịch vụ chăm sóc
+                        thú cưng tốt nhất!</p>
+                </div>
+                <div class="rectangle2"></div>
+            </div>
+        </div>
+        <div id="service">
+            <h2>Dịch vụ của chúng tôi</h2>
+            <div class="service-container">
+                <button class="prev-btn"><i class='bx bx-chevron-right bx-rotate-180' style='color:#000'></i></button>
+
+                <div class="service-wrapper">
+                    <div class="service-list ">
+                        <div class="service-item">
+                            <img src="./assets/img/trietsan.png" alt="Triệt sản">
+                            <p>Triệt sản</p>
+                        </div>
+                        <div class="service-item">
+                            <img src="./assets/img/taygiun.png" alt="Tẩy giun">
+                            <p>Tẩy giun</p>
+                        </div>
+                        <div class="service-item">
+                            <img src="./assets/img/tialong_catmong.png" alt="Tỉa lông cắt móng">
+                            <p>Tỉa lông cắt móng</p>
+                        </div>
+                        <div class="service-item">
+                            <img src="./assets/img/tiemphong.png" alt="Tiêm phòng">
+                            <p>Tiêm phòng</p>
+                        </div>
+                        <div class="service-item">
+                            <img src="./assets/img/kham-dieutri.png" alt="Khám điều trị">
+                            <p>Khám điều trị</p>
+                        </div>
+                        <div class="service-item">
+                            <img src="./assets/img/sieuam.jpg" alt="Siêu âm">
+                            <p>Siêu âm</p>
+                        </div>
+                        <div class="service-item">
+                            <img src="./assets/img/xetnghiem.png" alt="Chẩn đoán xét nghiệm">
+                            <p>Chẩn đoán xét nghiệm</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="next-btn"><i class='bx bx-chevron-right' style='color:#000'></i></button>
+            </div>
+        </div>
+
+        <footer id="footer">
+            <div class="footer-content">
+                <div class="footer-item">
+                    <i class='bx bx-map'></i> <b>Địa chỉ:</b> 2 Võ Oanh, Bình Thạnh, TP.HCM
+                </div>
+                <div class="footer-item">
+                    <i class='bx bx-phone'></i> <b>Đường dây nóng:</b> 0123-456-789
+                </div>
+                <div class="footer-item">
+                    <i class='bx bx-envelope'></i> <b>Email Contact:</b> contact@example.com
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bảng modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <i class='bx bx-error'></i>
+            <p>Đăng nhập để được sử dụng dịch vụ</p>
+            <div class="modal-buttons">
+                <button onclick="login()">Đăng nhập</button>
+                <button onclick="hideModal()">Trở về</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    // Hiển thị modal
+    function showModal() {
+        document.getElementById('login-modal').style.display = 'flex';
+    }
+
+    // Ẩn modal
+    function hideModal() {
+        document.getElementById('login-modal').style.display = 'none';
+    }
+
+    function login() {
+        window.location.href = 'login.html';
+        hideModal();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const headerBtn = document.querySelector('.header-btn');
+        const subNav = document.querySelector('.sub-nav');
+
+        headerBtn.addEventListener('click', function () {
+            // Toggle hiển thị sub-nav
+            subNav.style.display = (subNav.style.display === 'flex' ? 'none' : 'flex');
+        });
+
+        // Đóng sub-nav khi nhấp ra ngoài
+        document.addEventListener('click', function (event) {
+            if (!headerBtn.contains(event.target)) {
+                subNav.style.display = 'none';
+            }
+        });
+    });
+    // Transition slider
+    document.addEventListener('DOMContentLoaded', function () {
+        const slides = document.querySelectorAll('.slide');
+        const slideCount = slides.length;
+        let currentIndex = 0;
+
+        function showNextSlide() {
+            currentIndex = (currentIndex + 1) % slideCount;
+            const offset = -currentIndex * 100;
+            document.querySelector('.slider-container').style.transform = `translateX(${offset}%)`;
+        }
+
+        setInterval(showNextSlide, 5000); // Chuyển slide mỗi 10 giây
+    });
+
+    // List service
+    document.addEventListener('DOMContentLoaded', function () {
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const serviceList = document.querySelector('.service-list');
+        const serviceItems = document.querySelectorAll('.service-item');
+        const itemsToShow = 4;
+        const itemWidth = 282; // Điều chỉnh giá trị này dựa trên width và margin của card (192px width + 60px margin)
+        const totalItems = serviceItems.length;
+        let currentIndex = 0;
+
+        prevBtn.addEventListener('click', function () {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateServicePosition();
+            }
+        });
+
+        nextBtn.addEventListener('click', function () {
+            if (currentIndex < totalItems - itemsToShow) {
+                currentIndex++;
+                updateServicePosition();
+            }
+        });
+
+        function updateServicePosition() {
+            const offset = -currentIndex * itemWidth;
+            serviceList.style.transform = `translateX(${offset}px)`;
+            checkButtons();
+        }
+
+        function checkButtons() {
+            if (currentIndex === 0) {
+                prevBtn.classList.add('disabled');
+            } else {
+                prevBtn.classList.remove('disabled');
+            }
+
+            if (currentIndex >= totalItems - itemsToShow) {
+                nextBtn.classList.add('disabled');
+            } else {
+                nextBtn.classList.remove('disabled');
+            }
+        }
+
+        // Kiểm tra ban đầu khi tải trang
+        checkButtons();
+    });
+</script>
+
+</html>

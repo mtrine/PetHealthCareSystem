@@ -1,0 +1,419 @@
+/* Inria Sans */
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@100..900&display=swap');
+/* Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@100..900&display=swap');
+/* Itim */
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@100..900&family=Itim&display=swap');
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* reset html */
+html {
+    /* Dùng phông chữ không gạch chân */
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
+}
+
+/* Header */
+
+#header {
+    height: 146px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 85px 0 20px;
+    color: #16427C;
+    border-bottom: 2px solid #D3D3D3;
+}
+
+
+.logo img {
+    height: 146px;
+}
+
+
+.nav {
+    list-style: none;
+    display: flex;
+    gap: 90px;
+    
+}
+
+.nav li {
+    display: block;
+    padding: 35px 30px;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+/* Hiệu ứng hover cho các mục trong nav */
+.nav li:hover {
+    background-color: #16427C; /* Màu nền khi hover */
+    cursor: pointer;
+}
+
+.nav li:hover a {
+    color: #fff
+}
+.nav a {
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: 600;
+    color: #16427C;
+}
+
+/* Định kiểu cho phần button trong header */
+.header-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.header-btn i {
+    font-size: 55px;
+}
+
+/* Định kiểu cho sub-nav */
+.sub-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    width: 258px;
+    height: 166px;
+    border-radius: 30px;
+    border: 1px solid #000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none; 
+    /* display: flex; */
+    flex-direction: column;
+    z-index: 5;
+}
+
+
+.sub-nav li {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #000; 
+}
+
+
+.sub-nav li:last-child {
+    border-bottom: none;
+}
+
+
+.sub-nav a {
+    display: none;
+    font-size: 25px;
+    height: 100%; 
+    padding: 15px 20px; 
+    text-decoration: none;
+    color: #000;
+    box-sizing: border-box; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Slider */
+
+/* Định kiểu cho phần slider */
+#slider {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Định kiểu cho container chứa các slide */
+.slider-container {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%; 
+}
+
+/* Định kiểu cho từng slide */
+.slide {
+    min-width: 100%; 
+}
+
+/* Định kiểu cho hình ảnh trong slide */
+.slide img {
+    width: 1520px;
+    height: 707px;
+    display: block;
+}
+
+/* About us */
+
+/* Định kiểu cho phần about-us */
+#about-us {
+    position: relative;
+    padding: 100px; /* Padding tổng thể */
+}
+
+.top-section {
+    position: relative;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    margin-right: 50px;
+    margin-bottom: -93px;
+    z-index: 3;
+}
+
+.about-us-img {
+    width: 450px; /* Điều chỉnh kích thước hình ảnh nếu cần */
+    height: auto;
+}
+
+.divider {
+    flex: 1;
+    height: 6px;
+    background-color: #ddd; /* Màu của divider */
+    margin-right: 40px; /* Khoảng cách ở hai bên */
+    background-color: #4694DB;
+}
+
+
+.about-us-text {
+    font-size: 60px;
+    font-weight: 400;
+    font-family: "Itim", cursive;
+    color: #16427C;
+}
+
+/* Định kiểu cho phần dưới */
+.bottom-section {
+    position: relative;
+    height: 500px; /* Chiều cao của phần dưới */
+    overflow: hidden;
+    z-index: 0;
+}
+
+.rectangle2 {
+    position: absolute;
+    width: 1260px;
+    height: 440px;
+    background-color: #16427C;
+    box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.1);
+    top: 12px;
+    right: 12px;
+    z-index: 1;
+}
+
+.rectangle1 {
+    position: absolute;
+    width: 1260px;
+    height: 440px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.1);
+    bottom: 12px;
+    left: 12px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Căn giữa nội dung */
+}
+
+.rectangle1 p {
+    font-family: 'Inter', sans-serif;
+    color: #16427C;
+    margin: 0 40px;
+    text-align: left;
+    font-size: 32px;
+    font-weight: 500;
+}
+
+
+/* Service */
+
+#service {
+    padding: 100px;
+    margin-bottom: 200px;
+}
+
+#service h2 {
+    font-size: 40px;
+    color: #16427C;
+    margin-bottom: 20px;
+}
+
+.service-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 1350px;
+    height: 274px;
+    background-color: #D1FEFF;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.service-wrapper {
+    display: flex;
+    width: 1100px;
+    height: 274px;
+    align-items: center;
+    overflow: hidden;
+}
+
+.service-list {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.service-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 192px;
+    height: 220px;
+    margin: 0 45px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 1px 2px 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.service-item img {
+    width: 70%;
+    height: 60%;
+    border-radius: 10px;
+}
+
+.service-item p {
+    font-size: 26px;
+    font-weight: 600;
+    color: #16427C;
+    margin-top: 10px;
+}
+
+.prev-btn, .next-btn {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #fff;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 100px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 5;
+}
+
+.prev-btn {
+    left: 25px;
+}
+
+.next-btn {
+    right: 25px;
+}
+
+.prev-btn.disabled, .next-btn.disabled {
+    display: none;
+}
+
+/* Định kiểu cho footer */
+#footer {
+    height: 256px;
+    background-color: #5e5e5e;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    padding: 0 40px; 
+}
+
+/* Định kiểu cho nội dung trong footer */
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; 
+    text-align: center;
+}
+
+/* Định kiểu cho từng dòng nội dung */
+.footer-item {
+    font-size: 30px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Định kiểu cho các biểu tượng */
+.footer-item i {
+    font-size: 34px; 
+    color: #fff;
+}
+
+/* Định kiểu cho bảng modal */
+.modal {
+    display: flex; /* Ẩn modal theo mặc định */
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu nền nửa trong suốt */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Đặt lên trên cùng */
+}
+
+.modal-content {
+    width: 408px;
+    height: 274px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 30px;
+    text-align: center;
+    position: relative;
+}
+
+.modal-content i {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+.modal-content p {
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.modal-buttons {
+    margin-top: 40px;
+}
+
+.modal-buttons button {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 11px 15px;
+    font-size: 30px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 0 14px;
+    transition: background-color 0.3s;
+}
+
+.modal-buttons button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
