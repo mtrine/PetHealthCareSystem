@@ -27,7 +27,7 @@ public class PetService {
         Pet pet = new Pet();
         pet.setName(request.getName());
         pet.setAge(request.getAge());
-
+        pet.setGender(request.getGender());
         Species species = ISpeciesRepository.findById(request.getSpeciesID()).orElseThrow(() -> new RuntimeException("Species not found"));
         Customer customer = ICustomerRepository.findById(request.getCustomerID()).orElseThrow(() -> new RuntimeException("Customer not found"));
 
@@ -49,6 +49,7 @@ public class PetService {
         Pet pet = IPetRepository.findById(id).orElseThrow(() -> new RuntimeException("Pet not found"));
         pet.setName(request.getName());
         pet.setAge(request.getAge());
+        pet.setGender(request.getGender());
 
         Species species = ISpeciesRepository.findById(request.getSpeciesID()).orElseThrow(() -> new RuntimeException("Species not found"));
         Customer customer = ICustomerRepository.findById(request.getCustomerID()).orElseThrow(() -> new RuntimeException("Customer not found"));

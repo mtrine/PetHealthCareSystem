@@ -9,6 +9,7 @@ import lombok.Setter;
 public class PetCreationRequest {
     private String name;
     private int age;
+    private Boolean gender;
     private String speciesID;
     private String customerID;
 

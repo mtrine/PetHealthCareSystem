@@ -41,8 +41,12 @@ public class Appointment {
    @JsonManagedReference
     private Services service;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "VeterianSchedulesId")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "veterinarianID")
     @JsonManagedReference
-    private Veterinarianschedule veterinarianschedule;
+    private Veterinarian veterinarian;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="sessionId")
+    private Session session;
 }

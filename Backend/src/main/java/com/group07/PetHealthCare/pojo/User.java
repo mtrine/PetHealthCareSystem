@@ -27,8 +27,8 @@ public abstract class User {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "sex", length = 10)
-    private String sex;
+    @Column(name = "sex")
+    private Boolean sex;
 
     @Column(name = "password", length = 100)
     private String password;

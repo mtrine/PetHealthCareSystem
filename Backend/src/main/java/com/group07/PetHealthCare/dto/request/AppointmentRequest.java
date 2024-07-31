@@ -15,6 +15,8 @@ public class AppointmentRequest {
     private BigDecimal deposit;
     private String petId;
     private String serviceId;
-    private String veterinarianScheduleId;
+    private String veterinarianId;
+    private String sessionId;
     private String description;
+    private String appointmentType;
 }

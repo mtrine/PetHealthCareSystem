@@ -26,6 +26,9 @@ public class Pet {
     @Column(name = "age")
     private Integer age;
 
+    @Column(name="gender")
+    private Boolean gender;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "speciesID")
     private Species species;

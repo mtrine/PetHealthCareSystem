@@ -36,5 +36,6 @@ public class VeterinarianController {
         apiResponse.setResult("Delete success");
         return apiResponse;
     }
+
 }
 
