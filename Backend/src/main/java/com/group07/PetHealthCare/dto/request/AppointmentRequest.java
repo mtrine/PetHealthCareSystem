@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.Set;
 
 
 @Getter
@@ -14,9 +15,9 @@ public class AppointmentRequest {
     private Date appointmentDate;
     private BigDecimal deposit;
     private String petId;
-    private String serviceId;
+    private Set<String> serviceId;
     private String veterinarianId;
     private String sessionId;
     private String description;
-    private String appointmentType;
+
 }

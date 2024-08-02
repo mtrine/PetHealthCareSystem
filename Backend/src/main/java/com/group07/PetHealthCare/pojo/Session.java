@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -17,8 +18,8 @@ public class Session {
     private String id;
 
     @Column(name = "startTime")
-    private String startTime;
+    private LocalTime startTime;
 
     @Column(name = "endTime")
-    private String endTime;
+    private LocalTime endTime;
 }

@@ -47,8 +47,9 @@ public class AppointmentController {
         return apiResponse;
     }
     @PatchMapping("/{appointmentId}")
-    public ApiResponse<Appointment> changeInforAppointment(@PathVariable("appointmentId") String appointmentId,AppointmentRequest request){
+    public ApiResponse<Appointment> changeInforAppointment(@PathVariable("appointmentId") String appointmentId,@RequestBody  AppointmentRequest request){
         ApiResponse<Appointment> apiResponse = new ApiResponse<>();
+        System.out.println("Service Id hello: " + request.getServiceId());
         apiResponse.setResult(appointmentService.changeInforAppointment(appointmentId,request));
         return apiResponse;
     }

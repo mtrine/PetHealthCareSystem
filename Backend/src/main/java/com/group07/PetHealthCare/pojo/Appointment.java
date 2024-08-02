@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -36,10 +38,9 @@ public class Appointment {
     @JsonBackReference
     private Pet pet;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "serviceID")
-   @JsonManagedReference
-    private Services service;
+    @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AppointmentServices> appointmentServices = new LinkedHashSet<>();
+
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "veterinarianID")
