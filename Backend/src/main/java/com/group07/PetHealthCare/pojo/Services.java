@@ -26,7 +26,6 @@ public class Services {
     @Column(name = "unitPrice", precision = 10, scale = 2)
     private BigDecimal unitPrice;
 
-    @OneToMany(mappedBy = "service", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
-    private Set<Appointment> appointments= new LinkedHashSet<>();
+
+
 }

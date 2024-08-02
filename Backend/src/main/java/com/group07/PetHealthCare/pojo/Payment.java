@@ -9,8 +9,9 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED) // Sử dụng InheritanceType.JOINED để lưu các bảng con vào các bảng riêng biệt
 @Table(name = "payment")
-public class Payment {
+public abstract class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "PaymentID", nullable = false)
@@ -25,14 +26,9 @@ public class Payment {
     @Column(name = "paymentMethod", length = 50)
     private String paymentMethod;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "appointmentID")
-    private Appointment appointment;
 
     @Column(name = "totalAmount")
     private Double totalAmount;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "hospitalizationID", nullable = true)
-    private Hospitalization hospitalization;
+
 }

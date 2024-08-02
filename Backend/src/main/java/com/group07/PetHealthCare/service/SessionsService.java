@@ -15,6 +15,9 @@ public class SessionsService {
 
     public Session createSession(SessionsRequest request) {
         Session session = new Session();
+        if(request.getStartTime().isAfter(request.getEndTime())){
+            throw new RuntimeException("Start time must be before end time");
+        }
         session.setStartTime(request.getStartTime());
         session.setEndTime(request.getEndTime());
 
