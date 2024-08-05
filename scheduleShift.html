@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./assets/font/boxicons-2.1.4/css/boxicons.min.css">
+    <style>
+        #booking {
+            height: 877px;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        .header-container i {
+            font-size: 70px;
+            color: #16427C;
+        }
+
+        .header-container h1 {
+            font-size: 40px;
+            font-weight: 500;
+            color: #16427C;
+        }
+
+        .choose-date {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .choose-date label {
+            font-weight: 400;
+            font-size: 30px;
+            margin-left: 31px;
+            color: #1E65D6;
+        }
+
+        .date-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 350px;
+        }
+
+        .choose-date .date-container input[type="date"] {
+            width: 100%;
+            height: 70px;
+            padding: 10px 40px 10px 15px;
+            font-size: 30px;
+            text-align: center;
+            color: #16427C;
+            border: 1px solid #ced4da;
+            border-radius: 50px;
+            outline: none;
+            box-shadow: 0px 4px 10px 5px #16427C;
+            font-family: 'Inter', sans-serif;
+        }
+
+
+        .choose-date .date-container i {
+            position: absolute;
+            right: 15px;
+            font-size: 40px;
+            color: #16427C;
+            cursor: pointer;
+        }
+
+        /* Chọn ca */
+
+        .time-slot-selector {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            margin: 45px 0;
+        }
+
+        .time-slot-selector>label {
+            font-weight: 400;
+            font-size: 30px;
+            margin-left: 66px;
+            color: #1E65D6;
+        }
+
+
+
+        .tabs {
+            display: flex;
+            position: relative;
+            background-color: #fff;
+            box-shadow: 0 0 1px 0 rgba(24, 94, 224, 0.15), 0 6px 12px 0 rgba(24, 94, 224, 0.15);
+            padding: 0.75rem;
+            border-radius: 99px;
+            box-shadow: 0px 4px 10px 5px #16427C;
+        }
+
+        .tabs * {
+            z-index: 2;
+        }
+
+        .time-slot-container input[type="radio"] {
+            display: none;
+        }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            width: 216px;
+            font-weight: 500;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: color 0.15s ease-in;
+            font-weight: 400;
+            font-size: 30px;
+            margin: 0 30px;
+            color: #1E65D6;
+        }
+
+        .time-slot-container input[type="radio"]:checked+label {
+            color: #fff;
+        }
+
+        .time-slot-container input[id="radio-1"]:checked~.glider {
+            transform: translateX(0);
+        }
+
+        .time-slot-container input[id="radio-2"]:checked~.glider {
+            transform: translateX(100%);
+        }
+
+        .time-slot-container input[id="radio-3"]:checked~.glider {
+            transform: translateX(200%);
+        }
+
+        .time-slot-container input[id="radio-4"]:checked~.glider {
+            transform: translateX(300%);
+        }
+
+        .glider {
+            position: absolute;
+            display: flex;
+            height: 46.4px;
+            width: 276px;
+            background-color: #1E65D6;
+            z-index: 1;
+            border-radius: 99px;
+            transition: 0.25s ease-out;
+        }
+
+        @media (max-width: 760px) {
+
+            .tabs {
+                transform: scale(0.8);
+            }
+        }
+
+        /* Service */
+
+        .service-select-container {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin: 45px 0;
+            position: relative;
+        }
+
+        .service-select-container label {
+            font-weight: 400;
+            font-size: 30px;
+            margin-left: 77px;
+            color: #1E65D6;
+        }
+
+        .custom-select {
+            width: 400px;
+            height: 56px;
+            position: relative;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            box-shadow: 0px 4px 10px 5px #16427C;
+            cursor: pointer;
+        }
+
+        .custom-select .selected-option {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-size: 25px;
+            color: #16427C;
+            background-color: #fff;
+            border-radius: 30px;
+        }
+
+        .custom-select .options {
+            display: none;
+            position: absolute;
+            text-align: center;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 30px;
+            box-shadow: 0px 4px 10px 5px #16427C;
+            z-index: 10;
+        }
+
+        .custom-select .options div {
+            padding: 15px 20px;
+            font-size: 25px;
+            cursor: pointer;
+            color: #5E5E5E;
+            border-bottom: 2px solid #ccc;
+        }
+
+        .custom-select .options div:hover {
+            color: #16427C;
+        }
+
+        .custom-select.open .options {
+            display: block;
+        }
+
+        .service-select-container i {
+            position: absolute;
+            right: 15px;
+            font-size: 40px;
+            color: #16427C;
+            pointer-events: none;
+        }
+
+        /* Pet */
+        .pet-select-container {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin: 45px 0;
+            position: relative;
+        }
+
+        .pet-select-container label {
+            font-weight: 400;
+            font-size: 30px;
+            margin-left: 49px;
+            color: #1E65D6;
+        }
+
+        .pet-select-container .custom-select {
+            width: 400px;
+            height: 56px;
+            position: relative;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            box-shadow: 0px 4px 10px 5px #16427C;
+            cursor: pointer;
+        }
+
+        .pet-select-container .custom-select .selected-option {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-size: 25px;
+            color: #16427C;
+            background-color: #fff;
+            border-radius: 30px;
+        }
+
+        .pet-select-container .custom-select .options {
+            display: none;
+            position: absolute;
+            text-align: center;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 30px;
+            box-shadow: 0px 4px 10px 5px #16427C;
+            z-index: 10;
+        }
+
+        .pet-select-container .custom-select .options div {
+            padding: 15px 20px;
+            font-size: 25px;
+            cursor: pointer;
+            color: #5E5E5E;
+            border-bottom: 2px solid #ccc;
+        }
+
+        .pet-select-container .custom-select .options div:hover {
+            color: #16427C;
+        }
+
+        .pet-select-container .custom-select.open .options {
+            display: block;
+        }
+
+        .pet-select-container i {
+            position: absolute;
+            right: 15px;
+            font-size: 40px;
+            color: #16427C;
+            pointer-events: none;
+        }
+
+        /* Đặt lịch */
+        .submit {
+            display: flex;
+            justify-content: center;
+        }
+
+        .submit button {
+            width: 440px;
+            height: 87px;
+            border-radius: 50px;
+            border: none;
+            font-size: 30px;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            background-color: #16427C;
+            margin: 40px 0;
+        }
+
+        .submit button:hover {
+            box-shadow: 0px 4px 10px 5px #ccc;
+        }
+
+        /* Payment modal */
+        #payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        #payment-modal .payment-content {
+            width: 480px;
+            height: 460px;
+            background-color: #fff;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        #payment-modal .payment-content h2 {
+            text-align: center;
+            margin: 20px;
+        }
+
+        #payment-modal .radio-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin: 20px 40px;
+        }
+
+        #payment-modal .radio-option {
+            display: flex;
+            align-items: flex-start;
+            padding: 25px;
+            width: 400px;
+            height: 60px;
+            cursor: pointer;
+        }
+
+        #payment-modal .radio-option input {
+            width: 30px;
+            height: 30px;
+        }
+
+        #payment-modal .radio-option label {
+            margin-left: 20px;
+            font-size: 30px;
+            line-height: 1.2;
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-top: 113px;
+        }
+
+        .action-button {
+            width: 100%;
+            padding: 20px 0;
+            font-size: 20px;
+            cursor: pointer;
+            text-align: center;
+            border-top: 1px solid #000;
+        }
+
+        .action-button:hover {
+            background-color: #ddd;
+        }
+
+        #payment-modal .payment-content .close {
+            font-size: 40px;
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        #payment-modal .modal-actions .action-button:last-child {
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            border-top: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header">
+        <div class="logo">
+            <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
+        </div>
+        <ul class="nav">
+            <li><a href="#" onclick="showModal()">TRANG CHỦ</a></li>
+            <li><a href="#" onclick="showModal()">DỊCH VỤ</a></li>
+            <li><a href="#" onclick="showModal()">BẢNG GIÁ</a></li>
+        </ul>
+        <div class="header-btn">
+            <i class='bx bx-user-circle'></i>
+            <ul class="sub-nav">
+                <li><a href="login.html">Đăng nhập</a></li>
+                <li><a href="register.html">Đăng ký</a></li>
+            </ul>
+        </div>
+
+    </header>
+    <div id="booking">
+        <div class="booking-container">
+            <div class="header-container">
+                <a href="booking.html"><i class='bx bx-chevron-left'></i></a>
+                <h1>Đặt lịch theo ca</h1>
+            </div>
+            <form>
+                <div class="choose-date">
+                    <label for="date">Chọn ngày</label>
+                    <div class="date-container">
+                        <input type="date" id="date" name="date">
+                        <!-- <i class='bx bx-calendar-alt'></i> -->
+
+                    </div>
+                </div>
+                <div class="time-slot-selector">
+                    <label for="shift">Chọn ca</label>
+                    <div class="time-slot-container">
+                        <div class="tabs">
+                            <input type="radio" id="radio-1" name="time" checked>
+                            <label class="tab" for="radio-1">8h - 10h</label>
+                            <input type="radio" id="radio-2" name="time">
+                            <label class="tab" for="radio-2">10h - 12h</label>
+                            <input type="radio" id="radio-3" name="time">
+                            <label class="tab" for="radio-3">14h - 16h</label>
+                            <input type="radio" id="radio-4" name="time">
+                            <label class="tab" for="radio-4">16h - 18h</label>
+                            <span class="glider"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="service-select-container">
+                    <label for="service-select">Dịch vụ</label>
+                    <div id="service-select" class="custom-select">
+                        <div class="selected-option">Chọn dịch vụ <i class='bx bx-chevron-down'></i></div>
+                        <div class="options">
+                            <div data-value="service1">Tẩy giun</div>
+                            <div data-value="service2">Triệt sản</div>
+                            <div data-value="service3">Tỉa lông - cắt móng</div>
+                            <div data-value="service4">Tiêm phòng</div>
+                            <div data-value="service5">Khám và điều trị</div>
+                            <div data-value="service6">Siêu âm</div>
+                            <div data-value="service7" style="border-bottom: none;">Chẩn đoán và xét nghiệm</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pet-select-container">
+                    <label for="pet-select">Thú cưng</label>
+                    <div id="pet-select" class="custom-select">
+                        <div class="selected-option">Chọn thú cưng<i class='bx bx-chevron-down'></i></div>
+                        <div class="options">
+                            <div data-value="pet1">Tên thú cưng 1</div>
+                            <div data-value="pet2">Tên thú cưng 2</div>
+                            <div data-value="pet3">Tên thú cưng 3</div>
+                            <div data-value="pet4" style="border-bottom: none;">Tên thú cưng 4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="submit">
+                    <button type="submit" onclick="openPaymentModal()">ĐẶT LỊCH</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Options Modal -->
+    <div id="payment-modal">
+        <div class="payment-content">
+            <span class="close" onclick="closePaymentModal()">&times;</span>
+            <h2>Chọn phương thức thanh toán</h2>
+            <div class="radio-container">
+                <div class="radio-option">
+                    <input type="radio" id="prepay" name="payment" value="prepay">
+                    <label for="prepay">Thanh toán trước<br>(chuyển khoản)</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="pay-later" name="payment" value="pay-later">
+                    <label for="pay-later">Thanh toán trực tiếp<br>(trả bằng tiền mặt)</label>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <div class="action-button ok" onclick="confirmBooking()">OK</div>
+                <div class="action-button" onclick="closePaymentModal()">Thoát</div>
+            </div>
+        </div>
+    </div>
+
+
+    <footer id="footer">
+        <div class="footer-content">
+            <div class="footer-item">
+                <i class='bx bx-map'></i> <b>Địa chỉ:</b> 2 Võ Oanh, Bình Thạnh, TP.HCM
+            </div>
+            <div class="footer-item">
+                <i class='bx bx-phone'></i> <b>Đường dây nóng:</b> 0123-456-789
+            </div>
+            <div class="footer-item">
+                <i class='bx bx-envelope'></i> <b>Email Contact:</b> contact@example.com
+            </div>
+        </div>
+    </footer>
+</body>
+<script>
+    // Hiển thị payment modal
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const bookingForm = document.querySelector("form");
+        bookingForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Show the payment modal
+            document.getElementById("payment-modal").style.display = "flex";
+        });
+
+        const okButton = document.querySelector(".action-button.ok");
+        okButton.addEventListener("click", function () {
+            const selectedPayment = document.querySelector('input[name="payment"]:checked');
+            if (selectedPayment) {
+                if (selectedPayment.value === "prepay") {
+                    // Redirect to the payment method selection page
+                    window.location.href = "payment-method.html"; // Replace with your actual page
+                } else if (selectedPayment.value === "pay-later") {
+                    // Handle the pay later option
+                    alert("You have selected to pay later.");
+                    closePaymentModal();
+                }
+            } else {
+                alert("Please select a payment method.");
+            }
+        });
+    });
+
+    function closePaymentModal() {
+        document.getElementById("payment-modal").style.display = "none";
+    }
+
+    function confirmBooking() {
+        // Additional logic for confirming the booking can go here
+    }
+
+
+    // Service select
+    document.querySelector('#service-select').addEventListener('click', function (event) {
+        const icon = this.querySelector('.selected-option i');
+        this.classList.toggle('open');
+        icon.classList.toggle('bx-rotate-180');
+    });
+
+    document.querySelectorAll('#service-select .options div').forEach(function (option) {
+        option.addEventListener('click', function (event) {
+            event.stopPropagation(); // Prevent the dropdown from immediately re-opening
+            const select = option.closest('.custom-select');
+            select.querySelector('.selected-option').innerHTML = option.innerText + " <i class='bx bx-chevron-down'></i>";
+            select.classList.remove('open');
+        });
+    });
+
+    // Close the dropdown if clicking outside of it
+    document.addEventListener('click', function (event) {
+        if (!event.target.closest('#service-select')) {
+            document.querySelector('#service-select').classList.remove('open');
+        }
+    });
+
+    // Pet select
+    document.querySelector('#pet-select').addEventListener('click', function (event) {
+        const icon = this.querySelector('.selected-option i');
+        this.classList.toggle('open');
+        icon.classList.toggle('bx-rotate-180');
+    });
+
+    document.querySelectorAll('#pet-select .options div').forEach(function (option) {
+        option.addEventListener('click', function (event) {
+            event.stopPropagation(); // Prevent the dropdown from immediately re-opening
+            const select = option.closest('.custom-select');
+            select.querySelector('.selected-option').innerHTML = option.innerText + " <i class='bx bx-chevron-down'></i>";
+            select.classList.remove('open');
+        });
+    });
+
+    // Close the dropdown if clicking outside of it
+    document.addEventListener('click', function (event) {
+        if (!event.target.closest('#pet-select')) {
+            document.querySelector('#pet-select').classList.remove('open');
+        }
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const headerBtn = document.querySelector('.header-btn');
+        const subNav = document.querySelector('.sub-nav');
+
+        headerBtn.addEventListener('click', function () {
+            // Toggle hiển thị sub-nav
+            subNav.style.display = (subNav.style.display === 'flex' ? 'none' : 'flex');
+        });
+
+        // Đóng sub-nav khi nhấp ra ngoài
+        document.addEventListener('click', function (event) {
+            if (!headerBtn.contains(event.target)) {
+                subNav.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+</html>
