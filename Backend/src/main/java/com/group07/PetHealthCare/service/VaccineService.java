@@ -44,4 +44,6 @@ public class VaccineService {
         return vaccinerepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Vaccine not found"));
     }
+
+
 }

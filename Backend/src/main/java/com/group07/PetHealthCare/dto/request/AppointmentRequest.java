@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 
@@ -12,7 +13,7 @@ import java.util.Set;
 @Setter
 public class AppointmentRequest {
     private String status;
-    private Date appointmentDate;
+    private LocalDate appointmentDate;
     private BigDecimal deposit;
     private String petId;
     private Set<String> serviceId;
