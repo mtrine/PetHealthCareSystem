@@ -16,8 +16,8 @@ public class Cage {
     @Column(name = "cageNumber")
     private Integer cageNumber;
 
-    @Column(name = "status", length = 50)
-    private String status;
+    @Column(name = "status")
+    private Boolean status=false;
 
     @Column(name = "unitPrice")
     private BigDecimal unitPrice;

@@ -14,7 +14,6 @@ public class CagesService {
 
     public Cage addCage(CageRequest request) {
         Cage cage = new Cage();
-        cage.setStatus(request.getStatus());
         cage.setUnitPrice(request.getUnitPrice());
         return cagesRepository.save(cage);
     }

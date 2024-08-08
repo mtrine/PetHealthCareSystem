@@ -1,6 +1,4 @@
-package com.group07.PetHealthCare.controller;
-
-
+package com.group07.PetHealthCare.controllers;
 import com.group07.PetHealthCare.dto.request.ApiResponse;
 import com.group07.PetHealthCare.dto.request.VaccineRequest;
 import com.group07.PetHealthCare.pojo.Vaccine;

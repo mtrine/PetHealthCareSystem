@@ -8,6 +8,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class CageRequest {
-    private String status;
+    private Boolean status;
     private BigDecimal unitPrice;
 }

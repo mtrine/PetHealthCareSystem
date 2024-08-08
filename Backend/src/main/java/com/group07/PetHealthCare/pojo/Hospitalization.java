@@ -26,8 +26,8 @@ public class Hospitalization {
     @JoinColumn(name = "cageNumber")
     private Cage cage;
 
-    @Column(name = "visitTime")
-    private LocalTime visitTime;
+    @Column(name="reason_for_hospitalization")
+    private String reasonForHospitalization;
 
     @Column(name = "healthCondition")
     private String healthCondition;
