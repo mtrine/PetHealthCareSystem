@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -19,4 +20,7 @@ public class Veterinarian extends User {
     @OneToMany(mappedBy = "veterinarian")
     @JsonBackReference
     private Set<Appointment> appointments=new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "veterinarian")
+    private List<VisitSchedule> visitSchedules;
 }
