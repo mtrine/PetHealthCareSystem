@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/vaccines")
+@RequestMapping("/v1/vaccines")
 public class VaccineController {
     @Autowired
     private VaccineService vaccineService;
