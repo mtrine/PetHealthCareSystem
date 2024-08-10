@@ -1,9 +1,11 @@
 package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.UserRequest;
+import com.group07.PetHealthCare.dto.respone.UserRespone;
 import com.group07.PetHealthCare.enumData.Role;
 import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.exception.ErrorCode;
+import com.group07.PetHealthCare.mapper.IUserMapper;
 import com.group07.PetHealthCare.pojo.Customer;
 import com.group07.PetHealthCare.pojo.Staff;
 import com.group07.PetHealthCare.pojo.User;
@@ -21,76 +23,12 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     private IUserRepository IUserRepository;
+
     @Autowired
-    private ICustomerRepository ICustomerRepository;
-    @Autowired
-    private IVeterinarianRepository IVeterinarianRepository;
-    @Autowired
-    private IStaffRepository IStaffRepository;
+    private IUserMapper userMapper;
 
-    public User register(UserRequest request) {
-        Optional<User> existingCustomer = IUserRepository.findByEmail(request.getEmail());
-        if (existingCustomer.isPresent()) {
-            throw new AppException(ErrorCode.USER_EXISTED);
-        }
 
-        // Create a new user based on role
-        User newUser;
-        switch (request.getRole()) {
-            case "CUSTOMER":
-                newUser = new Customer();
-                break;
-            case "STAFF":
-                newUser = new Staff();
-                break;
-            case "VETERINARIAN":
-                newUser = new Veterinarian();
-                break;
-            default:
-                throw new AppException(ErrorCode.INVALID_ROLE);
-        }
-
-        newUser.setName(request.getName());
-        newUser.setEmail(request.getEmail());
-        newUser.setPhoneNumber(request.getPhoneNumber());
-        newUser.setAddress(request.getAddress());
-        newUser.setSex(request.getSex());
-        newUser.setPassword(request.getPassword());
-        newUser.setRole(Role.valueOf(request.getRole()));
-
-        // Save user based on role
-        if (newUser instanceof Customer) {
-            return ICustomerRepository.save((Customer) newUser);
-        } else if (newUser instanceof Staff) {
-            return IStaffRepository.save((Staff) newUser);
-        } else {
-            return IVeterinarianRepository.save((Veterinarian) newUser);
-        }
-    }
-
-    public User login(UserRequest request) {
-        User user;
-        switch (Role.valueOf(request.getRole())) {
-            case CUSTOMER:
-                user = ICustomerRepository.findByEmail(request.getEmail()).orElse(null);
-                break;
-            case STAFF:
-                user = IStaffRepository.findByEmail(request.getEmail()).orElse(null);
-                break;
-            case VETERINARIAN:
-                user = IVeterinarianRepository.findByEmail(request.getEmail()).orElse(null);
-                break;
-            default:
-                throw new AppException(ErrorCode.INVALID_ROLE);
-        }
-
-        if (user == null || !user.getPassword().equals(request.getPassword())) {
-            throw new AppException(ErrorCode.INCORRECT_EMAIL_OR_PASSWORD);
-        }
-        return user;
-    }
-
-    public User updateInforUser(String id, UserRequest request) {
+    public UserRespone updateInforUser(String id, UserRequest request) {
         User user = IUserRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
         // Cập nhật các trường chỉ khi có trong request
@@ -123,7 +61,7 @@ public class UserService {
             }
         }
 
-        return IUserRepository.save(user);
+        return userMapper.toUserRespone(IUserRepository.save(user)) ;
     }
 
 }

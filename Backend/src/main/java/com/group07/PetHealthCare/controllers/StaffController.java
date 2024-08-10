@@ -1,6 +1,7 @@
 package com.group07.PetHealthCare.controllers;
 
 import com.group07.PetHealthCare.dto.request.ApiResponse;
+import com.group07.PetHealthCare.dto.respone.StaffRespone;
 import com.group07.PetHealthCare.pojo.Staff;
 import com.group07.PetHealthCare.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,14 @@ public class StaffController {
     private StaffService staffService;
 
     @GetMapping
-    public ApiResponse<List<Staff>> getAllStaffs() {
-        ApiResponse<List<Staff>> apiResponse = new ApiResponse<>();
+    public ApiResponse<List<StaffRespone>> getAllStaffs() {
+        ApiResponse<List<StaffRespone>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(staffService.getAllStaff());
         return apiResponse;
     }
     @GetMapping("/{staffId}")
-    public ApiResponse<Staff> getStaffById(@PathVariable("staffId") String staffId) {
-        ApiResponse<Staff> apiResponse = new ApiResponse<>();
+    public ApiResponse<StaffRespone> getStaffById(@PathVariable("staffId") String staffId) {
+        ApiResponse<StaffRespone>  apiResponse = new ApiResponse<>();
         apiResponse.setResult(staffService.getStaffById(staffId));
         return apiResponse;
     }

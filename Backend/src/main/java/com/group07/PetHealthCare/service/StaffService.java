@@ -1,5 +1,7 @@
 package com.group07.PetHealthCare.service;
 
+import com.group07.PetHealthCare.dto.respone.StaffRespone;
+import com.group07.PetHealthCare.mapper.IStaffMapper;
 import com.group07.PetHealthCare.pojo.Staff;
 import com.group07.PetHealthCare.respositytory.IStaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +14,15 @@ public class StaffService {
     @Autowired
     IStaffRepository staffRepository;
 
-    public List<Staff> getAllStaff() {
-        return staffRepository.findAll();
+    @Autowired
+    IStaffMapper staffMapper;
+    public List<StaffRespone> getAllStaff() {
+
+        return staffMapper.toResponeList(staffRepository.findAll());
     }
 
-    public Staff getStaffById(String staff) {
-        return staffRepository.findById(staff).get();
+    public StaffRespone getStaffById(String staff) {
+        return staffMapper.toRespone(staffRepository.findById(staff).get());
     }
 
     public void deleteStaff(String staffId) {
