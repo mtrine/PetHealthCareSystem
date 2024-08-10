@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -28,7 +29,7 @@ public class Appointment {
     private String description;
 
     @Column(name = "appointmentDate")
-    private Date appointmentDate;
+    private LocalDate appointmentDate;
 
     @Column(name = "deposit", precision = 10, scale = 2)
     private BigDecimal deposit;

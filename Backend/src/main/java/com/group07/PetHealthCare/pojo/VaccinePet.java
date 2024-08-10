@@ -1,10 +1,10 @@
 package com.group07.PetHealthCare.pojo;
 
+import com.group07.PetHealthCare.config.VaccinePetId;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Getter
@@ -12,19 +12,23 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "vaccine_pet")
 public class VaccinePet {
-    @Id
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "petID", nullable = false)
-    private Pet pet;
 
-    @Id
+    @EmbeddedId
+    private VaccinePetId id= new VaccinePetId();
+
     @ManyToOne(fetch = FetchType.EAGER)
+    @MapsId("vaccineId")
     @JoinColumn(name = "vaccineID", nullable = false)
     private Vaccine vaccine;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @MapsId("petId")
+    @JoinColumn(name = "petID", nullable = false)
+    private Pet pet;
+
     @Column(name = "stingDate")
-    private Date stingDate;
+    private LocalDate stingDate;
 
     @Column(name = "reStingDate")
-    private Date reStingDate;
+    private LocalDate reStingDate;
 }

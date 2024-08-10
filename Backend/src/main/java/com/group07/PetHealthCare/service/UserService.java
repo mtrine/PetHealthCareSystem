@@ -1,6 +1,7 @@
 package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.UserRequest;
+import com.group07.PetHealthCare.enumData.Role;
 import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.pojo.Customer;
@@ -36,13 +37,13 @@ public class UserService {
         // Create a new user based on role
         User newUser;
         switch (request.getRole()) {
-            case "Customer":
+            case "CUSTOMER":
                 newUser = new Customer();
                 break;
-            case "Staff":
+            case "STAFF":
                 newUser = new Staff();
                 break;
-            case "Veterinarian":
+            case "VETERINARIAN":
                 newUser = new Veterinarian();
                 break;
             default:
@@ -55,6 +56,7 @@ public class UserService {
         newUser.setAddress(request.getAddress());
         newUser.setSex(request.getSex());
         newUser.setPassword(request.getPassword());
+        newUser.setRole(Role.valueOf(request.getRole()));
 
         // Save user based on role
         if (newUser instanceof Customer) {
@@ -68,21 +70,21 @@ public class UserService {
 
     public User login(UserRequest request) {
         User user;
-        switch (request.getRole()) {
-            case "Customer":
-                user= ICustomerRepository.findByEmail(request.getEmail()).get();
+        switch (Role.valueOf(request.getRole())) {
+            case CUSTOMER:
+                user = ICustomerRepository.findByEmail(request.getEmail()).orElse(null);
                 break;
-            case "Staff":
-                user = IStaffRepository.findByEmail(request.getEmail()).get();
+            case STAFF:
+                user = IStaffRepository.findByEmail(request.getEmail()).orElse(null);
                 break;
-            case "Veterinarian":
-                user = IVeterinarianRepository.findByEmail(request.getEmail()).get();
+            case VETERINARIAN:
+                user = IVeterinarianRepository.findByEmail(request.getEmail()).orElse(null);
                 break;
             default:
                 throw new AppException(ErrorCode.INVALID_ROLE);
         }
 
-        if (user==null ||  !user.getPassword().equals(request.getPassword())) {
+        if (user == null || !user.getPassword().equals(request.getPassword())) {
             throw new AppException(ErrorCode.INCORRECT_EMAIL_OR_PASSWORD);
         }
         return user;
@@ -91,7 +93,7 @@ public class UserService {
     public User updateInforUser(String id, UserRequest request) {
         User user = IUserRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
-        // Update only the fields present in the request
+        // Cập nhật các trường chỉ khi có trong request
         if (request.getName() != null) {
             user.setName(request.getName());
         }
@@ -108,11 +110,8 @@ public class UserService {
             user.setSex(request.getSex());
         }
 
-        // Update specific fields based on user type
-        if (user instanceof Customer) {
-            Customer customer = (Customer) user;
-            // Update specific fields for Customer if needed
-        } else if (user instanceof Veterinarian) {
+        // Cập nhật các trường cụ thể dựa trên loại user
+        if (user instanceof Veterinarian) {
             Veterinarian veterinarian = (Veterinarian) user;
             if (request.getIsFulltime() != null) {
                 veterinarian.setIsFulltime(request.getIsFulltime());

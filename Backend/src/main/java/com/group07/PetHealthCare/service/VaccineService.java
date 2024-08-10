@@ -16,7 +16,7 @@ public class VaccineService {
         Vaccine vaccine = new Vaccine();
 
         vaccine.setName(request.getName());
-        vaccine.setExpDate(request.getExpdate());
+        vaccine.setExpDate(request.getExpDate());
 
         return vaccinerepository.save(vaccine);
 
@@ -25,7 +25,7 @@ public class VaccineService {
     public Vaccine updateVaccine(String vaccineid , VaccineRequest request){
         Vaccine vaccine = getVaccine(vaccineid);
 
-        vaccine.setExpDate(request.getExpdate());
+        vaccine.setExpDate(request.getExpDate());
 
         return vaccinerepository.save(vaccine);
 
@@ -44,4 +44,6 @@ public class VaccineService {
         return vaccinerepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Vaccine not found"));
     }
+
+
 }

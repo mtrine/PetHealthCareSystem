@@ -1,5 +1,6 @@
 package com.group07.PetHealthCare.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,5 +26,6 @@ public class Vaccine {
     private LocalDate expDate;
 
     @OneToMany(mappedBy = "vaccine", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<VaccinePet> petVaccines = new HashSet<>();
 }

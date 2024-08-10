@@ -1,5 +1,6 @@
 package com.group07.PetHealthCare.pojo;
 
+import com.group07.PetHealthCare.enumData.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,4 +33,8 @@ public abstract class User {
 
     @Column(name = "password", length = 100)
     private String password;
+
+    @Enumerated(EnumType.STRING)  // Lưu vai trò dưới dạng chuỗi trong DB
+    @Column(name = "role", nullable = false)
+    private Role role;
 }
