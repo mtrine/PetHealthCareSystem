@@ -2,8 +2,7 @@ package com.group07.PetHealthCare.controllers;
 
 import com.group07.PetHealthCare.dto.request.ApiResponse;
 import com.group07.PetHealthCare.dto.request.UserRequest;
-import com.group07.PetHealthCare.dto.respone.UserRespone;
-import com.group07.PetHealthCare.pojo.User;
+import com.group07.PetHealthCare.dto.response.UserResponse;
 import com.group07.PetHealthCare.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,8 @@ public class UserController {
 
 
     @PatchMapping("/{userId}")
-    public ApiResponse<UserRespone>  updateUser(@PathVariable("userId") String userId, @RequestBody @Valid UserRequest request) {
-       ApiResponse<UserRespone> apiResponse= new ApiResponse<>();
+    public ApiResponse<UserResponse>  updateUser(@PathVariable("userId") String userId, @RequestBody @Valid UserRequest request) {
+       ApiResponse<UserResponse> apiResponse= new ApiResponse<>();
        apiResponse.setResult(userService.updateInforUser(userId,request));
        return apiResponse;
     }

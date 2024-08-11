@@ -1,5 +1,6 @@
 package com.group07.PetHealthCare.service;
 
+import com.group07.PetHealthCare.dto.response.CustomerResponse;
 import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.pojo.Customer;
@@ -20,11 +21,11 @@ public class CustomerService {
     private ICustomerRepository ICustomerRepository;
     @Autowired
     private IPetRepository IPetRepository;
-    public List<Customer> getAllCustomers() {
+    public List<CustomerResponse> getAllCustomers() {
         return ICustomerRepository.findAll();
     }
 
-    public Optional<Customer> getCustomerById(String id) {
+    public Optional<CustomerResponse> getCustomerById(String id) {
         Optional<Customer> customer = ICustomerRepository.findById(id);
         if(!customer.isPresent()){
             throw new AppException(ErrorCode.NOT_FOUND);

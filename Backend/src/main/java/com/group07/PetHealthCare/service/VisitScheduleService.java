@@ -24,7 +24,7 @@ public class VisitScheduleService {
     @Autowired
     private ISessionsRepository sessionsRepository;
 
-    public VisitSchedule createVisitSchedule(VisitScheduleRequest request) {
+    public VisitScheduleResponse createVisitSchedule(VisitScheduleRequest request) {
         // Check if the visit schedule already exists
         boolean visitScheduleExists = visitScheduleRepository
                 .findByVeterinarianIdAndVisitDateAndSessionId(

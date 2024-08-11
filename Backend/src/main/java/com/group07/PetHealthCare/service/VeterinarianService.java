@@ -16,9 +16,9 @@ public class VeterinarianService {
     @Autowired
     private IVeterinarianRepository IVeterinarianRepository;
 
-    public List<Veterinarian> getAllVeterinarian() {return IVeterinarianRepository.findAll();}
+    public List<VeterinarianResponse> getAllVeterinarian() {return IVeterinarianRepository.findAll();}
 
-    public Optional<Veterinarian> getVeterinarianById (String Id)
+    public Optional<VeterinarianResponse> getVeterinarianById (String Id)
     {
         Optional<Veterinarian> veterinarian = IVeterinarianRepository.findById(Id);
         if(!veterinarian.isPresent()){

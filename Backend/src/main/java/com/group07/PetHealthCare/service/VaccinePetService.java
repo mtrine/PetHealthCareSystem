@@ -1,6 +1,7 @@
 package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.VaccinePetRequest;
+import com.group07.PetHealthCare.dto.response.VaccinePetResponse;
 import com.group07.PetHealthCare.pojo.Pet;
 import com.group07.PetHealthCare.pojo.Vaccine;
 import com.group07.PetHealthCare.pojo.VaccinePet;
@@ -22,7 +23,7 @@ public class VaccinePetService {
 
     @Autowired
     private IVaccineRepository vaccineRepository;
-    public VaccinePet addVaccineToPet(VaccinePetRequest request) {
+    public VaccinePetResponse addVaccineToPet(VaccinePetRequest request) {
         VaccinePet vaccinePet = new VaccinePet();
         Pet pet = petRepository.findById(request.getPetId()).orElseThrow(()->new RuntimeException("Pet not found"));
         vaccinePet.setPet(pet);
@@ -33,7 +34,7 @@ public class VaccinePetService {
         return vaccinePetRepository.save(vaccinePet);
     }
 
-    public List<VaccinePet> getVaccinePetByPetId(String petId) {
+    public List<VaccinePetResponse> getVaccinePetByPetId(String petId) {
         Pet pet=petRepository.findById(petId).orElseThrow(()->new RuntimeException("Pet not found"));
         return vaccinePetRepository.findAllByPet(pet);
     }

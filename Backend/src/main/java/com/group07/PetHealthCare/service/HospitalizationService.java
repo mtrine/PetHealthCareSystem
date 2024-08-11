@@ -1,6 +1,7 @@
 package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.HospitalizationRequest;
+import com.group07.PetHealthCare.dto.response.HospitalizationResponse;
 import com.group07.PetHealthCare.pojo.Cage;
 import com.group07.PetHealthCare.pojo.Hospitalization;
 import com.group07.PetHealthCare.pojo.Pet;
@@ -23,7 +24,7 @@ public class HospitalizationService {
     @Autowired
     private IPetRepository petRepository;
 
-    public Hospitalization createHospitalization(HospitalizationRequest request) {
+    public HospitalizationResponse createHospitalization(HospitalizationRequest request) {
         if (request.getCageNumber() == null) {
             throw new IllegalArgumentException("Cage number  must not be null");
         }
@@ -47,11 +48,11 @@ public class HospitalizationService {
         return hospitalizationRepository.save(hospitalization);
     }
 
-    public List<Hospitalization> getAllHospitalization() {
+    public List<HospitalizationResponse> getAllHospitalization() {
         return hospitalizationRepository.findAll();
     }
 
-    public Hospitalization getHospitalizationById(String id) {
+    public HospitalizationResponse getHospitalizationById(String id) {
         if (id == null) {
             throw new IllegalArgumentException("ID must not be null");
         }
@@ -59,7 +60,7 @@ public class HospitalizationService {
                 .orElseThrow(() -> new RuntimeException("Hospitalization not found"));
     }
 
-    public Hospitalization updateHospitalization(String id, HospitalizationRequest request) {
+    public HospitalizationResponse updateHospitalization(String id, HospitalizationRequest request) {
         if (id == null) {
             throw new IllegalArgumentException("ID must not be null");
         }
@@ -99,7 +100,7 @@ public class HospitalizationService {
         hospitalizationRepository.delete(hospitalization);
     }
 
-    public List<Hospitalization> getHospitalizationByPetId(String petId) {
+    public List<HospitalizationResponse> getHospitalizationByPetId(String petId) {
         if (petId == null) {
             throw new IllegalArgumentException("Pet ID must not be null");
         }

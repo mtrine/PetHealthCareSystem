@@ -1,6 +1,6 @@
 package com.group07.PetHealthCare.service;
 
-import com.group07.PetHealthCare.dto.respone.StaffRespone;
+import com.group07.PetHealthCare.dto.response.StaffResponse;
 import com.group07.PetHealthCare.mapper.IStaffMapper;
 import com.group07.PetHealthCare.pojo.Staff;
 import com.group07.PetHealthCare.respositytory.IStaffRepository;
@@ -16,12 +16,12 @@ public class StaffService {
 
     @Autowired
     IStaffMapper staffMapper;
-    public List<StaffRespone> getAllStaff() {
+    public List<StaffResponse> getAllStaff() {
 
         return staffMapper.toResponeList(staffRepository.findAll());
     }
 
-    public StaffRespone getStaffById(String staff) {
+    public StaffResponse getStaffById(String staff) {
         return staffMapper.toRespone(staffRepository.findById(staff).get());
     }
 

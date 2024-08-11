@@ -1,6 +1,7 @@
 package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.VaccineRequest;
+import com.group07.PetHealthCare.dto.response.VaccineResponse;
 import com.group07.PetHealthCare.pojo.Vaccine;
 import com.group07.PetHealthCare.respositytory.IVaccineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ public class VaccineService {
     @Autowired
     private IVaccineRepository vaccinerepository;
 
-    public Vaccine createVaccine(VaccineRequest request){
+    public VaccineResponse createVaccine(VaccineRequest request){
         Vaccine vaccine = new Vaccine();
 
         vaccine.setName(request.getName());
@@ -22,7 +23,7 @@ public class VaccineService {
 
     }
 
-    public Vaccine updateVaccine(String vaccineid , VaccineRequest request){
+    public VaccineResponse updateVaccine(String vaccineid , VaccineRequest request){
         Vaccine vaccine = getVaccine(vaccineid);
 
         vaccine.setExpDate(request.getExpDate());
@@ -36,11 +37,11 @@ public class VaccineService {
         vaccinerepository.delete(vaccine);
     }
 
-    public List<Vaccine> getVaccines(){
+    public List<VaccineResponse> getVaccines(){
         return vaccinerepository.findAll();
     }
 
-    public Vaccine getVaccine(String id){
+    public VaccineResponse getVaccine(String id){
         return vaccinerepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Vaccine not found"));
     }
