@@ -1,18 +1,16 @@
-package com.group07.PetHealthCare.dto.respone;
+package com.group07.PetHealthCare.dto.response;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldNameConstants;
 import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRespone {
+public class UserResponse {
     private String id;
     private String name;
     private String email;

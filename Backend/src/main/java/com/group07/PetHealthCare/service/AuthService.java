@@ -1,8 +1,8 @@
 package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.UserRequest;
-import com.group07.PetHealthCare.dto.respone.AuthRespone;
-import com.group07.PetHealthCare.dto.respone.UserRespone;
+import com.group07.PetHealthCare.dto.response.AuthResponse;
+import com.group07.PetHealthCare.dto.response.UserResponse;
 import com.group07.PetHealthCare.enumData.Role;
 import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.exception.ErrorCode;
@@ -42,7 +42,7 @@ public class AuthService {
     @Autowired
     private IUserMapper userMapper;
 
-    public UserRespone register(UserRequest request) {
+    public UserResponse register(UserRequest request) {
         Optional<User> existingCustomer = IUserRepository.findByEmail(request.getEmail());
         if (existingCustomer.isPresent()) {
             throw new AppException(ErrorCode.USER_EXISTED);
@@ -82,7 +82,7 @@ public class AuthService {
         }
     }
 
-    public AuthRespone login(UserRequest request) throws JOSEException {
+    public AuthResponse login(UserRequest request) throws JOSEException {
         User user;
         user =IUserRepository.findByEmail(request.getEmail()).orElseThrow(()->new RuntimeException("User not found"));
         if (user == null || !user.getPassword().equals(request.getPassword())) {
@@ -90,7 +90,7 @@ public class AuthService {
         }
 
         String token =generateToken(user);
-        return AuthRespone.builder()
+        return AuthResponse.builder()
                 .token(token)
                 .userRespone(userMapper.toUserRespone(user))
                 .build();

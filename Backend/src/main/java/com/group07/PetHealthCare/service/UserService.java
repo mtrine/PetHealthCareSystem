@@ -1,23 +1,16 @@
 package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.UserRequest;
-import com.group07.PetHealthCare.dto.respone.UserRespone;
-import com.group07.PetHealthCare.enumData.Role;
+import com.group07.PetHealthCare.dto.response.UserResponse;
 import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.mapper.IUserMapper;
-import com.group07.PetHealthCare.pojo.Customer;
 import com.group07.PetHealthCare.pojo.Staff;
 import com.group07.PetHealthCare.pojo.User;
 import com.group07.PetHealthCare.pojo.Veterinarian;
-import com.group07.PetHealthCare.respositytory.ICustomerRepository;
-import com.group07.PetHealthCare.respositytory.IStaffRepository;
 import com.group07.PetHealthCare.respositytory.IUserRepository;
-import com.group07.PetHealthCare.respositytory.IVeterinarianRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -28,7 +21,7 @@ public class UserService {
     private IUserMapper userMapper;
 
 
-    public UserRespone updateInforUser(String id, UserRequest request) {
+    public UserResponse updateInforUser(String id, UserRequest request) {
         User user = IUserRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
         // Cập nhật các trường chỉ khi có trong request

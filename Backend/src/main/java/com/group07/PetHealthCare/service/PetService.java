@@ -2,6 +2,7 @@ package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.PetCreationRequest;
 import com.group07.PetHealthCare.dto.request.PetUpdateRequest;
+import com.group07.PetHealthCare.dto.response.PetResponse;
 import com.group07.PetHealthCare.pojo.Customer;
 import com.group07.PetHealthCare.pojo.Pet;
 import com.group07.PetHealthCare.pojo.Species;
@@ -23,7 +24,7 @@ public class PetService {
 
     @Autowired
     private ICustomerRepository ICustomerRepository;
-    public Pet addPet(PetCreationRequest request){
+    public PetResponse addPet(PetCreationRequest request){
         Pet pet = new Pet();
         pet.setName(request.getName());
         pet.setAge(request.getAge());
@@ -36,7 +37,7 @@ public class PetService {
         return IPetRepository.save(pet);
     }
 
-    public Set<Pet> getPetsByCustomerId(String customerId) {
+    public Set<PetResponse> getPetsByCustomerId(String customerId) {
         Customer customer = ICustomerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
@@ -45,7 +46,7 @@ public class PetService {
         return pets;
     }
 
-    public Pet updatePet(String id, PetUpdateRequest request) {
+    public PetResponse updatePet(String id, PetUpdateRequest request) {
         Pet pet = IPetRepository.findById(id).orElseThrow(() -> new RuntimeException("Pet not found"));
         pet.setName(request.getName());
         pet.setAge(request.getAge());

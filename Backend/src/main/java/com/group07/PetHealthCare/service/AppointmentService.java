@@ -1,6 +1,7 @@
 package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.AppointmentRequest;
+import com.group07.PetHealthCare.dto.response.AppointmentResponse;
 import com.group07.PetHealthCare.pojo.*;
 import com.group07.PetHealthCare.respositytory.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class AppointmentService {
     private IAppointmentServicesRepository IAppointmentServicesRepository;
 
     @Transactional
-    public Appointment addAppointmentBySession(AppointmentRequest request) {
+    public AppointmentRespones addAppointmentBySession(AppointmentRequest request) {
         // Kiểm tra ca làm việc hợp lệ
         Optional<Session> sessionOpt = ISessionsRepository.findById(request.getSessionId());
         if (sessionOpt.isEmpty()) {
@@ -60,7 +61,7 @@ public class AppointmentService {
     }
     @Transactional
 
-    public Appointment addAppointmentByVeterinarian(AppointmentRequest request) {
+    public AppointmentResponse addAppointmentByVeterinarian(AppointmentRequest request) {
         // Kiểm tra bác sĩ có hợp lệ không
         Optional<Veterinarian> veterinarianOpt = IVeterinarianRepository.findById(request.getVeterinarianId());
         if (veterinarianOpt.isEmpty()) {
@@ -110,16 +111,16 @@ public class AppointmentService {
         return savedAppointment;
     }
     @Transactional
-    public List<Appointment> getAllAppointments() {
+    public List<AppointmentResponse> getAllAppointments() {
         return IAppointmentRepository.findAll();
     }
     @Transactional
-    public List<Appointment> getAppointmentByVeterinarianId(String veterinarianId) {
+    public List<AppointmentResponse> getAppointmentByVeterinarianId(String veterinarianId) {
         return IAppointmentRepository.findByVeterinarianId(veterinarianId);
     }
 
     @Transactional
-    public Appointment changeInforAppointment(String appointmentId, AppointmentRequest request) {
+    public AppointmentResponse changeInforAppointment(String appointmentId, AppointmentRequest request) {
         Appointment appointment = IAppointmentRepository.findById(appointmentId).orElseThrow(() -> new RuntimeException("Appointment not found"));
         if (request.getStatus() != null) {
             appointment.setStatus(request.getStatus());

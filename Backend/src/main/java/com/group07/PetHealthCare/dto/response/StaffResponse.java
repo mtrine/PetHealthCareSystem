@@ -1,6 +1,5 @@
-package com.group07.PetHealthCare.dto.respone;
+package com.group07.PetHealthCare.dto.response;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -11,6 +10,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class StaffRespone extends UserRespone {
+public class StaffResponse extends UserResponse {
     private Boolean isAdmin;
 }

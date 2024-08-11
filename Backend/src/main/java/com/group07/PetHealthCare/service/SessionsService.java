@@ -1,6 +1,7 @@
 package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.SessionsRequest;
+import com.group07.PetHealthCare.dto.response.SessionResponse;
 import com.group07.PetHealthCare.pojo.Session;
 import com.group07.PetHealthCare.respositytory.ISessionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ public class SessionsService {
     @Autowired
     private ISessionsRepository ISessionsRepository;
 
-    public Session createSession(SessionsRequest request) {
+    public SessionResponse createSession(SessionsRequest request) {
         Session session = new Session();
         if(request.getStartTime().isAfter(request.getEndTime())){
             throw new RuntimeException("Start time must be before end time");
@@ -25,7 +26,7 @@ public class SessionsService {
 
     }
 
-    public List<Session> getAllSession(){
+    public List<SessionResponse> getAllSession(){
         return ISessionsRepository.findAll();
     }
 }
