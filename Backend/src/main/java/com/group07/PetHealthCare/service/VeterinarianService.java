@@ -1,8 +1,10 @@
 package com.group07.PetHealthCare.service;
 
 
+import com.group07.PetHealthCare.dto.response.VeterinarianResponse;
 import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.exception.ErrorCode;
+import com.group07.PetHealthCare.mapper.IVeterinarianMapper;
 import com.group07.PetHealthCare.pojo.Veterinarian;
 import com.group07.PetHealthCare.respositytory.IVeterinarianRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +17,19 @@ import java.util.Optional;
 public class VeterinarianService {
     @Autowired
     private IVeterinarianRepository IVeterinarianRepository;
+@Autowired
+    private IVeterinarianMapper veterinarianMapper;
+    public List<VeterinarianResponse> getAllVeterinarian() {
+        return veterinarianMapper.toResponseList(IVeterinarianRepository.findAll());
+    }
 
-    public List<VeterinarianResponse> getAllVeterinarian() {return IVeterinarianRepository.findAll();}
-
-    public Optional<VeterinarianResponse> getVeterinarianById (String Id)
+    public VeterinarianResponse getVeterinarianById (String Id)
     {
         Optional<Veterinarian> veterinarian = IVeterinarianRepository.findById(Id);
         if(!veterinarian.isPresent()){
             throw new AppException(ErrorCode.NOT_FOUND);
         }
-        return IVeterinarianRepository.findById(Id);
+        return veterinarianMapper.toResponse(veterinarian.get());
     }
     public void deleteVeterinarianById(String Id)
     {

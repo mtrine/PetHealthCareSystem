@@ -13,4 +13,5 @@ public interface IStaffMapper {
     StaffResponse toRespone(Staff staff);
     @Mapping(source = "isAdmin", target = "isAdmin")
     List<StaffResponse> toResponeList(List<Staff> staffList);
+    Staff toStaff(StaffResponse staffResponse);
 }

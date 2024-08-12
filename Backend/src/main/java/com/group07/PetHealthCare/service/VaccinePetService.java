@@ -2,6 +2,7 @@ package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.VaccinePetRequest;
 import com.group07.PetHealthCare.dto.response.VaccinePetResponse;
+import com.group07.PetHealthCare.mapper.IVaccinePetMapper;
 import com.group07.PetHealthCare.pojo.Pet;
 import com.group07.PetHealthCare.pojo.Vaccine;
 import com.group07.PetHealthCare.pojo.VaccinePet;
@@ -23,6 +24,8 @@ public class VaccinePetService {
 
     @Autowired
     private IVaccineRepository vaccineRepository;
+    @Autowired
+    private IVaccinePetMapper vaccinePetMapper;
     public VaccinePetResponse addVaccineToPet(VaccinePetRequest request) {
         VaccinePet vaccinePet = new VaccinePet();
         Pet pet = petRepository.findById(request.getPetId()).orElseThrow(()->new RuntimeException("Pet not found"));
@@ -31,11 +34,11 @@ public class VaccinePetService {
         vaccinePet.setVaccine(vaccine);
         vaccinePet.setStingDate(request.getStingDate());
         vaccinePet.setReStingDate(request.getReStingDate());
-        return vaccinePetRepository.save(vaccinePet);
+        return vaccinePetMapper.toVaccinePetResponse(vaccinePetRepository.save(vaccinePet)) ;
     }
 
     public List<VaccinePetResponse> getVaccinePetByPetId(String petId) {
         Pet pet=petRepository.findById(petId).orElseThrow(()->new RuntimeException("Pet not found"));
-        return vaccinePetRepository.findAllByPet(pet);
+        return vaccinePetMapper.toVaccinePetResponseList(vaccinePetRepository.findAllByPet(pet));
     }
 }

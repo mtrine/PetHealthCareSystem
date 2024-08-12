@@ -1,6 +1,8 @@
 package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.VisitScheduleRequest;
+import com.group07.PetHealthCare.dto.response.VisitScheduleResponse;
+import com.group07.PetHealthCare.mapper.IVisitScheduleMapper;
 import com.group07.PetHealthCare.pojo.*;
 import com.group07.PetHealthCare.respositytory.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class VisitScheduleService {
     @Autowired
     private ISessionsRepository sessionsRepository;
 
+    @Autowired
+    private IVisitScheduleMapper visitScheduleMapper;
     public VisitScheduleResponse createVisitSchedule(VisitScheduleRequest request) {
         // Check if the visit schedule already exists
         boolean visitScheduleExists = visitScheduleRepository
@@ -61,7 +65,7 @@ public class VisitScheduleService {
                 .orElseThrow(() -> new RuntimeException("Session not found"));
         visitSchedule.setSession(session);
         // Save and return the visit schedule
-        return visitScheduleRepository.save(visitSchedule);
+        return visitScheduleMapper.toVisitScheduleResponse(visitScheduleRepository.save(visitSchedule)) ;
     }
 }
 

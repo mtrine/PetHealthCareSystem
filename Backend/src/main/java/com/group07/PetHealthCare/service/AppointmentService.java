@@ -2,6 +2,7 @@ package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.AppointmentRequest;
 import com.group07.PetHealthCare.dto.response.AppointmentResponse;
+import com.group07.PetHealthCare.mapper.IAppointmentMapper;
 import com.group07.PetHealthCare.pojo.*;
 import com.group07.PetHealthCare.respositytory.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,10 @@ public class AppointmentService {
     private ISessionsRepository ISessionsRepository;
     @Autowired
     private IAppointmentServicesRepository IAppointmentServicesRepository;
-
+    @Autowired
+    private IAppointmentMapper appointmentMapper;
     @Transactional
-    public AppointmentRespones addAppointmentBySession(AppointmentRequest request) {
+    public AppointmentResponse addAppointmentBySession(AppointmentRequest request) {
         // Kiểm tra ca làm việc hợp lệ
         Optional<Session> sessionOpt = ISessionsRepository.findById(request.getSessionId());
         if (sessionOpt.isEmpty()) {
@@ -57,10 +59,9 @@ public class AppointmentService {
             IAppointmentServicesRepository.save(appointmentServices);
         }
 
-        return savedAppointment;
+        return appointmentMapper.toAppointmentResponse(savedAppointment);
     }
     @Transactional
-
     public AppointmentResponse addAppointmentByVeterinarian(AppointmentRequest request) {
         // Kiểm tra bác sĩ có hợp lệ không
         Optional<Veterinarian> veterinarianOpt = IVeterinarianRepository.findById(request.getVeterinarianId());
@@ -108,15 +109,16 @@ public class AppointmentService {
             IAppointmentServicesRepository.save(appointmentServices);
         }
 
-        return savedAppointment;
+      return   appointmentMapper.toAppointmentResponse(savedAppointment);
     }
     @Transactional
     public List<AppointmentResponse> getAllAppointments() {
-        return IAppointmentRepository.findAll();
+
+        return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findAll());
     }
     @Transactional
     public List<AppointmentResponse> getAppointmentByVeterinarianId(String veterinarianId) {
-        return IAppointmentRepository.findByVeterinarianId(veterinarianId);
+        return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findByVeterinarianId(veterinarianId));
     }
 
     @Transactional
@@ -158,7 +160,7 @@ public class AppointmentService {
             }
         }
 
-        return IAppointmentRepository.save(appointment);
+        return appointmentMapper.toAppointmentResponse(IAppointmentRepository.save(appointment));
     }
 }
 

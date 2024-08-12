@@ -1,9 +1,18 @@
 package com.group07.PetHealthCare.dto.response;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
+
 @Data
-@SuperBuilder
-public class VaccinePetResponse extends VaccineResponse{
+@Builder
+public class VaccinePetResponse {
+    private Long vaccineId;
+    private String vaccineName;  // Bạn có thể thay đổi tên này thành những trường mà bạn muốn lấy từ đối tượng Vaccine
+    private Long petId;
+    private String petName;  // Tương tự, thay đổi nếu cần thiết
+    private LocalDate stingDate;
+    private LocalDate reStingDate;
 }

@@ -3,6 +3,7 @@ package com.group07.PetHealthCare.service;
 import com.group07.PetHealthCare.dto.response.CustomerResponse;
 import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.exception.ErrorCode;
+import com.group07.PetHealthCare.mapper.ICustomerMapper;
 import com.group07.PetHealthCare.pojo.Customer;
 import com.group07.PetHealthCare.respositytory.ICustomerRepository;
 import com.group07.PetHealthCare.respositytory.IPetRepository;
@@ -20,17 +21,18 @@ public class CustomerService {
     @Autowired
     private ICustomerRepository ICustomerRepository;
     @Autowired
-    private IPetRepository IPetRepository;
+    private ICustomerMapper customerMapper;
     public List<CustomerResponse> getAllCustomers() {
-        return ICustomerRepository.findAll();
+
+        return customerMapper.toCustomerResponses(ICustomerRepository.findAll());
     }
 
-    public Optional<CustomerResponse> getCustomerById(String id) {
+    public CustomerResponse getCustomerById(String id) {
         Optional<Customer> customer = ICustomerRepository.findById(id);
         if(!customer.isPresent()){
             throw new AppException(ErrorCode.NOT_FOUND);
         }
-        return ICustomerRepository.findById(id);
+        return customerMapper.toCustomerResponse(customer.get());
     }
 
     public void deleteCustomersById(String id){

@@ -92,7 +92,7 @@ public class AuthService {
         String token =generateToken(user);
         return AuthResponse.builder()
                 .token(token)
-                .userRespone(userMapper.toUserRespone(user))
+                .userResponse(userMapper.toUserRespone(user))
                 .build();
     }
 
