@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Add</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./assets/font/boxicons-2.1.4/css/boxicons.min.css">
+    <style>
+        #pet-add-container {
+            height: 877px;
+        }
+
+        #pet-add-container .header-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        #pet-add-container .header-container i {
+            font-size: 70px;
+            color: #16427C;
+        }
+
+        #pet-add-container .header-container h1 {
+            font-size: 40px;
+            font-weight: 600;
+            color: #16427C;
+        }
+
+        #pet-add-container h1 .pet-id {
+            color: #16427C;
+            font-size: 40px;
+            font-weight: 300;
+        }
+
+        #pet-add-container .name-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 75px;
+        }
+
+        #pet-add-container .age-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 75px;
+        }
+
+        #pet-add-container .name-container label,
+        #pet-add-container .age-container label,
+        #pet-add-container .species-container label,
+        #pet-add-container .gender-container label {
+            font-size: 32px;
+            color: #16427C;
+            font-weight: 700;
+            margin-right: 40px;
+        }
+
+        #pet-add-container .name-container input,
+        #pet-add-container .age-container input {
+            font-size: 25px;
+            padding: 5px 25px;
+            border: 1px solid #ccc;
+            border-radius: 50px;
+            outline: none;
+            height: 55px;
+            width: 408px;
+        }
+
+        #pet-add-container .name-container input:focus,
+        #pet-add-container .age-container input:focus {
+            border-color: #0c3d72;
+        }
+
+        #pet-add-container .age-container input {
+            width: 200px;
+            text-align: center;
+        }
+
+        #pet-add-container .species-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 75px;
+            position: relative;
+
+        }
+
+        /* Remove the spinner */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        /* Style the error message */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        #pet-add-container .species-container .custom-select {
+            width: 320px;
+            height: 60px;
+            position: relative;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        #pet-add-container .custom-select .selected-option {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px 0 40px;
+            font-size: 25px;
+            color: #16427C;
+            background-color: #fff;
+            border-radius: 30px;
+        }
+
+        #pet-add-container .custom-select .options {
+            display: none;
+            position: absolute;
+            text-align: center;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 30px;
+            box-shadow: 0px 4px 10px 5px #16427C;
+            z-index: 10;
+        }
+
+        #pet-add-container .selected-option i {
+            font-size: 48px;
+        }
+
+        #pet-add-container .options div {
+            padding: 15px 20px;
+            font-size: 25px;
+            cursor: pointer;
+            color: #5E5E5E;
+            border-bottom: 2px solid #ccc;
+        }
+
+        #pet-add-container .options div:last-child {
+            border-bottom: none;
+        }
+
+        #pet-add-container .custom-select.open .options {
+            display: block;
+        }
+
+        #pet-add-container .gender-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 75px;
+            gap: 40px;
+        }
+
+        #pet-add-container .species-section {
+            display: flex;
+            gap: 300px;
+        }
+
+        #pet-add-container .gender-options {
+            display: flex;
+            gap: 50px;
+        }
+
+        #pet-add-container .gender-container .gender-options label {
+            font-size: 30px;
+            color: #000;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        #pet-add-container .gender-container .gender-options input {
+            margin-right: 25px;
+            transform: scale(1.5);
+            width: 20px;
+            height: 20px;
+        }
+        /* Nút thay đổi thông tin */
+        .submit {
+            display: flex;
+            justify-content: center;
+            margin-top: 80px;
+        }
+
+        .submit button {
+            width: 300px;
+            height: 70px;
+            border-radius: 30px;
+            border: none;
+            font-size: 30px;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            background-color: #16427C;
+            margin: 40px 0;
+            box-shadow: 0px 4px 10px 0px #000000;
+        }
+
+        .submit button:hover {
+            box-shadow: 0px 4px 10px 5px #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header">
+        <div class="logo">
+            <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
+        </div>
+        <ul class="nav">
+            <li><a href="#" onclick="showModal()">TRANG CHỦ</a></li>
+            <li><a href="#" onclick="showModal()">DỊCH VỤ</a></li>
+            <li><a href="#" onclick="showModal()">BẢNG GIÁ</a></li>
+        </ul>
+        <div class="header-btn">
+            <i class='bx bx-user-circle'></i>
+            <ul class="sub-nav guest">
+                <li><a href="login.html">Đăng nhập</a></li>
+                <li><a href="register.html">Đăng ký</a></li>
+            </ul>
+            <!-- sub-nav khi đã đăng nhập -->
+            <ul class="sub-nav logged-in">
+                <li><a href="PetList.html">Danh sách thú cưng</a></li>
+                <li><a href="AppointmentList.html">Đánh giá lượt thăm khám</a></li>
+                <li><a href="AppointmentTracking.html">Theo dõi lịch hẹn</a></li>
+                <li><a href="PetTracking.html">Theo dõi nhập viện</a></li>
+                <li><a href="CustomerInfo.html">Thông tin cá nhân</a></li>
+                <li><a href="register.html">Đăng xuất</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div id="pet-add-container">
+        <div class="header-container">
+            <a href="PetList.html"><i class='bx bx-chevron-left'></i></a>
+            <h1>Thêm thú cưng</h1>
+        </div>
+
+        <div class="name-container">
+            <label for="pet-name">Tên</label>
+            <input type="text" id="pet-name" placeholder="Nhập tên" value="">
+        </div>
+
+        <div class="age-container">
+            <label for="pet-age">Tuổi</label>
+            <input type="number" id="pet-age" placeholder="Nhập tuổi" value="">
+            <div id="age-error" class="error-message"></div>
+        </div>
+
+        <div class="species-section">
+            <div class="species-container">
+                <label for="pet-species">Loài</label>
+                <div id="pet-select" class="custom-select">
+                    <div class="selected-option">
+                        Chọn loài <i class='bx bx-chevron-down'></i>
+                    </div>
+                    <div class="options">
+                        <div data-value="meo">Mèo</div>
+                        <div data-value="cho">Chó</div>
+                        <div data-value="chim">Chim</div>
+                        <div data-value="thucungkhac">Thú cưng khác</div>
+                    </div>
+                </div>
+            </div>
+            <div class="gender-container">
+                <label for="pet-gender">Giống</label>
+                <div class="gender-options">
+                    <label>
+                        <input type="radio" name="gender" value="duc" checked> Đực
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" value="cai"> Cái
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="submit">
+            <button type="submit" onclick="">Thêm</button>
+        </div>
+    </div>
+
+
+
+    <footer id="footer">
+        <div class="footer-content">
+            <div class="footer-item">
+                <i class='bx bx-map'></i> <b>Địa chỉ:</b> 2 Võ Oanh, Bình Thạnh, TP.HCM
+            </div>
+            <div class="footer-item">
+                <i class='bx bx-phone'></i> <b>Đường dây nóng:</b> 0123-456-789
+            </div>
+            <div class="footer-item">
+                <i class='bx bx-envelope'></i> <b>Email Contact:</b> contact@example.com
+            </div>
+        </div>
+    </footer>
+</body>
+<script>
+    // Bật subnav của customer
+    document.addEventListener('DOMContentLoaded', function () {
+        const headerBtn = document.querySelector('.header-btn');
+        const subNavLoggedIn = document.querySelector('.sub-nav.logged-in');
+
+        headerBtn.addEventListener('click', function () {
+            // Toggle hiển thị sub-nav
+            subNavLoggedIn.style.display = (subNavLoggedIn.style.display === 'block' ? 'none' : 'block');
+        });
+
+        // Đóng sub-nav khi nhấp ra ngoài
+        document.addEventListener('click', function (event) {
+            if (!headerBtn.contains(event.target)) {
+                subNavLoggedIn.style.display = 'none';
+            }
+        });
+    });
+
+    // Pet select
+    document.querySelector('#pet-select').addEventListener('click', function (event) {
+        const icon = this.querySelector('.selected-option i');
+        this.classList.toggle('open');
+        icon.classList.toggle('bx-rotate-180');
+    });
+
+    document.querySelectorAll('#pet-select .options div').forEach(function (option) {
+        option.addEventListener('click', function (event) {
+            event.stopPropagation(); // Prevent the dropdown from immediately re-opening
+            const select = option.closest('.custom-select');
+            select.querySelector('.selected-option').innerHTML = option.innerText + " <i class='bx bx-chevron-down'></i>";
+            select.classList.remove('open');
+        });
+    });
+
+    // Close the dropdown if clicking outside of it
+    document.addEventListener('click', function (event) {
+        if (!event.target.closest('#pet-select')) {
+            document.querySelector('#pet-select').classList.remove('open');
+        }
+    });
+    // Báo lỗi khi nhập tuổi âm
+    function validateAge() {
+            const ageInput = document.getElementById('pet-age');
+            const errorMessage = document.getElementById('age-error');
+
+            if (ageInput.value < 0) {
+                errorMessage.textContent = 'Tuổi không thể là số âm.';
+                errorMessage.style.display = 'block';
+            } else {
+                errorMessage.style.display = 'none';
+            }
+        }
+
+</script>
+
+</html>

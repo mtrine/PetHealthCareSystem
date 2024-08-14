@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Edit</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./assets/font/boxicons-2.1.4/css/boxicons.min.css">
+    <style>
+        #pet-info-container {
+            height: 877px;
+        }
+
+        #pet-info-container .header-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        #pet-info-container .header-container i {
+            font-size: 70px;
+            color: #16427C;
+        }
+
+        #pet-info-container .header-container h1 {
+            font-size: 40px;
+            font-weight: 600;
+            color: #16427C;
+        }
+
+        #pet-info-container h1 .pet-id {
+            color: #16427C;
+            font-size: 40px;
+            font-weight: 300;
+        }
+
+        #pet-info-container .detail-container h1 {
+            font-size: 30px;
+            font-weight: 500;
+            margin-left: 50px;
+        }
+
+        #pet-info-container .name-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 75px;
+        }
+
+        #pet-info-container .age-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 75px;
+        }
+
+        #pet-info-container .name-container label,
+        #pet-info-container .age-container label,
+        #pet-info-container .species-container label,
+        #pet-info-container .gender-container label {
+            font-size: 32px;
+            color: #16427C;
+            font-weight: 700;
+            margin-right: 40px;
+        }
+
+        #pet-info-container .species-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 75px;
+            position: relative;
+
+        }
+
+        #pet-info-container .gender-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 75px;
+            gap: 40px;
+        }
+
+        #pet-info-container .species-section {
+            display: flex;
+            gap: 300px;
+        }
+
+        #pet-info-container .gender-options {
+            display: flex;
+            gap: 50px;
+        }
+
+        #pet-info-container .gender-container .gender-options label {
+            font-size: 30px;
+            color: #000;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        #pet-info-container .history-container {
+            width: 1330px;
+            height: 305px;
+            background-color: #fff;
+            box-shadow: 0px 4px 10px 5px #00000040;
+            margin: auto;
+        }
+
+        #pet-info-container .history-title {
+            font-size: 32px;
+            color: #16427C;
+            font-weight: 700;
+            margin: 50px 0 40px 75px;
+        }
+
+        /* Header styling */
+        .history-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 3px solid #E0E5E8;
+            border-top: 3px solid #E0E5E8;
+            list-style: none;
+            padding: 10px 0px;
+        }
+
+        .history-list-header li {
+            flex: 1;
+            text-align: center;
+            font-size: 30px;
+            font-weight: 600;
+            color: #000;
+            padding: 20px;
+        }
+
+        .history-list-container {
+            max-height: 213.6px;
+            overflow-y: auto;
+        }
+
+        /* List inside each pet item */
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 3px solid #E0E5E8;
+            list-style: none;
+        }
+
+        /* Individual item fields (li) styling */
+        .history-item li {
+            flex: 1;
+            font-size: 24px;
+            color: #000;
+            text-align: center;
+            list-style: none;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header">
+        <div class="logo">
+            <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
+        </div>
+        <ul class="nav">
+            <li><a href="#" onclick="showModal()">TRANG CHỦ</a></li>
+            <li><a href="#" onclick="showModal()">DỊCH VỤ</a></li>
+            <li><a href="#" onclick="showModal()">BẢNG GIÁ</a></li>
+        </ul>
+        <div class="header-btn">
+            <i class='bx bx-user-circle'></i>
+            <ul class="sub-nav guest">
+                <li><a href="login.html">Đăng nhập</a></li>
+                <li><a href="register.html">Đăng ký</a></li>
+            </ul>
+            <!-- sub-nav khi đã đăng nhập -->
+            <ul class="sub-nav logged-in">
+                <li><a href="PetList.html">Danh sách thú cưng</a></li>
+                <li><a href="AppointmentList.html">Đánh giá lượt thăm khám</a></li>
+                <li><a href="AppointmentTracking.html">Theo dõi lịch hẹn</a></li>
+                <li><a href="PetTracking.html">Theo dõi nhập viện</a></li>
+                <li><a href="CustomerInfo.html">Thông tin cá nhân</a></li>
+                <li><a href="register.html">Đăng xuất</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div id="pet-info-container">
+        <div class="header-container">
+            <a href="PetList.html"><i class='bx bx-chevron-left'></i></a>
+            <h1>Thông tin chi tiết</span></h1>
+        </div>
+
+        <div class="detail-container">
+            <div class="name-container">
+                <label for="pet-name">Tên</label>
+                <h1 id="pet-name">Tên thú cưng</h1>
+            </div>
+
+            <div class="age-container">
+                <label for="pet-age">Tuổi</label>
+                <h1 id="pet-age">2</h1>
+            </div>
+
+            <div class="species-section">
+                <div class="species-container">
+                    <label for="pet-species">Loài</label>
+                    <h1 class="pet-select">Mèo</h1>
+                </div>
+    
+                <div class="gender-container">
+                    <label for="pet-gender">Giống</label>
+                    <h1 class="pet-gender">Cái</h1>
+                </div>
+            </div>
+        </div>
+
+        <h1 class="history-title">Lịch sử khám bệnh</h1>
+        <div class="history-container">
+            <ul class="history-list-header">
+                <li>Ngày thăm khám</li>
+                <li>Ca</li>
+                <li>Bác sĩ phụ trách</li>
+                <li>Dịch vụ</li>
+            </ul>
+            <div class="history-list-container">
+                <ul class="history-item">
+                    <li>2/3/2024</li>
+                    <li>2</li>
+                    <li>Tên bác sĩ</li>
+                    <li>Tẩy giun</li>
+                </ul>
+                <ul class="history-item">
+                    <li>2/3/2024</li>
+                    <li>2</li>
+                    <li>Tên bác sĩ</li>
+                    <li>Triệt sản</li>
+                </ul>
+                <ul class="history-item">
+                    <li>2/3/2024</li>
+                    <li>2</li>
+                    <li>Tên bác sĩ</li>
+                    <li>Tỉa lông</li>
+                </ul>
+                <ul class="history-item">
+                    <li>2/3/2024</li>
+                    <li>2</li>
+                    <li>Tên bác sĩ</li>
+                    <li>Tẩy giun</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+    <footer id="footer">
+        <div class="footer-content">
+            <div class="footer-item">
+                <i class='bx bx-map'></i> <b>Địa chỉ:</b> 2 Võ Oanh, Bình Thạnh, TP.HCM
+            </div>
+            <div class="footer-item">
+                <i class='bx bx-phone'></i> <b>Đường dây nóng:</b> 0123-456-789
+            </div>
+            <div class="footer-item">
+                <i class='bx bx-envelope'></i> <b>Email Contact:</b> contact@example.com
+            </div>
+        </div>
+    </footer>
+</body>
+<script>
+    // Bật subnav của customer
+    document.addEventListener('DOMContentLoaded', function () {
+        const headerBtn = document.querySelector('.header-btn');
+        const subNavLoggedIn = document.querySelector('.sub-nav.logged-in');
+
+        headerBtn.addEventListener('click', function () {
+            // Toggle hiển thị sub-nav
+            subNavLoggedIn.style.display = (subNavLoggedIn.style.display === 'block' ? 'none' : 'block');
+        });
+
+        // Đóng sub-nav khi nhấp ra ngoài
+        document.addEventListener('click', function (event) {
+            if (!headerBtn.contains(event.target)) {
+                subNavLoggedIn.style.display = 'none';
+            }
+        });
+    });
+
+    // Pet select
+    document.querySelector('#pet-select').addEventListener('click', function (event) {
+        const icon = this.querySelector('.selected-option i');
+        this.classList.toggle('open');
+        icon.classList.toggle('bx-rotate-180');
+    });
+
+    document.querySelectorAll('#pet-select .options div').forEach(function (option) {
+        option.addEventListener('click', function (event) {
+            event.stopPropagation(); // Prevent the dropdown from immediately re-opening
+            const select = option.closest('.custom-select');
+            select.querySelector('.selected-option').innerHTML = option.innerText + " <i class='bx bx-chevron-down'></i>";
+            select.classList.remove('open');
+        });
+    });
+
+    // Close the dropdown if clicking outside of it
+    document.addEventListener('click', function (event) {
+        if (!event.target.closest('#pet-select')) {
+            document.querySelector('#pet-select').classList.remove('open');
+        }
+    });
+    // Báo lỗi khi nhập tuổi âm
+    function validateAge() {
+            const ageInput = document.getElementById('pet-age');
+            const errorMessage = document.getElementById('age-error');
+
+            if (ageInput.value < 0) {
+                errorMessage.textContent = 'Tuổi không thể là số âm.';
+                errorMessage.style.display = 'block';
+            } else {
+                errorMessage.style.display = 'none';
+            }
+        }
+
+</script>
+
+</html>

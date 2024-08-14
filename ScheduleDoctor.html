@@ -535,9 +535,17 @@
         </ul>
         <div class="header-btn">
             <i class='bx bx-user-circle'></i>
-            <ul class="sub-nav">
+            <ul class="sub-nav guest">
                 <li><a href="login.html">Đăng nhập</a></li>
                 <li><a href="register.html">Đăng ký</a></li>
+            </ul>
+            <ul class="sub-nav logged-in">
+                <li><a href="PetList.html">Danh sách thú cưng</a></li>
+                <li><a href="AppointmentList.html">Đánh giá lượt thăm khám</a></li>
+                <li><a href="AppointmentTracking.html">Theo dõi lịch hẹn</a></li>
+                <li><a href="PetTracking.html">Theo dõi nhập viện</a></li>
+                <li><a href="CustomerInfo.html">Thông tin cá nhân</a></li>
+                <li><a href="register.html">Đăng xuất</a></li>
             </ul>
         </div>
 
@@ -619,14 +627,14 @@
                 </div>
 
                 <div class="submit">
-                    <button type="submit" onclick="openPaymentModal()">ĐẶT LỊCH</button>
+                    <button type="submit" onclick="openPaymentMethods()">ĐẶT LỊCH</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Payment Options Modal -->
-    <div id="payment-modal">
+    <!-- <div id="payment-modal">
         <div class="payment-content">
             <span class="close" onclick="closePaymentModal()">&times;</span>
             <h2>Chọn phương thức thanh toán</h2>
@@ -645,7 +653,7 @@
                 <div class="action-button" onclick="closePaymentModal()">Thoát</div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
     <footer id="footer">
@@ -663,6 +671,24 @@
     </footer>
 </body>
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const headerBtn = document.querySelector('.header-btn');
+        const subNavLoggedIn = document.querySelector('.sub-nav.logged-in');
+
+        headerBtn.addEventListener('click', function () {
+            // Toggle hiển thị sub-nav
+            subNavLoggedIn.style.display = (subNavLoggedIn.style.display === 'block' ? 'none' : 'block');
+        });
+
+        // Đóng sub-nav khi nhấp ra ngoài
+        document.addEventListener('click', function (event) {
+            if (!headerBtn.contains(event.target)) {
+                subNavLoggedIn.style.display = 'none';
+            }
+        });
+    });
+
+
     // Kiểm tra trạng thái của ca
     document.addEventListener("DOMContentLoaded", function () {
     const timeSlots = document.querySelectorAll('.time-slot-container input[type="radio"]');
@@ -680,6 +706,9 @@
     // Rest of your code, such as handling glider animation
 });
 
+    function openPaymentMethods() {
+        window.location.href = 'paymentMethods.html';
+    }
 
     // Hiển thị payment modal
 
@@ -778,22 +807,22 @@
     });
 
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const headerBtn = document.querySelector('.header-btn');
-        const subNav = document.querySelector('.sub-nav');
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const headerBtn = document.querySelector('.header-btn');
+    //     const subNav = document.querySelector('.sub-nav');
 
-        headerBtn.addEventListener('click', function () {
-            // Toggle hiển thị sub-nav
-            subNav.style.display = (subNav.style.display === 'flex' ? 'none' : 'flex');
-        });
+    //     headerBtn.addEventListener('click', function () {
+    //         // Toggle hiển thị sub-nav
+    //         subNav.style.display = (subNav.style.display === 'flex' ? 'none' : 'flex');
+    //     });
 
-        // Đóng sub-nav khi nhấp ra ngoài
-        document.addEventListener('click', function (event) {
-            if (!headerBtn.contains(event.target)) {
-                subNav.style.display = 'none';
-            }
-        });
-    });
+    //     // Đóng sub-nav khi nhấp ra ngoài
+    //     document.addEventListener('click', function (event) {
+    //         if (!headerBtn.contains(event.target)) {
+    //             subNav.style.display = 'none';
+    //         }
+    //     });
+    // });
 </script>
 
 </html>

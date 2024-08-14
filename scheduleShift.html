@@ -439,9 +439,17 @@
         </ul>
         <div class="header-btn">
             <i class='bx bx-user-circle'></i>
-            <ul class="sub-nav">
+            <ul class="sub-nav guest">
                 <li><a href="login.html">Đăng nhập</a></li>
                 <li><a href="register.html">Đăng ký</a></li>
+            </ul>
+            <ul class="sub-nav logged-in">
+                <li><a href="PetList.html">Danh sách thú cưng</a></li>
+                <li><a href="AppointmentList.html">Đánh giá lượt thăm khám</a></li>
+                <li><a href="AppointmentTracking.html">Theo dõi lịch hẹn</a></li>
+                <li><a href="PetTracking.html">Theo dõi nhập viện</a></li>
+                <li><a href="CustomerInfo.html">Thông tin cá nhân</a></li>
+                <li><a href="register.html">Đăng xuất</a></li>
             </ul>
         </div>
 
@@ -509,14 +517,14 @@
                 </div>
 
                 <div class="submit">
-                    <button type="submit" onclick="openPaymentModal()">ĐẶT LỊCH</button>
+                    <button type="submit" onclick="openPaymentMethods()">ĐẶT LỊCH</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Payment Options Modal -->
-    <div id="payment-modal">
+    <!-- <div id="payment-modal">
         <div class="payment-content">
             <span class="close" onclick="closePaymentModal()">&times;</span>
             <h2>Chọn phương thức thanh toán</h2>
@@ -535,7 +543,7 @@
                 <div class="action-button" onclick="closePaymentModal()">Thoát</div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 
     <footer id="footer">
@@ -553,6 +561,9 @@
     </footer>
 </body>
 <script>
+    function openPaymentMethods() {
+        window.location.href = 'paymentMethods.html';
+    }
     // Hiển thị payment modal
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -581,6 +592,7 @@
             }
         });
     });
+
 
     function closePaymentModal() {
         document.getElementById("payment-modal").style.display = "none";
