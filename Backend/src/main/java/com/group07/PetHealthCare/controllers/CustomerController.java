@@ -31,11 +31,5 @@ public class CustomerController {
         return apiResponse;
     }
 
-    @DeleteMapping("/{userID}")
-    public ApiResponse<String> deleteCustomer (@PathVariable("userID") String userID){
-        customerService.deleteCustomersById(userID);
-        ApiResponse<String> apiResponse=new ApiResponse<>();
-        apiResponse.setResult("Deleted successfully");
-        return apiResponse;
-    }
+
 }

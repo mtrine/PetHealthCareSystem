@@ -11,5 +11,4 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class StaffResponse extends UserResponse {
-    private Boolean isAdmin;
 }

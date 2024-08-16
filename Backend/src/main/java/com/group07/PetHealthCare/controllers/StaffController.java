@@ -27,11 +27,5 @@ public class StaffController {
         return apiResponse;
     }
 
-    @DeleteMapping("/{staffId}")
-    public ApiResponse<String> deleteStaffById(@PathVariable("staffId") String staffId) {
-        ApiResponse<String> apiResponse = new ApiResponse<>();
-        staffService.deleteStaff(staffId);
-        apiResponse.setResult("Delete staff successfully");
-        return apiResponse;
-    }
+
 }

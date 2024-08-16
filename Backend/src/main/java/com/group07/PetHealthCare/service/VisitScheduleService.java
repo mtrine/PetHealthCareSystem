@@ -6,6 +6,7 @@ import com.group07.PetHealthCare.mapper.IVisitScheduleMapper;
 import com.group07.PetHealthCare.pojo.*;
 import com.group07.PetHealthCare.respositytory.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,6 +29,8 @@ public class VisitScheduleService {
 
     @Autowired
     private IVisitScheduleMapper visitScheduleMapper;
+
+    @PreAuthorize("hasAnyRole('STAFF')")
     public VisitScheduleResponse createVisitSchedule(VisitScheduleRequest request) {
         // Check if the visit schedule already exists
         boolean visitScheduleExists = visitScheduleRepository

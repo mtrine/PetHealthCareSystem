@@ -10,6 +10,8 @@ import com.group07.PetHealthCare.pojo.User;
 import com.group07.PetHealthCare.pojo.Veterinarian;
 import com.group07.PetHealthCare.respositytory.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +22,7 @@ public class UserService {
     @Autowired
     private IUserMapper userMapper;
 
-
+    @PostAuthorize("returnObject.email == authentication.name")
     public UserResponse updateInforUser(String id, UserRequest request) {
         User user = IUserRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
@@ -47,14 +49,14 @@ public class UserService {
             if (request.getIsFulltime() != null) {
                 veterinarian.setIsFulltime(request.getIsFulltime());
             }
-        } else if (user instanceof Staff) {
-            Staff staff = (Staff) user;
-            if (request.getIsAdmin() != null) {
-                staff.setIsAdmin(request.getIsAdmin());
-            }
         }
 
         return userMapper.toUserRespone(IUserRepository.save(user)) ;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteUser(String id) {
+        User user = IUserRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        IUserRepository.delete(user);
+    }
 }
