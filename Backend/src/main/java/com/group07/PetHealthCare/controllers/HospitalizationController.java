@@ -2,6 +2,7 @@ package com.group07.PetHealthCare.controllers;
 
 import com.group07.PetHealthCare.dto.request.ApiResponse;
 import com.group07.PetHealthCare.dto.request.HospitalizationRequest;
+import com.group07.PetHealthCare.dto.response.HospitalizationResponse;
 import com.group07.PetHealthCare.pojo.Hospitalization;
 import com.group07.PetHealthCare.service.HospitalizationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +18,23 @@ public class HospitalizationController {
     private HospitalizationService hospitalizationService;
 
     @PostMapping
-    public ApiResponse<Hospitalization> createHospitalization(@RequestBody HospitalizationRequest request) {
-        ApiResponse<Hospitalization> apiResponse = new ApiResponse<>();
+    public ApiResponse<HospitalizationResponse> createHospitalization(@RequestBody HospitalizationRequest request) {
+        ApiResponse<HospitalizationResponse>  apiResponse = new ApiResponse<>();
         apiResponse.setResult(hospitalizationService.createHospitalization(request));
         return apiResponse;
     }
 
     @PatchMapping("/{hospitalizationId}")
-    public ApiResponse<Hospitalization> updateHospitalization(@PathVariable("hospitalizationId") String hospitalizationId,
+    public ApiResponse<HospitalizationResponse> updateHospitalization(@PathVariable("hospitalizationId") String hospitalizationId,
                                                               @RequestBody HospitalizationRequest request) {
-        ApiResponse<Hospitalization> apiResponse = new ApiResponse<>();
+        ApiResponse<HospitalizationResponse>  apiResponse = new ApiResponse<>();
         apiResponse.setResult(hospitalizationService.updateHospitalization(hospitalizationId, request));
         return apiResponse;
     }
 
     @GetMapping
-    public ApiResponse<List<Hospitalization>> getAllHospitalizations() {
-        ApiResponse<List<Hospitalization>> apiResponse = new ApiResponse<>();
+    public ApiResponse<List<HospitalizationResponse>> getAllHospitalizations() {
+        ApiResponse<List<HospitalizationResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(hospitalizationService.getAllHospitalization());
         return apiResponse;
     }
@@ -47,15 +48,15 @@ public class HospitalizationController {
     }
 
     @GetMapping("/{hospitalizationId}")
-    public ApiResponse<Hospitalization> getHospitalization(@PathVariable("hospitalizationId") String hospitalizationId) {
-        ApiResponse<Hospitalization> apiResponse = new ApiResponse<>();
+    public ApiResponse<HospitalizationResponse> getHospitalization(@PathVariable("hospitalizationId") String hospitalizationId) {
+        ApiResponse<HospitalizationResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(hospitalizationService.getHospitalizationById(hospitalizationId));
         return apiResponse;
     }
 
     @GetMapping(params = "petId")
-    public ApiResponse<List<Hospitalization>> getHospitalizationByPet(@RequestParam("petId") String petId) {
-        ApiResponse<List<Hospitalization>> apiResponse = new ApiResponse<>();
+    public ApiResponse<List<HospitalizationResponse>> getHospitalizationByPet(@RequestParam("petId") String petId) {
+        ApiResponse<List<HospitalizationResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(hospitalizationService.getHospitalizationByPetId(petId));
         return apiResponse;
     }

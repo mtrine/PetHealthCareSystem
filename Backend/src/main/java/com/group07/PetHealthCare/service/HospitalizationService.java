@@ -2,6 +2,7 @@ package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.HospitalizationRequest;
 import com.group07.PetHealthCare.dto.response.HospitalizationResponse;
+import com.group07.PetHealthCare.mapper.IHospitalizationMapper;
 import com.group07.PetHealthCare.pojo.Cage;
 import com.group07.PetHealthCare.pojo.Hospitalization;
 import com.group07.PetHealthCare.pojo.Pet;
@@ -24,6 +25,9 @@ public class HospitalizationService {
     @Autowired
     private IPetRepository petRepository;
 
+    @Autowired
+    private IHospitalizationMapper hospitalizationMapper;
+
     public HospitalizationResponse createHospitalization(HospitalizationRequest request) {
         if (request.getCageNumber() == null) {
             throw new IllegalArgumentException("Cage number  must not be null");
@@ -45,19 +49,20 @@ public class HospitalizationService {
         cage.setStatus(!cage.getStatus());
         hospitalization.setPetID(pet);
 
-        return hospitalizationRepository.save(hospitalization);
+        return hospitalizationMapper.toHospitalizationResponse(hospitalizationRepository.save(hospitalization));
     }
 
     public List<HospitalizationResponse> getAllHospitalization() {
-        return hospitalizationRepository.findAll();
+
+        return hospitalizationMapper.toHospitalizationResponseList(hospitalizationRepository.findAll());
     }
 
     public HospitalizationResponse getHospitalizationById(String id) {
         if (id == null) {
             throw new IllegalArgumentException("ID must not be null");
         }
-        return hospitalizationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Hospitalization not found"));
+        return hospitalizationMapper.toHospitalizationResponse(hospitalizationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hospitalization not found")));
     }
 
     public HospitalizationResponse updateHospitalization(String id, HospitalizationRequest request) {
@@ -65,7 +70,7 @@ public class HospitalizationService {
             throw new IllegalArgumentException("ID must not be null");
         }
 
-        Hospitalization hospitalization = getHospitalizationById(id);
+        Hospitalization hospitalization = hospitalizationRepository.findById(id).orElseThrow(() -> new RuntimeException("Hospitalization not found"));
         if (request.getReasonForHospitalization() != null) {
             hospitalization.setReasonForHospitalization(request.getReasonForHospitalization());
         }
@@ -88,7 +93,7 @@ public class HospitalizationService {
                     .orElseThrow(() -> new RuntimeException("Pet not found"));
             hospitalization.setPetID(pet);
         }
-        return hospitalizationRepository.save(hospitalization);
+        return hospitalizationMapper.toHospitalizationResponse(hospitalizationRepository.save(hospitalization));
     }
 
     public void deleteHospitalization(String id) {
@@ -96,7 +101,7 @@ public class HospitalizationService {
             throw new IllegalArgumentException("ID must not be null");
         }
 
-        Hospitalization hospitalization = getHospitalizationById(id);
+        Hospitalization hospitalization = hospitalizationRepository.findById(id).orElseThrow(() -> new RuntimeException("Hospitalization not found"));
         hospitalizationRepository.delete(hospitalization);
     }
 
@@ -107,6 +112,6 @@ public class HospitalizationService {
 
         Pet pet = petRepository.findById(petId)
                 .orElseThrow(() -> new RuntimeException("Pet not found"));
-        return hospitalizationRepository.findAllByPetID(pet);
+        return hospitalizationMapper.toHospitalizationResponseList( hospitalizationRepository.findAllByPetID(pet));
     }
 }

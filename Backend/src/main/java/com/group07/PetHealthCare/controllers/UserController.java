@@ -22,4 +22,12 @@ public class UserController {
        apiResponse.setResult(userService.updateInforUser(userId,request));
        return apiResponse;
     }
+
+    @DeleteMapping("/{userId}")
+    public ApiResponse<String>  deleteUser(@PathVariable("userId") String userId) {
+        ApiResponse<String> apiResponse= new ApiResponse<>();
+        userService.deleteUser(userId);
+        apiResponse.setResult("Deleted");
+        return apiResponse;
+    }
 }

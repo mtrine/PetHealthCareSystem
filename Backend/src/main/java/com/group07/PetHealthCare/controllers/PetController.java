@@ -3,6 +3,7 @@ package com.group07.PetHealthCare.controllers;
 import com.group07.PetHealthCare.dto.request.ApiResponse;
 import com.group07.PetHealthCare.dto.request.PetCreationRequest;
 import com.group07.PetHealthCare.dto.request.PetUpdateRequest;
+import com.group07.PetHealthCare.dto.response.PetResponse;
 import com.group07.PetHealthCare.pojo.Pet;
 import com.group07.PetHealthCare.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +18,17 @@ public class PetController {
     private PetService petService;
 
     @PostMapping
-    public ApiResponse<Pet> createPet(@RequestBody PetCreationRequest request) {
-        ApiResponse<Pet> apiResponse = new ApiResponse<>();
+    public ApiResponse<PetResponse> createPet(@RequestBody PetCreationRequest request) {
+        ApiResponse<PetResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(petService.addPet(request));
         return apiResponse;
     }
 
-    @GetMapping("/{customerId}")
-    public ApiResponse<Set<Pet>> getPetsByCustomerId(@PathVariable String customerId) {
-        ApiResponse<Set<Pet>> apiResponse = new ApiResponse<>();
+    @GetMapping("/customers/{customerId}")
+    public ApiResponse<Set<PetResponse>> getPetsByCustomerId(@PathVariable String customerId) {
+        ApiResponse<Set<PetResponse>> apiResponse = new ApiResponse<>();
         try {
-            Set<Pet> pets = petService.getPetsByCustomerId(customerId);
+            Set<PetResponse> pets = petService.getPetsByCustomerId(customerId);
                 apiResponse.setResult(pets);
                 apiResponse.setMessage("Pets retrieved successfully");
             return apiResponse;
@@ -38,10 +39,10 @@ public class PetController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse<Pet> updatePet(@PathVariable String id, @RequestBody PetUpdateRequest request) {
-        ApiResponse<Pet> apiResponse = new ApiResponse<>();
+    public ApiResponse<PetResponse> updatePet(@PathVariable String id, @RequestBody PetUpdateRequest request) {
+        ApiResponse<PetResponse>  apiResponse = new ApiResponse<>();
         try {
-            Pet updatedPet = petService.updatePet(id, request);
+            PetResponse updatedPet = petService.updatePet(id, request);
             apiResponse.setResult(updatedPet);
             apiResponse.setMessage("Pet updated successfully");
         } catch (RuntimeException e) {

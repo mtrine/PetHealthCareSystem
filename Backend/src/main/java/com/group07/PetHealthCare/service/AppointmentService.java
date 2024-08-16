@@ -2,16 +2,22 @@ package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.AppointmentRequest;
 import com.group07.PetHealthCare.dto.response.AppointmentResponse;
+import com.group07.PetHealthCare.enumData.Role;
+import com.group07.PetHealthCare.mapper.IAppointmentMapper;
 import com.group07.PetHealthCare.pojo.*;
 import com.group07.PetHealthCare.respositytory.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class AppointmentService {
     @Autowired
     private IAppointmentRepository IAppointmentRepository;
@@ -25,9 +31,12 @@ public class AppointmentService {
     private ISessionsRepository ISessionsRepository;
     @Autowired
     private IAppointmentServicesRepository IAppointmentServicesRepository;
+    @Autowired
+    private IAppointmentMapper appointmentMapper;
 
     @Transactional
-    public AppointmentRespones addAppointmentBySession(AppointmentRequest request) {
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'STAFF')")
+    public AppointmentResponse addAppointmentBySession(AppointmentRequest request) {
         // Kiểm tra ca làm việc hợp lệ
         Optional<Session> sessionOpt = ISessionsRepository.findById(request.getSessionId());
         if (sessionOpt.isEmpty()) {
@@ -57,10 +66,10 @@ public class AppointmentService {
             IAppointmentServicesRepository.save(appointmentServices);
         }
 
-        return savedAppointment;
+        return appointmentMapper.toAppointmentResponse(savedAppointment);
     }
     @Transactional
-
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'STAFF')")
     public AppointmentResponse addAppointmentByVeterinarian(AppointmentRequest request) {
         // Kiểm tra bác sĩ có hợp lệ không
         Optional<Veterinarian> veterinarianOpt = IVeterinarianRepository.findById(request.getVeterinarianId());
@@ -108,18 +117,24 @@ public class AppointmentService {
             IAppointmentServicesRepository.save(appointmentServices);
         }
 
-        return savedAppointment;
+      return   appointmentMapper.toAppointmentResponse(savedAppointment);
     }
+
+
     @Transactional
+    @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF')")
     public List<AppointmentResponse> getAllAppointments() {
-        return IAppointmentRepository.findAll();
+
+        return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findAll());
     }
     @Transactional
+    @PreAuthorize("hasRole('VETERINARIAN')")
     public List<AppointmentResponse> getAppointmentByVeterinarianId(String veterinarianId) {
-        return IAppointmentRepository.findByVeterinarianId(veterinarianId);
+        return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findByVeterinarianId(veterinarianId));
     }
 
     @Transactional
+    @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF')")
     public AppointmentResponse changeInforAppointment(String appointmentId, AppointmentRequest request) {
         Appointment appointment = IAppointmentRepository.findById(appointmentId).orElseThrow(() -> new RuntimeException("Appointment not found"));
         if (request.getStatus() != null) {
@@ -158,7 +173,9 @@ public class AppointmentService {
             }
         }
 
-        return IAppointmentRepository.save(appointment);
+        return appointmentMapper.toAppointmentResponse(IAppointmentRepository.save(appointment));
     }
+
+
 }
 

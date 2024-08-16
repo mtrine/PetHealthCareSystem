@@ -6,9 +6,10 @@ import java.time.LocalDate;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
+@SuperBuilder
 public class PaymentResponse {
     private String id;
     private LocalDate paymentDate;

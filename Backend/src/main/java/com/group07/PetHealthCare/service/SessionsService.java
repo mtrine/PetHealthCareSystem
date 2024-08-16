@@ -2,6 +2,7 @@ package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.SessionsRequest;
 import com.group07.PetHealthCare.dto.response.SessionResponse;
+import com.group07.PetHealthCare.mapper.ISessionsMapper;
 import com.group07.PetHealthCare.pojo.Session;
 import com.group07.PetHealthCare.respositytory.ISessionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,8 @@ import java.util.List;
 public class SessionsService {
     @Autowired
     private ISessionsRepository ISessionsRepository;
-
+    @Autowired
+    private ISessionsMapper sessionsMapper;
     public SessionResponse createSession(SessionsRequest request) {
         Session session = new Session();
         if(request.getStartTime().isAfter(request.getEndTime())){
@@ -22,11 +24,12 @@ public class SessionsService {
         session.setStartTime(request.getStartTime());
         session.setEndTime(request.getEndTime());
 
-        return ISessionsRepository.save(session);
+        return sessionsMapper.toSessionResponse(ISessionsRepository.save(session));
 
     }
 
     public List<SessionResponse> getAllSession(){
-        return ISessionsRepository.findAll();
+
+        return sessionsMapper.toSessionResponseList(ISessionsRepository.findAll());
     }
 }

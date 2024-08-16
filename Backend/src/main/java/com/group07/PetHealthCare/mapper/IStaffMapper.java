@@ -9,8 +9,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface IStaffMapper {
-    @Mapping(source = "isAdmin", target = "isAdmin")
     StaffResponse toRespone(Staff staff);
-    @Mapping(source = "isAdmin", target = "isAdmin")
     List<StaffResponse> toResponeList(List<Staff> staffList);
+    Staff toStaff(StaffResponse staffResponse);
 }

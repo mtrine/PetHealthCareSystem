@@ -3,6 +3,7 @@ package com.group07.PetHealthCare.service;
 import com.group07.PetHealthCare.dto.request.PetCreationRequest;
 import com.group07.PetHealthCare.dto.request.PetUpdateRequest;
 import com.group07.PetHealthCare.dto.response.PetResponse;
+import com.group07.PetHealthCare.mapper.IPetMapper;
 import com.group07.PetHealthCare.pojo.Customer;
 import com.group07.PetHealthCare.pojo.Pet;
 import com.group07.PetHealthCare.pojo.Species;
@@ -24,6 +25,9 @@ public class PetService {
 
     @Autowired
     private ICustomerRepository ICustomerRepository;
+
+    @Autowired
+    private IPetMapper petMapper;
     public PetResponse addPet(PetCreationRequest request){
         Pet pet = new Pet();
         pet.setName(request.getName());
@@ -34,7 +38,7 @@ public class PetService {
 
         pet.setSpecies(species);
         pet.setCustomer(customer);
-        return IPetRepository.save(pet);
+        return petMapper.toResponse(IPetRepository.save(pet));
     }
 
     public Set<PetResponse> getPetsByCustomerId(String customerId) {
@@ -43,7 +47,7 @@ public class PetService {
 
         Set<Pet> pets = customer.getPets();
 
-        return pets;
+        return petMapper.toResponseList(pets);
     }
 
     public PetResponse updatePet(String id, PetUpdateRequest request) {
@@ -57,7 +61,7 @@ public class PetService {
 
         pet.setSpecies(species);
         pet.setCustomer(customer);
-        return IPetRepository.save(pet);
+        return petMapper.toResponse(IPetRepository.save(pet));
     }
 
     public void deletePet(String id) {

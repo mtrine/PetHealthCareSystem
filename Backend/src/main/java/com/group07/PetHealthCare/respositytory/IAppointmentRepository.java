@@ -13,4 +13,5 @@ import java.util.Optional;
 public interface IAppointmentRepository extends JpaRepository<Appointment, String> {
     Optional<Appointment> findByVeterinarianIdAndAppointmentDateAndSessionId(String veterinarianId, LocalDate appointmentDate, String sessionId);
     List<Appointment> findByVeterinarianId(String veterinarianId);
+    List<Appointment> findByVeterinarianIdAndAppointmentDate(String veterinarianId, LocalDate appointmentDate);
 }
