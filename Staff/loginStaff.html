@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Staff</title>
+    <link rel="stylesheet" href="../assets/font/boxicons-2.1.4/css/boxicons.min.css">
+
+    <style>
+        /* Inria Sans */
+        @import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@100..900&display=swap');
+        /* Inter */
+        @import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@100..900&display=swap');
+
+        html {
+            /* Dùng phông chữ không gạch chân */
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* Login */
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            position: relative;
+            background-image: url('../assets/img/background_loginStaff.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 1000px;
+            height: 650px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+
+        .login-container h1 {
+            margin: 50px 0;
+            font-size: 50px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .login-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1E1E1E;
+            opacity: 0.6;
+            z-index: 0;
+            
+        }
+
+        .login-container>* {
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-container .input-box {
+            display: flex;
+            gap: 50px;
+            justify-content: space-between;
+            margin-bottom: 60px;
+            align-items: center;
+        }
+
+        .login-container .input-box label {
+            font-size: 30px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .login-container .input-box label[for="password"]{
+            margin-left: 52px;
+        }
+
+        .login-container .input-box input {
+            width: 550px;
+            height: 22px;
+            border-radius: 50px;
+            outline: none;
+            background: none;
+            border: 2px solid #fff;
+            font-size: 30px;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .role-container {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-bottom: 40px;
+
+        }
+
+        .checkbox {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 22px;
+            user-select: none;
+        }
+
+        .checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkbox label {
+            color: #fff;
+            font-size: 25px;
+            font-weight: 600;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 25px;
+            width: 25px;
+            border: 2px solid #fff;
+            border-radius: 5px;
+        }
+
+        .checkbox input:checked~.checkmark {
+            background-color: #fff;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox input:checked~.checkmark:after {
+            display: block;
+        }
+
+        .checkbox .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid #000;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+
+        .login-btn {
+            margin: auto;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            border-radius: 20px;
+            width: 350px;
+            cursor: pointer;
+            position: relative;
+            background: rgba(255, 255, 255, 0.3);
+            color: #fff;
+        }
+
+        .login-btn p {
+            font-size: 35px;
+            font-weight: 900;
+        }
+
+        .login-btn i {
+            font-size: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+
+        <h1>ĐĂNG NHẬP</h1>
+        <form>
+            <div class="input-box">
+                <label for="phone">Số điện thoại</label>
+                <input type="text" id="phone" name="phone" required>
+            </div>
+            <div class="input-box">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="role-container">
+
+                <label class="checkbox">
+                    <input type="checkbox" id="admin" name="role" class="role-checkbox">
+                    <span class="checkmark"></span>
+                    <label for="admin">ADMIN</label>
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" id="doctor" name="role" class="role-checkbox">
+                    <span class="checkmark"></span>
+                    <label for="doctor">BÁC SĨ</label>
+                </label>
+
+            </div>
+
+            <div class="login-btn">
+                <p>ĐĂNG NHẬP</p>
+                <i class='bx bx-chevron-right'></i>
+            </div>
+        </form>
+
+
+
+    </div>
+</body>
+<script>
+    // Lấy tất cả checkbox trong class role-checkbox
+    const checkboxes = document.querySelectorAll('.role-checkbox');
+
+    // Thêm sự kiện change cho từng checkbox
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            // Nếu checkbox được chọn, bỏ chọn các checkbox khác
+            if (checkbox.checked) {
+                checkboxes.forEach(cb => {
+                    if (cb !== checkbox) {
+                        cb.checked = false;
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+</html>
