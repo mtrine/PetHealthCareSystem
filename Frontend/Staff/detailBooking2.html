@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Booking</title>
+    <link rel="stylesheet" href="../assets/font/boxicons-2.1.4/css/boxicons.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@100..900&display=swap');
+
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            /* Dùng phông chữ không gạch chân */
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        #detail-booking-container {
+            padding: 20px;
+        }
+
+        #detail-booking-container .header-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        #detail-booking-container .header-container i {
+            font-size: 50px;
+            color: #1D1B20;
+        }
+
+        #detail-booking-container .header-container h1 {
+            font-size: 30px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        #detail-booking-container h1 .pet-id {
+            color: #000;
+            font-size: 30px;
+        }
+
+        #detail-booking-container .detail-container h1 {
+            font-size: 30px;
+            font-weight: 500;
+            margin-left: 50px;
+        }
+
+        #detail-booking-container .id-container {
+            display: flex;
+            align-items: center;
+            margin-left: 40px;
+        }
+
+        #detail-booking-container .phone-container {
+            display: flex;
+            align-items: center;
+        }
+
+        #detail-booking-container .pet-id-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 83px;
+        }
+
+        #detail-booking-container .id-container label,
+        #detail-booking-container .phone-container label,
+        #detail-booking-container .pet-id-container label,
+        #detail-booking-container .date-container label,
+        #detail-booking-container .shift-container label,
+        #detail-booking-container .service-container label,
+        #detail-booking-container .doctor-container label {
+            font-size: 32px;
+            color: #000;
+            font-weight: 700;
+            margin-right: 40px;
+        }
+
+        #detail-booking-container .date-container {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+            position: relative;
+
+        }
+
+        #detail-booking-container .shift-container {
+            display: flex;
+            align-items: center;
+            margin-left: 164px;
+            gap: 2px;
+        }
+
+
+        #detail-booking-container .service-container {
+            display: flex;
+            align-items: center;
+            margin-top: 40px;
+            margin-left: 160px;
+            gap: 5px;
+        }
+
+        #detail-booking-container .doctor-container {
+            display: flex;
+            align-items: center;
+            margin-top: 40px;
+            margin-left: 183px;
+            gap: 7px;
+        }
+
+        #detail-booking-container .info-section {
+            display: flex;
+            gap: 100px;
+        }
+
+        #detail-booking-container .visit-section {
+            display: flex;
+            gap: 100px;
+        }
+
+        /* Nút thay đổi thông tin */
+        .submit {
+            display: flex;
+            justify-content: center;
+            margin-top: 80px;
+        }
+
+        .submit button {
+            width: 300px;
+            height: 90px;
+            border-radius: 40px;
+            border: none;
+            font-size: 30px;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            background-color: #000;
+            margin: 40px 0;
+            box-shadow: 0px 4px 5px 5px #00000040;
+        }
+
+        .submit button:hover {
+            box-shadow: 0px 4px 10px 5px #ccc;
+        }
+
+        /* Định kiểu cho bảng modal */
+        .delete-modal {
+            display: none;
+            /* Ẩn modal theo mặc định */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Màu nền nửa trong suốt */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Đặt lên trên cùng */
+        }
+
+        .delete-modal .modal-content {
+            width: 418px;
+            height: 280px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .delete-modal .modal-content i {
+            font-size: 50px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .delete-modal .modal-content p {
+            padding: 0 10px;
+            font-size: 25px;
+            font-weight: 600;
+        }
+
+        .delete-modal .modal-content p:nth-of-type(2) {
+            font-style: italic;
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .delete-modal .modal-buttons {
+            margin-top: 40px;
+        }
+
+        .delete-modal .modal-buttons button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 8px 40px;
+            font-size: 30px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 0 14px;
+            transition: background-color 0.3s;
+        }
+
+        .delete-modal .modal-buttons button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .success-message {
+            position: fixed;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: green;
+            color: white;
+            width: 300px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 15px;
+            opacity: 0;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .success-message.show {
+            top: 5%;
+            /* End position */
+            opacity: 1;
+        }
+
+        .doctor-container .custom-select {
+            width: 320px;
+            height: 60px;
+            position: relative;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .custom-select .selected-option {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px 0 40px;
+            font-size: 25px;
+            color: #000;
+            background-color: #fff;
+            border-radius: 30px;
+        }
+
+        .custom-select .options {
+            display: none;
+            position: absolute;
+            text-align: center;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 30px;
+            box-shadow: 0px 4px 10px 5px #000;
+            z-index: 10;
+        }
+
+        .selected-option i {
+            font-size: 48px;
+        }
+
+        .options div {
+            padding: 15px 20px;
+            font-size: 25px;
+            cursor: pointer;
+            color: #5E5E5E;
+            border-bottom: 2px solid #ccc;
+        }
+
+        .options div:last-child {
+            border-bottom: none;
+        }
+
+        .custom-select.open .options {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="detail-booking-container">
+        <div class="header-container">
+            <a href="index.html"><i class='bx bx-chevron-left'></i></a>
+            <h1>Booking : <span class="pet-id">abc-xyz</span></h1>
+        </div>
+
+        <div class="detail-container">
+            <div class="info-section">
+                <div class="id-container">
+                    <label for="customer-id">Mã khách hàng</label>
+                    <h1 id="customer-id">abcdefg</h1>
+                </div>
+                <div class="phone-container">
+                    <label for="customer-phone">SĐT khách hàng</label>
+                    <h1 class="customer-phone">090999099</h1>
+                </div>
+            </div>
+
+            <div class="pet-id-container">
+                <label for="customer-pet-id">Mã thú cưng</label>
+                <h1 id="customer-pet-id">abc-xyz</h1>
+            </div>
+
+            <div class="visit-section">
+                <div class="date-container">
+                    <label for="date">Ngày thăm khám</label>
+                    <h1 id="visit-date">10/08/2024</h1>
+                </div>
+                <div class="shift-container">
+                    <label for="shift">Ca</label>
+                    <h1 class="shift">2</h1>
+                </div>
+            </div>
+
+            <div class="service-container">
+                <label for="service">Dịch vụ</label>
+                <h1 class="service">Triệt sản</h1>
+            </div>
+
+            <div class="doctor-container">
+                <label for="doctor-name">Bác sĩ</label>
+                <div id="doctor-select" class="custom-select">
+                    <div class="selected-option">Chọn bác sĩ<i class='bx bx-chevron-down'></i></div>
+                    <div class="options">
+                        <div data-value="d1">Bác sĩ 1</div>
+                        <div data-value="d2">Bác sĩ 2</div>
+                        <div data-value="d3">Bác sĩ 3</div>
+                        <div data-value="d4">Bác sĩ 4</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="submit">
+            <button type="submit" id="show-modal">Xóa booking</button>
+        </div>
+    </div>
+
+    <!-- Bảng modal -->
+    <div id="delete-modal" class="delete-modal">
+        <div class="modal-content">
+            <i class='bx bx-error'></i>
+            <p>Xóa booking ID <span>123-xyz</span>?</p>
+            <p>&lt; Hành động không thể hoàn tác &gt;</p>
+            <div class="modal-buttons">
+                <button id="confirm-delete">Xóa</button>
+                <button id="cancel-delete">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Thông báo xóa thành công -->
+    <div id="success-message" class="success-message">
+        <p>Xóa thành công!</p>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var showModalButton = document.getElementById('show-modal');
+        var deleteModal = document.getElementById('delete-modal');
+        var confirmDeleteButton = document.getElementById('confirm-delete');
+        var cancelDeleteButton = document.getElementById('cancel-delete');
+        var successMessage = document.getElementById('success-message');
+
+        // Hiển thị modal khi nhấn vào nút "Xóa booking"
+        showModalButton.addEventListener('click', function () {
+            deleteModal.style.display = 'flex';
+        });
+
+        // Đóng modal và hiển thị thông báo xóa thành công khi nhấn vào nút "Xóa"
+        confirmDeleteButton.addEventListener('click', function () {
+            deleteModal.style.display = 'none';
+            successMessage.style.display = 'block';
+            successMessage.classList.add('show');
+
+            // Ẩn thông báo thành công sau 3 giây
+            setTimeout(function () {
+                successMessage.classList.remove('show');
+            }, 3000);
+        });
+
+        // Đóng modal khi nhấn vào nút "Hủy"
+        cancelDeleteButton.addEventListener('click', function () {
+            deleteModal.style.display = 'none';
+        });
+    });
+
+
+    // doctor select
+    document.querySelector('#doctor-select').addEventListener('click', function (event) {
+        const icon = this.querySelector('.selected-option i');
+        this.classList.toggle('open');
+        icon.classList.toggle('bx-rotate-180');
+    });
+
+    document.querySelectorAll('#doctor-select .options div').forEach(function (option) {
+        option.addEventListener('click', function (event) {
+            event.stopPropagation(); // Prevent the dropdown from immediately re-opening
+            const select = option.closest('.custom-select');
+            select.querySelector('.selected-option').innerHTML = option.innerText + " <i class='bx bx-chevron-down'></i>";
+            select.classList.remove('open');
+        });
+    });
+
+    // Close the dropdown if clicking outside of it
+    document.addEventListener('click', function (event) {
+        if (!event.target.closest('#doctor-select')) {
+            document.querySelector('#doctor-select').classList.remove('open');
+        }
+    });
+</script>
+
+</html>
