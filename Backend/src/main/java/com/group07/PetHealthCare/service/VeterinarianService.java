@@ -60,7 +60,7 @@ public class VeterinarianService {
 
         // Loại bỏ các ca đã có lịch hẹn
         for (Appointment appointment : appointments) {
-            allSessions.removeIf(session -> session.getId().equals(appointment.getSession().getId()));
+            allSessions.removeIf(session -> session.getId()==appointment.getSession().getId());
         }
 
         return sessionsMapper.toSessionResponseList(allSessions);

@@ -11,5 +11,4 @@ import java.time.LocalDate;
 public class VaccineResponse {
     private String id;
     private String name;
-    private LocalDate expDate;
 }
