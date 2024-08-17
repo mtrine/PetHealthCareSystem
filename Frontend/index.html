@@ -140,9 +140,12 @@
 
 </body>
 <script>
-    // Hiển thị modal
-    function showModal() {
-        document.getElementById('login-modal').style.display = 'flex';
+    let authToken=localStorage.getItem("authToken")
+
+    if(!authToken){
+        function showModal() {
+            document.getElementById('login-modal').style.display = 'flex';
+        }
     }
 
     // Ẩn modal
@@ -155,39 +158,38 @@
         hideModal();
     }
 
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const headerBtn = document.querySelector('.header-btn');
-    //     const subNav = document.querySelector('.sub-nav');
-
-    //     headerBtn.addEventListener('click', function () {
-    //         // Toggle hiển thị sub-nav
-    //         subNav.style.display = (subNav.style.display === 'flex' ? 'none' : 'flex');
-    //     });
-
-    //     // Đóng sub-nav khi nhấp ra ngoài
-    //     document.addEventListener('click', function (event) {
-    //         if (!headerBtn.contains(event.target)) {
-    //             subNav.style.display = 'none';
-    //         }
-    //     });
-    // });
-
     document.addEventListener('DOMContentLoaded', function () {
         const headerBtn = document.querySelector('.header-btn');
+        const subNav = document.querySelector('.sub-nav');
         const subNavLoggedIn = document.querySelector('.sub-nav.logged-in');
+        if(authToken){
+            headerBtn.addEventListener('click', function () {
+                // Toggle hiển thị sub-nav
+                subNavLoggedIn.style.display = (subNavLoggedIn.style.display === 'block' ? 'none' : 'block');
+            });
 
-        headerBtn.addEventListener('click', function () {
+            // Đóng sub-nav khi nhấp ra ngoài
+            document.addEventListener('click', function (event) {
+                if (!headerBtn.contains(event.target)) {
+                    subNavLoggedIn.style.display = 'none';
+                }
+            });
+        }
+        else{
+            headerBtn.addEventListener('click', function () {
             // Toggle hiển thị sub-nav
-            subNavLoggedIn.style.display = (subNavLoggedIn.style.display === 'block' ? 'none' : 'block');
+            subNav.style.display = (subNav.style.display === 'flex' ? 'none' : 'flex');
         });
 
-        // Đóng sub-nav khi nhấp ra ngoài
-        document.addEventListener('click', function (event) {
-            if (!headerBtn.contains(event.target)) {
-                subNavLoggedIn.style.display = 'none';
-            }
-        });
+            // Đóng sub-nav khi nhấp ra ngoài
+            document.addEventListener('click', function (event) {
+                if (!headerBtn.contains(event.target)) {
+                    subNav.style.display = 'none';
+                }
+            });}
+
     });
+
 
 
 
