@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rating</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./assets/font/boxicons-2.1.4/css/boxicons.min.css">
+    <style>
+        #appointment-container {
+            height: 877px;
+        }
+
+        #appointment-container .header-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        #appointment-container .header-container i {
+            font-size: 70px;
+            color: #16427C;
+        }
+
+        #appointment-container .header-container h1 {
+            font-size: 40px;
+            font-weight: 600;
+            color: #16427C;
+        }
+
+        #appointment-container .detail-container h1 {
+            font-size: 30px;
+            font-weight: 500;
+            margin-left: 50px;
+        }
+
+        #appointment-container .date-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 130px;
+        }
+
+        #appointment-container .doctor-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 77px;
+        }
+
+        #appointment-container .pet-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 243px;
+        }
+
+        #appointment-container .services-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 273px;
+        }
+
+        #appointment-container .rating-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 75px;
+        }
+
+        #appointment-container .comment-container {
+            display: flex;
+            /* align-items: center; */
+            margin: 40px 0 40px 75px;
+
+        }
+
+        #appointment-container .date-container label,
+        #appointment-container .doctor-container label,
+        #appointment-container .pet-container label,
+        #appointment-container .services-container label,
+        #appointment-container .rating-container>label,
+        #appointment-container .comment-container label {
+            font-size: 32px;
+            color: #16427C;
+            font-weight: 700;
+            margin-right: 40px;
+        }
+
+        .rating-container>label {
+            margin-left: 90px;
+        }
+
+        .rating {
+            display: inline-block;
+            margin-left: 60px;
+        }
+
+        .rating input {
+            display: none;
+        }
+
+        .rating label {
+            float: right;
+            cursor: pointer;
+            color: #ccc;
+            transition: color 0.3s;
+            font-weight: 700;
+            margin-right: 40px;
+        }
+
+        .rating label:before {
+            content: '\2605';
+            font-size: 50px;
+        }
+
+        .rating input:checked~label,
+        .rating label:hover,
+        .rating label:hover~label {
+            color: #16427C;
+            transition: color 0.3s;
+        }
+
+        .form-comment {
+            width: 550px;
+            padding: 10px;
+            border: 2px solid #000;
+            background-color: #fff;
+            color: #333;
+            border-radius: 5px;
+        }
+
+        textarea.form-comment {
+            height: 140px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        textarea.form-comment::placeholder {
+            font-style: italic;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header">
+        <div class="logo">
+            <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
+        </div>
+        <ul class="nav">
+            <li><a href="#" onclick="showModal()">TRANG CHỦ</a></li>
+            <li><a href="#" onclick="showModal()">DỊCH VỤ</a></li>
+            <li><a href="#" onclick="showModal()">BẢNG GIÁ</a></li>
+        </ul>
+        <div class="header-btn">
+            <i class='bx bx-user-circle'></i>
+            <ul class="sub-nav guest">
+                <li><a href="login.html">Đăng nhập</a></li>
+                <li><a href="register.html">Đăng ký</a></li>
+            </ul>
+            <!-- sub-nav khi đã đăng nhập -->
+            <ul class="sub-nav logged-in">
+                <li><a href="PetList.html">Danh sách thú cưng</a></li>
+                <li><a href="AppointmentList.html">Đánh giá lượt thăm khám</a></li>
+                <li><a href="AppointmentTracking.html">Theo dõi lịch hẹn</a></li>
+                <li><a href="PetTracking.html">Theo dõi nhập viện</a></li>
+                <li><a href="CustomerInfo.html">Thông tin cá nhân</a></li>
+                <li><a href="register.html">Đăng xuất</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div id="appointment-container">
+        <div class="header-container">
+            <a href="AppointmentList.html"><i class='bx bx-chevron-left'></i></a>
+            <h1>Đánh giá các lượt thăm khám</h1>
+        </div>
+        <div class="detail-container">
+            <div class="date-container">
+                <label for="date">Ngày thăm khám</label>
+                <h1 id="date">02/02/2024</h1>
+            </div>
+
+            <div class="doctor-container">
+                <label for="doctor-name">Tên bác sĩ phụ trách</label>
+                <h1 id="doctor-name">Tên bác sĩ</h1>
+            </div>
+
+            <div class="pet-container">
+                <label for="pet-name">Thú cưng</label>
+                <h1 class="pet-name">Tên thú cưng</h1>
+            </div>
+
+            <div class="services-container">
+                <label for="service-name">Dịch vụ</label>
+                <h1 class="service-name">Triệt sản</h1>
+            </div>
+
+            <div class="rating-container">
+                <label for="rating-name">Đánh giá</label>
+                <div class="rating">
+                    <input value="5" name="rating" id="star5" type="radio">
+                    <label for="star5"></label>
+                    <input value="4" name="rating" id="star4" type="radio">
+                    <label for="star4"></label>
+                    <input value="3" name="rating" id="star3" type="radio">
+                    <label for="star3"></label>
+                    <input value="2" name="rating" id="star2" type="radio">
+                    <label for="star2"></label>
+                    <input value="1" name="rating" id="star1" type="radio">
+                    <label for="star1"></label>
+                </div>
+            </div>
+
+            <div class="comment-container">
+                <label for="comment-name">Để lại nhận xét</label>
+                <textarea required="" placeholder="Viết đánh giá ở đây" class="form-comment" name="comment"
+                    id="comment"></textarea>
+            </div>
+
+        </div>
+    </div>
+
+    <footer id="footer">
+        <div class="footer-content">
+            <div class="footer-item">
+                <i class='bx bx-map'></i> <b>Địa chỉ:</b> 2 Võ Oanh, Bình Thạnh, TP.HCM
+            </div>
+            <div class="footer-item">
+                <i class='bx bx-phone'></i> <b>Đường dây nóng:</b> 0123-456-789
+            </div>
+            <div class="footer-item">
+                <i class='bx bx-envelope'></i> <b>Email Contact:</b> contact@example.com
+            </div>
+        </div>
+    </footer>
+</body>
+
+<script>
+    // Bật subnav của customer
+    document.addEventListener('DOMContentLoaded', function () {
+        const headerBtn = document.querySelector('.header-btn');
+        const subNavLoggedIn = document.querySelector('.sub-nav.logged-in');
+
+        headerBtn.addEventListener('click', function () {
+            // Toggle hiển thị sub-nav
+            subNavLoggedIn.style.display = (subNavLoggedIn.style.display === 'block' ? 'none' : 'block');
+        });
+
+        // Đóng sub-nav khi nhấp ra ngoài
+        document.addEventListener('click', function (event) {
+            if (!headerBtn.contains(event.target)) {
+                subNavLoggedIn.style.display = 'none';
+            }
+        });
+    });
+
+</script>
+
+</html>
