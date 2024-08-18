@@ -16,10 +16,11 @@
                 <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
             </div>
             <ul class="nav">
-                <li><a href="index.html" onclick="showModal()">TRANG CHỦ</a></li>
-                <li><a href="booking.html" onclick="showModal()">DỊCH VỤ</a></li>
-                <li><a href="priceList.html" onclick="showModal()">BẢNG GIÁ</a></li>
+                <li><a href="index.html">TRANG CHỦ</a></li>
+                <li><a  onclick="navigate('booking.html')">DỊCH VỤ</a></li>
+                <li><a  onclick="navigate('priceList.html')">BẢNG GIÁ</a></li>
             </ul>
+
             <div class="header-btn">
                 <i class='bx bx-user-circle'></i>
                 <ul class="sub-nav guest">
@@ -140,13 +141,22 @@
 
 </body>
 <script>
-    let authToken=localStorage.getItem("authToken")
+    var authToken=localStorage.getItem("authToken")
 
-    if(!authToken){
-        function showModal() {
-            document.getElementById('login-modal').style.display = 'flex';
+    function navigate(url) {
+        var authToken = localStorage.getItem("authToken");
+
+        if (authToken) {
+            window.location.href = url;
+        } else {
+            showModal();
         }
     }
+
+    function showModal() {
+        document.getElementById('login-modal').style.display = 'flex';
+    }
+
 
     // Ẩn modal
     function hideModal() {

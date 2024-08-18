@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('form');
     form.addEventListener('submit', async (event) => {
@@ -7,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.querySelector('#password').value;
 
         try {
-            const response = await fetch('http://192.168.100.185:8080/v1/auth/login', { // Thay thế URL bằng API của bạn
+            const response = await fetch(`${API_BASE_URL}/v1/auth/login`, { // Thay thế URL bằng API của bạn
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

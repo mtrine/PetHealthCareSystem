@@ -30,4 +30,11 @@ public class UserController {
         apiResponse.setResult("Deleted");
         return apiResponse;
     }
+
+    @GetMapping("/my-info")
+    public ApiResponse<UserResponse> getUserInfo() {
+        ApiResponse<UserResponse> apiResponse= new ApiResponse<>();
+        apiResponse.setResult(userService.getMyInfo());
+        return apiResponse;
+    }
 }
