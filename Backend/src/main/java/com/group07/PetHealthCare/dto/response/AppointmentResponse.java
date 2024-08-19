@@ -21,4 +21,5 @@ public class AppointmentResponse {
     private LocalTime startTime;
     private LocalTime endTime;
     private Set<String> serviceName;
+    private String petName;
 }

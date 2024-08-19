@@ -256,16 +256,7 @@
                 <li>Thanh toán</li>
             </ul>
             <div class="appointment-list-section">
-                <ul class="appointment-item">
-                    <li>2/3/2024</li>
-                    <li>Tên bác sĩ</li>
-                    <li>Tên thú cưng</li>
-                    <li>Tẩy giun</li>
-                    <li>2</li>
-                    <li>Đã chuyển khoảng <div class="cancel" onclick="showModal()"><i class='bx bx-x-circle'></i></div>
-                        <div class="cancel-hover">Hủy lịch hẹn</div>
-                    </li>
-                </ul>
+                
             </div>
         </div>
     </div>
@@ -299,47 +290,7 @@
 
 
 </body>
-<script>
-
-
-    // Bật subnav của customer
-    document.addEventListener('DOMContentLoaded', function () {
-        const headerBtn = document.querySelector('.header-btn');
-        const subNavLoggedIn = document.querySelector('.sub-nav.logged-in');
-
-        headerBtn.addEventListener('click', function () {
-            // Toggle hiển thị sub-nav
-            subNavLoggedIn.style.display = (subNavLoggedIn.style.display === 'block' ? 'none' : 'block');
-        });
-
-        // Đóng sub-nav khi nhấp ra ngoài
-        document.addEventListener('click', function (event) {
-            if (!headerBtn.contains(event.target)) {
-                subNavLoggedIn.style.display = 'none';
-            }
-        });
-    });
-
-    // Thao tác ấn vào pet-item
-    document.addEventListener("DOMContentLoaded", function () {
-        // Handle pet-item clicks
-        document.querySelectorAll('.history-item').forEach(function (item) {
-            item.addEventListener('click', function (event) {
-                window.location.href = 'AppointmentDetails.html';
-            });
-        });
-    });
-
-    // Hiển thị modal
-    function showModal() {
-        document.getElementById('cancel-modal').style.display = 'flex';
-    }
-
-    // Ẩn modal
-    function hideModal() {
-        document.getElementById('cancel-modal').style.display = 'none';
-    }
-
-</script>
+<script src="./config/config.js"></script>
+<script src="./js/appointmentTracking.js"></script>
 
 </html>
