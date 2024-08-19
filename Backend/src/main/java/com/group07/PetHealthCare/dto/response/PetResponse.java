@@ -1,5 +1,6 @@
 package com.group07.PetHealthCare.dto.response;
 
+import com.group07.PetHealthCare.pojo.Species;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,4 +11,5 @@ public class PetResponse {
     private String name;
     private Integer age;
     private Boolean gender;
+    private SpeciesResponse speciesResponse;
 }
