@@ -50,6 +50,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             const appointmentItem = document.createElement('ul');
             appointmentItem.classList.add('appointment-item');
             var vetName = appointment.veterinarianName;
+            var status = "Đã chuyển khoảng";
+            if(!appointment.deposit){
+                status = "Chưa chuyển khoảng";
+            }
             if(!vetName){
                 vetName = 'Chưa có';
             }
@@ -59,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <li>${appointment.petName}</li>
                     <li>${appointment.serviceName[0]}</li>
                     <li>${appointment.startTime}-${appointment.endTime}</li>
-                    <li>Đã chuyển khoảng <div class="cancel" onclick="showModal()"><i class='bx bx-x-circle'></i></div>
+                    <li>${status} <div class="cancel" onclick="showModal()"><i class='bx bx-x-circle'></i></div>
                         <div class="cancel-hover">Hủy lịch hẹn</div>
                     </li>
             `;
