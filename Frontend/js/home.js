@@ -123,3 +123,38 @@ var authToken=localStorage.getItem("authToken")
         // Kiểm tra ban đầu khi tải trang
         checkButtons();
     });
+document.querySelector("#logout").addEventListener("click", async function () {
+    try {
+        const response = await fetch(`${API_BASE_URL}/v1/auth/logout`, { // Thay thế URL bằng API của bạn
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+               token:authToken
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Đăng xuất thất bại');
+        }
+
+        const data = await response.json();
+
+        // Kiểm tra mã phản hồi
+        if (data.code === 1000) {
+            // Xử lý dữ liệu nhận được từ API
+            console.log('Đăng xuất thành công');
+
+            // Lưu token vào localStorage và chuyển hướng người dùng
+           localStorage.removeItem('authToken');
+            window.location.href = 'index.html'; // Chuyển hướng đến trang sau khi đăng nhập thành công
+        } else {
+            throw new Error(data.message || 'Đăng xuất thất bại');
+        }
+
+    } catch (error) {
+        console.error('Lỗi:', error);
+        alert('Đăng nhập thất bại, vui lòng kiểm tra lại thông tin');
+    }
+})
