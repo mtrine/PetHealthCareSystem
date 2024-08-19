@@ -15,7 +15,6 @@ public class UserController {
     private UserService userService;
 
 
-
     @PatchMapping("/{userId}")
     public ApiResponse<UserResponse>  updateUser(@PathVariable("userId") String userId, @RequestBody @Valid UserRequest request) {
        ApiResponse<UserResponse> apiResponse= new ApiResponse<>();
