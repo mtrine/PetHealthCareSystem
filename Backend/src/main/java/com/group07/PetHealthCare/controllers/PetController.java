@@ -62,4 +62,18 @@ public class PetController {
         }
         return apiResponse;
     }
+    @PostMapping("/add-my-pet")
+    public ApiResponse<PetResponse> addMyPet(@RequestBody PetCreationRequest request) {
+        ApiResponse<PetResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(petService.addMyPet(request));
+        return apiResponse;
+    }
+
+    @GetMapping("/get-my-pet-list")
+    public ApiResponse<Set<PetResponse>> getMyPetList() {
+        ApiResponse<Set<PetResponse>> apiResponse = new ApiResponse<>();
+        Set<PetResponse> pets = petService.getMyPetList();
+        apiResponse.setResult(pets);
+        return apiResponse;
+    }
 }

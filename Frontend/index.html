@@ -16,10 +16,11 @@
                 <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
             </div>
             <ul class="nav">
-                <li><a href="index.html" onclick="showModal()">TRANG CHỦ</a></li>
-                <li><a href="booking.html" onclick="showModal()">DỊCH VỤ</a></li>
-                <li><a href="priceList.html" onclick="showModal()">BẢNG GIÁ</a></li>
+                <li><a href="index.html">TRANG CHỦ</a></li>
+                <li><a  onclick="navigate('booking.html')">DỊCH VỤ</a></li>
+                <li><a  onclick="navigate('priceList.html')">BẢNG GIÁ</a></li>
             </ul>
+
             <div class="header-btn">
                 <i class='bx bx-user-circle'></i>
                 <ul class="sub-nav guest">
@@ -140,10 +141,22 @@
 
 </body>
 <script>
-    // Hiển thị modal
+    var authToken=localStorage.getItem("authToken")
+
+    function navigate(url) {
+        var authToken = localStorage.getItem("authToken");
+
+        if (authToken) {
+            window.location.href = url;
+        } else {
+            showModal();
+        }
+    }
+
     function showModal() {
         document.getElementById('login-modal').style.display = 'flex';
     }
+
 
     // Ẩn modal
     function hideModal() {
@@ -155,39 +168,38 @@
         hideModal();
     }
 
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const headerBtn = document.querySelector('.header-btn');
-    //     const subNav = document.querySelector('.sub-nav');
-
-    //     headerBtn.addEventListener('click', function () {
-    //         // Toggle hiển thị sub-nav
-    //         subNav.style.display = (subNav.style.display === 'flex' ? 'none' : 'flex');
-    //     });
-
-    //     // Đóng sub-nav khi nhấp ra ngoài
-    //     document.addEventListener('click', function (event) {
-    //         if (!headerBtn.contains(event.target)) {
-    //             subNav.style.display = 'none';
-    //         }
-    //     });
-    // });
-
     document.addEventListener('DOMContentLoaded', function () {
         const headerBtn = document.querySelector('.header-btn');
+        const subNav = document.querySelector('.sub-nav');
         const subNavLoggedIn = document.querySelector('.sub-nav.logged-in');
+        if(authToken){
+            headerBtn.addEventListener('click', function () {
+                // Toggle hiển thị sub-nav
+                subNavLoggedIn.style.display = (subNavLoggedIn.style.display === 'block' ? 'none' : 'block');
+            });
 
-        headerBtn.addEventListener('click', function () {
+            // Đóng sub-nav khi nhấp ra ngoài
+            document.addEventListener('click', function (event) {
+                if (!headerBtn.contains(event.target)) {
+                    subNavLoggedIn.style.display = 'none';
+                }
+            });
+        }
+        else{
+            headerBtn.addEventListener('click', function () {
             // Toggle hiển thị sub-nav
-            subNavLoggedIn.style.display = (subNavLoggedIn.style.display === 'block' ? 'none' : 'block');
+            subNav.style.display = (subNav.style.display === 'flex' ? 'none' : 'flex');
         });
 
-        // Đóng sub-nav khi nhấp ra ngoài
-        document.addEventListener('click', function (event) {
-            if (!headerBtn.contains(event.target)) {
-                subNavLoggedIn.style.display = 'none';
-            }
-        });
+            // Đóng sub-nav khi nhấp ra ngoài
+            document.addEventListener('click', function (event) {
+                if (!headerBtn.contains(event.target)) {
+                    subNav.style.display = 'none';
+                }
+            });}
+
     });
+
 
 
 

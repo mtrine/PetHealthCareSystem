@@ -9,5 +9,5 @@ import java.time.LocalDate;
 @Setter
 public class VaccineRequest {
     private String name;
-    private LocalDate expDate;
+
 }

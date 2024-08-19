@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface IVisitScheduleRepository extends JpaRepository<VisitSchedule, String> {
-    Optional<VisitSchedule> findByVeterinarianIdAndVisitDateAndSessionId(String veterinarianId, LocalDate visitDate, String sessionId);
+    Optional<VisitSchedule> findByVeterinarianIdAndVisitDateAndSessionId(String veterinarianId, LocalDate visitDate, int sessionId);
 }

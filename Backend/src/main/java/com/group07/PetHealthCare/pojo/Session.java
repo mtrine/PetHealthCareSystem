@@ -13,9 +13,9 @@ import java.time.LocalTime;
 @Table(name = "sessions")
 public class Session {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sessionID", nullable = false)
-    private String id;
+    private int id;
 
     @Column(name = "startTime")
     private LocalTime startTime;

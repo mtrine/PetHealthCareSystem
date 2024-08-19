@@ -18,7 +18,7 @@ public class AppointmentRequest {
     private String petId;
     private Set<String> serviceId;
     private String veterinarianId;
-    private String sessionId;
+    private int sessionId;
     private String description;
 
 }
