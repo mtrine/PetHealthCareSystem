@@ -14,4 +14,5 @@ public interface IAppointmentRepository extends JpaRepository<Appointment, Strin
     Optional<Appointment> findByVeterinarianIdAndAppointmentDateAndSessionId(String veterinarianId, LocalDate appointmentDate, int sessionId);
     List<Appointment> findByVeterinarianId(String veterinarianId);
     List<Appointment> findByVeterinarianIdAndAppointmentDate(String veterinarianId, LocalDate appointmentDate);
+    List<Appointment> findByPetId(String petId);
 }

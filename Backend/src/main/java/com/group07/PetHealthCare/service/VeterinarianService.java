@@ -35,7 +35,7 @@ public class VeterinarianService {
     private IVeterinarianMapper veterinarianMapper;
     @Autowired
     private ISessionsMapper sessionsMapper;
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF','CUSTOMER')")
     public List<VeterinarianResponse> getAllVeterinarian() {
         return veterinarianMapper.toResponseList(IVeterinarianRepository.findAll());
     }
