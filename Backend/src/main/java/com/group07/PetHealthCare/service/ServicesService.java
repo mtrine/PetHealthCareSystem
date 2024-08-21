@@ -6,6 +6,7 @@ import com.group07.PetHealthCare.mapper.IServiceMapper;
 import com.group07.PetHealthCare.pojo.Services;
 import com.group07.PetHealthCare.respositytory.IServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,8 @@ public class ServicesService {
 
     @Autowired
     private IServiceMapper serviceMapper;
+
+    @PreAuthorize("hasRole('ADMIN')")
     public ServicesResponse createService (ServiceRequest request)
     {
         Services service = new Services();

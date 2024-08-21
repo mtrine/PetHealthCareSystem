@@ -10,6 +10,7 @@ import com.group07.PetHealthCare.respositytory.IPetRepository;
 import com.group07.PetHealthCare.respositytory.IVaccinePetRepository;
 import com.group07.PetHealthCare.respositytory.IVaccineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,8 @@ public class VaccinePetService {
     private IVaccineRepository vaccineRepository;
     @Autowired
     private IVaccinePetMapper vaccinePetMapper;
+
+    @PreAuthorize("hasAnyRole('STAFF','ADMIN','VETERINARIAN')")
     public VaccinePetResponse addVaccineToPet(VaccinePetRequest request) {
         VaccinePet vaccinePet = new VaccinePet();
         Pet pet = petRepository.findById(request.getPetId()).orElseThrow(()->new RuntimeException("Pet not found"));

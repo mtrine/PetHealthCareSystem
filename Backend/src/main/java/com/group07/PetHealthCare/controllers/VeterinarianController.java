@@ -43,5 +43,12 @@ public class VeterinarianController {
         apiResponse.setResult(availableSessions);
         return apiResponse;
     }
+
+    @GetMapping("/{sessionId}/get-avai")
+    public ApiResponse<List<VeterinarianResponse>> getAvailableVeterinariansForSessionAndDate() {
+        ApiResponse<List<VeterinarianResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(veterinarianService.getAllVeterinarian());
+        return apiResponse;
+    }
 }
 

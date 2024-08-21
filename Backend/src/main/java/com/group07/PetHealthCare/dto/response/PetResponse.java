@@ -12,4 +12,5 @@ public class PetResponse {
     private Integer age;
     private Boolean gender;
     private SpeciesResponse speciesResponse;
+    private CustomerResponse customerResponse;
 }

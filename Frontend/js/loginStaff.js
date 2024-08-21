@@ -27,6 +27,7 @@ document.querySelector(".login-btn").addEventListener("click", async function ()
                 alert('Bạn là khách hàng không thể truy cập');
             }
             else if (data.result.userResponse.role === "STAFF") {
+                localStorage.setItem('authToken', data.result.token);
                 window.location.href = "index.html";
             }
             else if (data.result.userResponse.role === "ADMIN") {
