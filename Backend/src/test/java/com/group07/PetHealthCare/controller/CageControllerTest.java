@@ -41,7 +41,7 @@ public class CageControllerTest {
     private List<CageResponse> cageResponseList;
 
     @BeforeEach
-    void setUp() {
+    void initData() {
         objectMapper = new ObjectMapper();
 
         cageResponse = CageResponse.builder()
@@ -58,6 +58,7 @@ public class CageControllerTest {
         Mockito.when(cagesService.getAllCages()).thenReturn(cageResponseList);
 
         mockMvc.perform(get("/v1/cages")
+                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -65,4 +66,52 @@ public class CageControllerTest {
                 .andExpect(jsonPath("$.result[0].status").value(true))
                 .andExpect(jsonPath("$.result[0].unitPrice").value(50.00));
     }
+    @Test
+    void createCage() throws Exception {
+        CageRequest cageRequest = new CageRequest();
+        cageRequest.setStatus(true);
+        cageRequest.setUnitPrice(BigDecimal.valueOf(200000));
+
+        CageResponse cageResponse = CageResponse.builder()
+                .cageNumber(1)
+                .status(true)
+                .unitPrice(BigDecimal.valueOf(200000))
+                .build();
+
+        Mockito.when(cagesService.addCage(any(CageRequest.class))).thenReturn(cageResponse);
+
+        mockMvc.perform(post("/v1/cages")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cageRequest)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.result.cageNumber").value(1))
+                .andExpect(jsonPath("$.result.status").value(true))
+                .andExpect(jsonPath("$.result.unitPrice").value(200000));
+    }
+
+
+
+    private String getAuthToken() throws Exception {
+        String username = "user@example.com";
+        String password = "securepassword";
+
+        String response = mockMvc.perform(post("/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        // Print the response to debug
+        System.out.println("Login Response: " + response);
+
+        // Adjust parsing based on the actual structure
+        return new ObjectMapper().readTree(response).get("result").get("token").asText();
+    }
+
+
+
+
 }
