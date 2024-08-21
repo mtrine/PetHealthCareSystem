@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <li class="${veterinarianClass}">${veterinarianName}</li>
                 <li>${booking.pet.id}</li>
                 <li>${booking.appointmentDate}</li>
-                <li>${booking.startTime}-${booking.endTime}</li>
+                <li>${booking.sessionResponse.startTime}-${booking.sessionResponse.endTime}</li>
                 <li><a href="detailBooking.html?id=${booking.id}">Xem chi tiết</a></li>
             `;
             bookingContainer.appendChild(bookingItem);

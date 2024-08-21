@@ -44,10 +44,12 @@ public class VeterinarianController {
         return apiResponse;
     }
 
-    @GetMapping("/{sessionId}/get-avai")
-    public ApiResponse<List<VeterinarianResponse>> getAvailableVeterinariansForSessionAndDate() {
+    @GetMapping("/{sessionId}/get-available-veterinarian-session")
+    public ApiResponse<List<VeterinarianResponse>> getAvailableVeterinariansForSessionAndDate(
+            @PathVariable("sessionId") int sessionId,
+            @RequestParam("date") LocalDate appointmentDate) {
         ApiResponse<List<VeterinarianResponse>> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(veterinarianService.getAllVeterinarian());
+        apiResponse.setResult(veterinarianService.getAvailableVeterinariansForSessionAndDate(sessionId, appointmentDate));
         return apiResponse;
     }
 }

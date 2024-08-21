@@ -31,25 +31,27 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <h1 class="doctor-name">${appointment.veterinarianName}</h1> 
             `;
         } else {
-            const dataVeterinarian=await fetchWithToken(`${API_BASE_URL}/v1/veterinarians`,{
+            const dataVeterinarian=await fetchWithToken(`${API_BASE_URL}/v1/veterinarians/${appointment.sessionResponse.id}/get-available-veterinarian-session?date=${appointment.appointmentDate}`,{
                 method:'GET',
                 headers:{
                     'Content-Type':'application/json'
                 }
             })
-            doctorContainer.innerHTML = ` 
+            if(dataVeterinarian.code==1000){
+                const veterinarians=dataVeterinarian.result;
+                doctorContainer.innerHTML = ` 
                     <label for="doctor-name">Bác sĩ</label>
                     <div id="doctor-select" class="custom-select">
                         <div class="selected-option">Chọn bác sĩ<i class='bx bx-chevron-down'></i></div>
                         <div class="options">
-                            <div data-value="d1">Bác sĩ 1</div>
-                            <div data-value="d2">Bác sĩ 2</div>
-                            <div data-value="d3">Bác sĩ 3</div>
-                            <div data-value="d4">Bác sĩ 4</div>
+                            ${veterinarians.map(veterinarian=>`
+                                <div data-value="${veterinarian.id}">${veterinarian.name}</div>
+                            `).join('')}
                         </div>
                     </div>
                     <button id="choose-veterinarian">Chọn</button>
-            `;
+                `;
+            }
         }
     }
     else{
@@ -85,9 +87,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         document.querySelectorAll('#doctor-select .options div').forEach(function (option) {
             option.addEventListener('click', function (event) {
-                event.stopPropagation(); // Prevent the dropdown from immediately re-opening
+                event.stopPropagation(); // Ngăn không cho dropdown mở lại ngay lập tức
                 const select = option.closest('.custom-select');
+                // Cập nhật phần tử .selected-option với tên bác sĩ được chọn
                 select.querySelector('.selected-option').innerHTML = option.innerText + " <i class='bx bx-chevron-down'></i>";
+                // Lưu giá trị data-value vào phần tử .selected-option dưới dạng thuộc tính data
+                select.querySelector('.selected-option').setAttribute('data-value', option.getAttribute('data-value'));
                 select.classList.remove('open');
             });
         });
@@ -98,4 +103,26 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         });
     }
+
+    document.querySelector('#choose-veterinarian').addEventListener('click', async function () {
+        const selectedOption = document.querySelector('#doctor-select .selected-option');
+        const veterinarianId = selectedOption.getAttribute('data-value');
+        console.log(veterinarianId);
+        const dataAppointment = await fetchWithToken(`${API_BASE_URL}/v1/appointments/${appointmentId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                veterinarianId: veterinarianId
+            })
+        });
+        
+        if (dataAppointment.code == 1000) {
+            alert("Chọn bác sĩ thành công");
+            location.reload();
+        } else {
+            alert("Đã có lỗi xảy ra: ",data.message);
+        }
+    })
 });
