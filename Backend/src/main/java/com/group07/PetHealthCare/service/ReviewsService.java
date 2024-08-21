@@ -14,6 +14,7 @@ import com.group07.PetHealthCare.respositytory.IAppointmentRepository;
 import com.group07.PetHealthCare.respositytory.ICustomerRepository;
 import com.group07.PetHealthCare.respositytory.IReviewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -33,7 +34,7 @@ public class ReviewsService {
 
     @Autowired
     ICustomerRepository customerRepository;
-
+    @PreAuthorize("hasRole('CUSTOMER')")
     public ReviewsResponse createReview(ReviewsRequest reviewsRequest) {
         // Fetching the required entities
         Appointment appointment = appointmentRepository.findById(reviewsRequest.getAppointmentId())

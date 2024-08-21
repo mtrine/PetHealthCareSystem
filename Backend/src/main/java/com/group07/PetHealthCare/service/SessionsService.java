@@ -6,6 +6,7 @@ import com.group07.PetHealthCare.mapper.ISessionsMapper;
 import com.group07.PetHealthCare.pojo.Session;
 import com.group07.PetHealthCare.respositytory.ISessionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,8 @@ public class SessionsService {
     private ISessionsRepository ISessionsRepository;
     @Autowired
     private ISessionsMapper sessionsMapper;
+
+    @PreAuthorize("hasRole('ADMIN')")
     public SessionResponse createSession(SessionsRequest request) {
         Session session = new Session();
         if(request.getStartTime().isAfter(request.getEndTime())){
