@@ -95,4 +95,9 @@ public class PetService {
         Set<Pet> pets = customer.getPets();
         return petMapper.toResponseList(pets);
     }
+
+    public PetResponse getPetById(String id) {
+        Pet pet = IPetRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        return petMapper.toResponse(pet);
+    }
 }

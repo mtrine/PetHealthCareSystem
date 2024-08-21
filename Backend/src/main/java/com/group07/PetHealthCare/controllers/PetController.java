@@ -50,6 +50,12 @@ public class PetController {
         }
         return apiResponse;
     }
+    @GetMapping("/{id}")
+    public ApiResponse<PetResponse> getPet(@PathVariable("id") String id) {
+        ApiResponse<PetResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(petService.getPetById(id));
+        return apiResponse;
+    }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deletePet(@PathVariable String id) {

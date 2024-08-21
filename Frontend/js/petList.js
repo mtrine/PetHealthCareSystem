@@ -89,7 +89,9 @@
                         </button>
                     </li>
                 `;
-    
+                petItem.addEventListener('click', function() {
+                    window.location.href = `PetInfo.html?id=${pet.id}`;
+                });
                 petContainer.appendChild(petItem);
             });
             
