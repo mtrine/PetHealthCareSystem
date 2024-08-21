@@ -52,4 +52,18 @@ public class AppointmentController {
         apiResponse.setResult(appointmentService.changeInforAppointment(appointmentId,request));
         return apiResponse;
     }
+
+    @GetMapping("/{custometId}/customer")
+    public ApiResponse<List<AppointmentResponse>> getAppointmentByCustometId(@PathVariable("custometId") String custometId) {
+        ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(appointmentService.getAppointmentByCustomerId(custometId));
+        return apiResponse;
+    }
+
+    @GetMapping("/get-my-appointment-for-customer")
+    public ApiResponse<List<AppointmentResponse>> getMyAppointmentForCustomer() {
+        ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(appointmentService.getMyAppointmentForCustomer());
+        return apiResponse;
+    }
 }

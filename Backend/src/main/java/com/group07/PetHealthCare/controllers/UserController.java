@@ -29,4 +29,18 @@ public class UserController {
         apiResponse.setResult("Deleted");
         return apiResponse;
     }
+
+    @GetMapping("/my-info")
+    public ApiResponse<UserResponse> getUserInfo() {
+        ApiResponse<UserResponse> apiResponse= new ApiResponse<>();
+        apiResponse.setResult(userService.getMyInfo());
+        return apiResponse;
+    }
+
+    @PatchMapping("/update-my-info")
+    public ApiResponse<UserResponse> updateUserInfo(@RequestBody @Valid UserRequest request) {
+        ApiResponse<UserResponse> apiResponse= new ApiResponse<>();
+        apiResponse.setResult(userService.updateMyInfo(request));
+        return apiResponse;
+    }
 }

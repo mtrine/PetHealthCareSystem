@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./assets/font/boxicons-2.1.4/css/boxicons.min.css">
+    <style>
+        #appointment-info-container {
+            height: 877px;
+        }
+
+        #appointment-info-container .header-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        #appointment-info-container .header-container i {
+            font-size: 70px;
+            color: #16427C;
+        }
+
+        #appointment-info-container .header-container h1 {
+            font-size: 40px;
+            font-weight: 600;
+            color: #16427C;
+        }
+
+        #appointment-info-container .appointment-list-container {
+            width: 1330px;
+            height: 635.2px;
+            background-color: #fff;
+            box-shadow: 0px 4px 10px 5px #00000040;
+            margin: auto;
+        }
+
+        /* Header styling */
+        .appointment-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 3px solid #E0E5E8;
+            border-top: 3px solid #E0E5E8;
+            list-style: none;
+            padding: 10px 0px;
+        }
+
+        .appointment-list-header li {
+            flex: 1;
+            text-align: center;
+            font-size: 23px;
+            font-weight: 600;
+            color: #000;
+            padding: 20px;
+        }
+
+        .appointment-list-section {
+            height: 542px;
+            max-height: 542px;
+            overflow-y: auto;
+        }
+
+        /* List inside each pet item */
+        .appointment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 3px solid #E0E5E8;
+            list-style: none;
+        }
+
+        /* Individual item fields (li) styling */
+
+        .appointment-item li {
+            flex: 1;
+            font-size: 20px;
+            color: #000;
+            text-align: center;
+            list-style: none;
+            padding: 20px 5px;
+        }
+
+        .appointment-item li:last-child {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+        }
+
+        .appointment-item li:last-child .cancel {
+            cursor: pointer;
+            position: relative;
+            background: #5E5E5E;
+            margin-left: 18px;
+            width: 30px;
+            height: 30px;
+        }
+
+        /* .cancel {
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+        } */
+
+
+        .appointment-item .cancel i {
+            color: #fff;
+            font-size: 30px;
+        }
+
+        .appointment-item .cancel-hover {
+            display: none;
+            position: absolute;
+            top: 75%;
+            left: 45%;
+            transform: translateX(-50%);
+            background-color: #555;
+            color: white;
+            text-align: center;
+            border-radius: 12px;
+            padding: 8px 15px;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+
+        .cancel:hover+.cancel-hover {
+            display: block;
+        }
+
+        .cancel-hover::after {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent #555 transparent;
+        }
+
+        /* Định kiểu cho bảng modal */
+        .cancel-modal {
+            display: none;
+            /* Ẩn modal theo mặc định */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Màu nền nửa trong suốt */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Đặt lên trên cùng */
+        }
+
+        .cancel-modal .modal-content {
+            width: 408px;
+            height: 274px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .cancel-modal .modal-content i {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .cancel-modal .modal-content h3 {
+            font-size: 30px;
+            font-weight: 500;
+            margin-bottom: 30px;
+        }
+
+        .cancel-modal .modal-content p {
+            padding: 0 10px;
+            font-size: 25px;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        .cancel-modal .modal-buttons {
+            margin-top: 40px;
+        }
+
+        .cancel-modal .modal-buttons button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 11px 40px;
+            font-size: 30px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 0 14px;
+            transition: background-color 0.3s;
+        }
+
+        .cancel-modal .modal-buttons button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header">
+        <div class="logo">
+            <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
+        </div>
+        <ul class="nav">
+            <li><a href="#" onclick="">TRANG CHỦ</a></li>
+            <li><a href="#" onclick="">DỊCH VỤ</a></li>
+            <li><a href="#" onclick="">BẢNG GIÁ</a></li>
+        </ul>
+        <div class="header-btn">
+            <i class='bx bx-user-circle'></i>
+            <ul class="sub-nav guest">
+                <li><a href="login.html">Đăng nhập</a></li>
+                <li><a href="register.html">Đăng ký</a></li>
+            </ul>
+            <!-- sub-nav khi đã đăng nhập -->
+            <ul class="sub-nav logged-in">
+                <li><a href="PetList.html">Danh sách thú cưng</a></li>
+                <li><a href="AppointmentList.html">Đánh giá lượt thăm khám</a></li>
+                <li><a href="AppointmentTracking.html">Theo dõi lịch hẹn</a></li>
+                <li><a href="PetTracking.html">Theo dõi nhập viện</a></li>
+                <li><a href="CustomerInfo.html">Thông tin cá nhân</a></li>
+                <li><a href="register.html">Đăng xuất</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div id="appointment-info-container">
+        <div class="header-container">
+            <a href="index.html"><i class='bx bx-chevron-left'></i></a>
+            <h1>Theo dõi lịch hẹn</h1>
+        </div>
+        <div class="appointment-list-container">
+            <ul class="appointment-list-header">
+                <li>Ngày hẹn khám</li>
+                <li>Bác sĩ phụ trách</li>
+                <li>Thú cưng</li>
+                <li>Dịch vụ</li>
+                <li>Ca</li>
+                <li>Thanh toán</li>
+            </ul>
+            <div class="appointment-list-section">
+                
+            </div>
+        </div>
+    </div>
+
+
+    <footer id="footer">
+        <div class="footer-content">
+            <div class="footer-item">
+                <i class='bx bx-map'></i> <b>Địa chỉ:</b> 2 Võ Oanh, Bình Thạnh, TP.HCM
+            </div>
+            <div class="footer-item">
+                <i class='bx bx-phone'></i> <b>Đường dây nóng:</b> 0123-456-789
+            </div>
+            <div class="footer-item">
+                <i class='bx bx-envelope'></i> <b>Email Contact:</b> contact@example.com
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bảng modal -->
+    <div id="cancel-modal" class="cancel-modal">
+        <div class="modal-content">
+            <h3>Hủy lịch?</h3>
+            <p>Bạn được hoàn 75% phí thanh toán</p>
+            <div class="modal-buttons">
+                <button onclick="hideModal()">OK</button>
+                <button onclick="hideModal()">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<script src="./config/config.js"></script>
+<script src="./js/appointmentTracking.js"></script>
+
+</html>

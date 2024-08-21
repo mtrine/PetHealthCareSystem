@@ -35,7 +35,7 @@ public class VeterinarianService {
     private IVeterinarianMapper veterinarianMapper;
     @Autowired
     private ISessionsMapper sessionsMapper;
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF','CUSTOMER')")
     public List<VeterinarianResponse> getAllVeterinarian() {
         return veterinarianMapper.toResponseList(IVeterinarianRepository.findAll());
     }
@@ -60,7 +60,7 @@ public class VeterinarianService {
 
         // Loại bỏ các ca đã có lịch hẹn
         for (Appointment appointment : appointments) {
-            allSessions.removeIf(session -> session.getId().equals(appointment.getSession().getId()));
+            allSessions.removeIf(session -> session.getId()==appointment.getSession().getId());
         }
 
         return sessionsMapper.toSessionResponseList(allSessions);

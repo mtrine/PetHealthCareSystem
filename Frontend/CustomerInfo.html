@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Information</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./assets/font/boxicons-2.1.4/css/boxicons.min.css">
+    <link rel="stylesheet" href="./assets/font/boxicons-2.1.4/fontawesome-free-6.6.0-web/css/all.min.css">
+    <style>
+        #customer-info-container {
+            height: 877px;
+        }
+
+        #customer-info-container .header-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        #customer-info-container .header-container i {
+            font-size: 70px;
+            color: #16427C;
+        }
+
+        #customer-info-container .header-container h1 {
+            font-size: 40px;
+            font-weight: 600;
+            color: #16427C;
+        }
+
+        /* #customer-info-container h1 .pet-id {
+            color: #16427C;
+            font-size: 40px;
+            font-weight: 300;
+        } */
+
+        #customer-info-container .detail-container h1 {
+            font-size: 30px;
+            font-weight: 500;
+            margin-left: 50px;
+        }
+
+        #customer-info-container .name-container {
+            display: flex;
+            align-items: center;
+            margin-left: 220px;
+        }
+
+        #customer-info-container .gender-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 75px;
+        }
+
+        #customer-info-container .name-container label,
+        #customer-info-container .gender-container label,
+        #customer-info-container .phone-container label,
+        #customer-info-container .email-container label,
+        #customer-info-container .address-container label,
+        #customer-info-container .password-container label {
+            font-size: 32px;
+            color: #16427C;
+            font-weight: 700;
+            margin-right: 40px;
+        }
+
+        #customer-info-container .phone-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 75px;
+            position: relative;
+
+        }
+
+        #customer-info-container .email-container {
+            display: flex;
+            align-items: center;
+            margin-top: 40px;
+            margin-left: 192px;
+            gap: 40px;
+        }
+
+        #customer-info-container .email-container>h1 {
+            margin-left: 12px;
+        }
+
+        #customer-info-container .address-container {
+            display: flex;
+            align-items: center;
+            margin-top: 40px;
+            margin-left: 170px;
+            gap: 40px;
+        }
+
+        #customer-info-container .address-container>h1 {
+            margin-left: 12px;
+        }
+
+        #customer-info-container .info-section {
+            display: flex;
+            gap: 100px;
+        }
+
+        #customer-info-container .password-container {
+            display: flex;
+            align-items: center;
+            margin-top: 40px;
+            margin-left: 130px;
+            /* gap: 40px; */
+        }
+
+        #customer-info-container .password-section {
+            display: flex;
+            align-items: center;
+            margin-left: 30px;
+        }
+
+        #customer-info-container .toggle-password {
+            font-size: 35px;
+            border: none;
+            background-color: #fff;
+        }
+
+        #customer-info-container .password-display {
+            font-size: 40px;
+            margin-right: 10px;
+        }
+
+        #customer-info-container .change-password {
+            margin-left: 30px;
+            font-size: 30px;
+            font-weight: 500;
+            color: #16427C;
+        }
+        /* Nút thay đổi thông tin */
+        .submit {
+            display: flex;
+            justify-content: center;
+            margin-top: 80px;
+        }
+
+        .submit button {
+            width: 524px;
+            height: 90px;
+            border-radius: 40px;
+            border: none;
+            font-size: 30px;
+            font-weight: 700;
+            color: #000;
+            cursor: pointer;
+            background-color: #fff;
+            margin: 40px 0;
+            box-shadow: 0px 4px 5px 5px #00000040;
+        }
+
+        .submit button:hover {
+            box-shadow: 0px 4px 10px 5px #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header">
+        <div class="logo">
+            <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
+        </div>
+        <ul class="nav">
+            <li><a href="#" onclick="showModal()">TRANG CHỦ</a></li>
+            <li><a href="#" onclick="showModal()">DỊCH VỤ</a></li>
+            <li><a href="#" onclick="showModal()">BẢNG GIÁ</a></li>
+        </ul>
+        <div class="header-btn">
+            <i class='bx bx-user-circle'></i>
+            <ul class="sub-nav guest">
+                <li><a href="login.html">Đăng nhập</a></li>
+                <li><a href="register.html">Đăng ký</a></li>
+            </ul>
+            <!-- sub-nav khi đã đăng nhập -->
+            <ul class="sub-nav logged-in">
+                <li><a href="PetList.html">Danh sách thú cưng</a></li>
+                <li><a href="AppointmentList.html">Đánh giá lượt thăm khám</a></li>
+                <li><a href="AppointmentTracking.html">Theo dõi lịch hẹn</a></li>
+                <li><a href="PetTracking.html">Theo dõi nhập viện</a></li>
+                <li><a href="CustomerInfo.html">Thông tin cá nhân</a></li>
+                <li><a href="register.html">Đăng xuất</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div id="customer-info-container">
+        <div class="header-container">
+            <a href="index.html"><i class='bx bx-chevron-left'></i></a>
+            <h1>Thông tin cá nhân</h1>
+        </div>
+
+        <div class="detail-container">
+            <div class="info-section">
+                <div class="name-container">
+                    <label for="customer-name">Tên</label>
+                    <h1 id="customer-name">Nguyễn Văn A</h1>
+                </div>
+                <div class="gender-container">
+                    <label for="customer-gender">Giới tính</label>
+                    <h1 class="customer-gender">Nam</h1>
+                </div>
+            </div>
+
+            <div class="phone-container">
+                <label for="customer-phone">Số điện thoại</label>
+                <h1 id="customer-phone">012334567</h1>
+            </div>
+
+            <div class="email-container">
+                <label for="customer-email">Email</label>
+                <h1 class="customer-email">nguyenvana@gmail.com</h1>
+            </div>
+
+            <div class="address-container">
+                <label for="customer-address">Địa chỉ</label>
+                <h1 class="customer-address">02 Võ Oanh, Bình Thạnh</h1>
+            </div>
+            <div class="password-container">
+                <label for="customer-password">Mật khẩu</label>
+                <div class="password-section">
+                    <span id="customer-password" class="password-display">••••••••</span>
+                    <button type="button" id="toggle-password" class="toggle-password">
+                        <i class="fa-solid fa-eye-slash"></i>
+                    </button>
+                </div>
+                <a href="ChangePassword.html" class="change-password">Đổi mật khẩu</a>
+            </div>
+        </div>
+
+        <div class="submit">
+            <button type="submit" onclick="showEditInfo()">Chỉnh sửa thông tin cá nhân</button>
+        </div>
+    </div>
+
+
+
+    <footer id="footer">
+        <div class="footer-content">
+            <div class="footer-item">
+                <i class='bx bx-map'></i> <b>Địa chỉ:</b> 2 Võ Oanh, Bình Thạnh, TP.HCM
+            </div>
+            <div class="footer-item">
+                <i class='bx bx-phone'></i> <b>Đường dây nóng:</b> 0123-456-789
+            </div>
+            <div class="footer-item">
+                <i class='bx bx-envelope'></i> <b>Email Contact:</b> contact@example.com
+            </div>
+        </div>
+    </footer>
+</body>
+<script src="./config/config.js"></script>
+<script src="./js/customerInfo.js"></script>
+
+</html>

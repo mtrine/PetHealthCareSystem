@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        /* Inria Sans */
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@100..900&display=swap');
+/* Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@100..900&display=swap');
+
+html {
+    /* Dùng phông chữ không gạch chân */
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
+}
+
+/* Login */
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-image: url('./assets/img/background_login.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Dark overlay with transparency */
+    z-index: -1; /* Place behind other content */
+}
+
+.login-container {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 870px;
+    height: 620px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.logo {
+    width: 112px;
+    height: 112px;
+    /* Adjust spacing if needed */
+}
+
+.divider {
+    width: 810px;
+    height: 1px;
+    background-color: #546350;
+    margin: 0;
+}
+
+.form-container {
+    width: 100%;
+    height: auto;
+    background-image: url('./assets/img/background_login.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    flex: 1;
+    box-sizing: border-box;
+    padding: 64px 0 64px 64px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 330px;
+    top: 70px;
+}
+
+.login-form h1 {
+    font-size: 70px;
+    color: #2F6D30;
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-family: 'Inria Sans', sans-serif;
+}
+
+.login-form form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.input-box {
+    position: relative;
+    margin-bottom: 15px;
+    width: 100%;
+    height: 50px;
+}
+
+.input-box input {
+    width: 100%;
+    height: 30px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #546350;
+    border-bottom: 2px solid #48AB34;
+}
+
+.input-box label {
+    position: absolute;
+    top: 25%;
+    left: 0;
+    transform: translateY(-25%);
+    font-size: 16px;
+    color: #48AB34;
+    transition: .5s;
+}
+
+.input-box input:focus+label,
+.input-box input:valid~label {
+    top: -5px;
+    font-size: 12px;
+}
+
+.input-box input:focus {
+    border-bottom: 2px solid #2F6D30 ;
+}
+
+.login-form button {
+    width: 240px;
+    height: 50px;
+    font-size: 18px;
+    background-color: #2F6D30;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-form button:hover {
+    background-color: #285a28; 
+    box-shadow: 0 1px 5px 1px rgba(0, 0, 0, 0.3); 
+}
+
+.login-form p {
+    margin-top: 15px;
+    color: #546350;
+    font-weight: 400;
+}
+
+.login-form a {
+    color:#546350;
+    margin-left: 5px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-form a:hover {
+    text-decoration: underline;
+}
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
+        </div>
+        <hr class="divider">
+        <div class="form-container">
+            <div class="login-form">
+                <h1>Login</h1>
+                <form>
+                    <div class="input-box">
+                        <input type="text" id="email" name="email" required>
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" id="password" name="password" required>
+                        <label for="password">Mật khẩu</label>
+                    </div>
+                    <button type="submit">Đăng nhập</button>
+                </form>
+                <p>Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></p>
+            </div>
+        </div>
+
+    </div>
+    <script src="./config/config.js"></script>
+    <script src="./js/login.js"></script>
+</body>
+
+</html>

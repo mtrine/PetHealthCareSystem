@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <style>
+        /* Inria Sans */
+        @import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@100..900&display=swap');
+        /* Inter */
+        @import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@100..900&display=swap');
+
+        html {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* Register Page */
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('./assets/img/background_signUp.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            /* Dark overlay with transparency */
+            z-index: -1;
+        }
+
+        .login-container {
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 870px;
+            height: 620px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .logo {
+            width: 112px;
+            height: 112px;
+        }
+
+        .divider {
+            width: 810px;
+            height: 1px;
+            background-color: #007bff;
+            /* Blue color */
+            margin: 0;
+        }
+
+        .form-container {
+            width: 100%;
+            height: auto;
+            background-image: url('./assets/img/background_signUp.png');
+            /* Use a different background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            flex: 1;
+            box-sizing: border-box;
+            padding-left: 100px;
+        }
+
+        .register-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 330px;
+            top: 70px;
+        }
+
+        .register-form h1 {
+            font-size: 60px;
+            color: #16427C;
+            /* Blue color */
+            margin-bottom: 80px;
+            margin-top: 5px;
+            font-family: 'Inria Sans', sans-serif;
+        }
+
+        .register-form form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .input-box {
+            position: relative;
+            width: 100%;
+            height: 50px;
+        }
+
+        .input-box input {
+            width: 100%;
+            height: 30px;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            font-weight: 500;
+            color: #007bff;
+            /* Blue color */
+            border-bottom: 2px solid #1E65D6;
+            /* Blue border */
+        }
+
+        .input-box label {
+            position: absolute;
+            top: 25%;
+            left: 0;
+            transform: translateY(-25%);
+            font-size: 16px;
+            color: #9BA7E5;
+            /* Blue color */
+            transition: .5s;
+        }
+
+        .input-box input:focus+label,
+        .input-box input:valid~label {
+            top: -5px;
+            font-size: 12px;
+        }
+
+        .input-box input:focus {
+            border-bottom: 2px solid #16427C;
+            /* Darker blue */
+        }
+
+        .register-form button {
+            width: 240px;
+            height: 50px;
+            font-size: 18px;
+            background-color: #16427C;
+            /* Blue color */
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .register-form button:hover {
+            background-color: #0056b3;
+            /* Darker blue */
+            box-shadow: 0 1px 5px 1px rgba(0, 0, 0, 0.3);
+        }
+
+        .register-form p {
+            margin-top: 15px;
+            color: #007bff;
+            /* Blue color */
+            font-weight: 400;
+        }
+
+        .register-form a {
+            color: #007bff;
+            /* Blue color */
+            margin-left: 5px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .register-form a:hover {
+            text-decoration: underline;
+        }
+
+        .gender-box {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .gender-box>div {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        .gender-box input[type="radio"] {
+            margin-right: 8px;
+            margin-top: 0;
+        }
+
+        .gender-box label {
+            font-size: 20px;
+            color: #16427C;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
+        </div>
+        <hr class="divider">
+        <div class="form-container">
+            <!-- First Step Form -->
+            <div class="register-form" id="step1">
+                <h1>Register</h1>
+                <form id="form-step1">
+                    <div class="input-box">
+                        <input type="text" id="phone" name="phone" required>
+                        <label for="phone">Số điện thoại</label>
+                    </div>
+                    <div class="input-box">
+                        <input type="email" id="email" name="email" required>
+                        <label for="email">Email</label>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" id="fullname" name="fullname" required>
+                        <label for="fullname">Họ và tên</label>
+                    </div>
+                    <div class="input-box">
+                        <input type="text" id="address" name="address" required>
+                        <label for="address">Địa chỉ</label>
+                    </div>
+
+                    <div class="gender-box">
+                        <div>
+                            <input type="radio" id="male" name="gender" value="male">
+                            <label for="male">Nam</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="female" name="gender" value="female">
+                            <label for="female">Nữ</label>
+                        </div>
+
+                    </div>
+
+                    <button type="button" id="continue-btn">Tiếp theo</button>
+                </form>
+            </div>
+
+            <!-- Second Step Form -->
+            <div class="register-form" id="step2" style="display: none;">
+                <h1>Register</h1>
+                <form id="form-step2">
+                    <div class="input-box">
+                        <input type="password" id="password" name="password" required>
+                        <label for="password">Mật khẩu</label>
+                    </div>
+                    <div class="input-box">
+                        <input type="password" id="confirm-password" name="confirm-password" required>
+                        <label for="confirm-password">Nhập lại mật khẩu</label>
+                    </div>
+                    <button type="submit">Đăng ký</button>
+                </form>
+                <p>Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a></p>
+            </div>
+        </div>
+    </div>
+    <script src="./config/config.js"></script>
+    <script src="./js/register.js"></script>
+</body>
+
+</html>
