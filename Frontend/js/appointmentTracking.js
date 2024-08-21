@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <li>${vetName}</li>
                     <li>${appointment.petName}</li>
                     <li>${appointment.serviceName[0]}</li>
-                    <li>${appointment.startTime}-${appointment.endTime}</li>
+                    <li>${appointment.sessionResponse.startTime}-${appointment.sessionResponse.endTime}</li>
                     <li>${status} <div class="cancel" onclick="showModal()"><i class='bx bx-x-circle'></i></div>
                         <div class="cancel-hover">Hủy lịch hẹn</div>
                     </li>

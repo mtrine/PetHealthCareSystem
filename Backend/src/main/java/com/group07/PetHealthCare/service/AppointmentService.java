@@ -195,6 +195,10 @@ public class AppointmentService {
                 IAppointmentServicesRepository.save(appointmentServices);
             }
         }
+        if(request.getVeterinarianId()!=null){
+            Veterinarian veterinarian= IVeterinarianRepository.findById(request.getVeterinarianId()).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+            appointment.setVeterinarian(veterinarian);
+        }
 
         return appointmentMapper.toAppointmentResponse(IAppointmentRepository.save(appointment));
     }
