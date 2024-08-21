@@ -12,6 +12,7 @@ import com.group07.PetHealthCare.respositytory.IHospitalizationRepository;
 import com.group07.PetHealthCare.respositytory.IPetRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,8 @@ public class HospitalizationService {
 
     @Autowired
     private ICustomerRepository customerRepository;
+
+    @PreAuthorize("hasAnyRole('VETERINARIAN','STAFF')")
     public HospitalizationResponse createHospitalization(HospitalizationRequest request) {
         if (request.getCageNumber() == null) {
             throw new IllegalArgumentException("Cage number  must not be null");
@@ -61,12 +64,12 @@ public class HospitalizationService {
 
         return hospitalizationMapper.toHospitalizationResponse(hospitalizationRepository.save(hospitalization));
     }
-
+    @PreAuthorize("hasAnyRole('VETERINARIAN','STAFF')")
     public List<HospitalizationResponse> getAllHospitalization() {
 
         return hospitalizationMapper.toHospitalizationResponseList(hospitalizationRepository.findAll());
     }
-
+    @PreAuthorize("hasAnyRole('VETERINARIAN','STAFF')")
     public HospitalizationResponse getHospitalizationById(String id) {
         if (id == null) {
             throw new IllegalArgumentException("ID must not be null");
@@ -74,7 +77,7 @@ public class HospitalizationService {
         return hospitalizationMapper.toHospitalizationResponse(hospitalizationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hospitalization not found")));
     }
-
+    @PreAuthorize("hasAnyRole('VETERINARIAN','STAFF')")
     public HospitalizationResponse updateHospitalization(String id, HospitalizationRequest request) {
         if (id == null) {
             throw new IllegalArgumentException("ID must not be null");
@@ -105,7 +108,7 @@ public class HospitalizationService {
         }
         return hospitalizationMapper.toHospitalizationResponse(hospitalizationRepository.save(hospitalization));
     }
-
+    @PreAuthorize("hasAnyRole('VETERINARIAN','STAFF')")
     public void deleteHospitalization(String id) {
         if (id == null) {
             throw new IllegalArgumentException("ID must not be null");
@@ -114,7 +117,7 @@ public class HospitalizationService {
         Hospitalization hospitalization = hospitalizationRepository.findById(id).orElseThrow(() -> new RuntimeException("Hospitalization not found"));
         hospitalizationRepository.delete(hospitalization);
     }
-
+    @PreAuthorize("hasAnyRole('VETERINARIAN','STAFF')")
     public List<HospitalizationResponse> getHospitalizationByPetId(String petId) {
         if (petId == null) {
             throw new IllegalArgumentException("Pet ID must not be null");

@@ -76,7 +76,6 @@
 
         #detail-hospitalized-container .doctor-container label,
         #detail-hospitalized-container .status-container label,
-        #detail-hospitalized-container .visit-container label,
         #detail-hospitalized-container .cage-container label,
         #detail-hospitalized-container .id-container label,
         #detail-hospitalized-container .name-container label,
@@ -134,17 +133,9 @@
             /* margin-left: 50px; */
         }
 
-        #detail-hospitalized-container .visit-container {
-            display: flex;
-            align-items: center;
-            margin-left: 20px;
-        }
+       
 
-        #detail-hospitalized-container .visit-container h1 {
-            font-size: 30px;
-            font-weight: 500;
-            /* margin-left: 50px; */
-        }
+      
 
         #detail-hospitalized-container .status-container input {
             font-size: 25px;
@@ -559,10 +550,6 @@
                     <label for="cage">Chuồng</label>
                     <h1 id="cage">2</h1>
                 </div>
-                <div class="visit-container">
-                    <label for="visit">Lần thăm khám gần nhất</label>
-                    <h1 class="visit">10/08/2024</h1>
-                </div>
             </div>
 
             <div class="status-container">
@@ -580,16 +567,7 @@
                 </div>
 
                 <div class="doctor-container">
-                    <label for="doctor-name">Bác sĩ</label>
-                    <div id="doctor-select" class="custom-select">
-                        <div class="selected-option">Chọn bác sĩ<i class='bx bx-chevron-down'></i></div>
-                        <div class="options">
-                            <div data-value="d1">Bác sĩ 1</div>
-                            <div data-value="d2">Bác sĩ 2</div>
-                            <div data-value="d3">Bác sĩ 3</div>
-                            <div data-value="d4">Bác sĩ 4</div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
 
@@ -645,74 +623,9 @@
         </div>
     </div>
 </body>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Lấy các phần tử modal
-        const deleteModal = document.getElementById('delete-modal');
-        const dischargedModal = document.getElementById('discharged-modal');
-
-        // Lấy các nút
-        const deleteBtn = document.getElementById('delete-btn');
-        const dischargedBtn = document.getElementById('discharged-btn');
-
-        // Lấy các nút trong modal
-        const confirmDelete = document.getElementById('confirm-delete');
-        const cancelDelete = document.getElementById('cancel-delete');
-        const confirmDischarged = document.getElementById('confirm-discharged');
-        const cancelDischarged = document.getElementById('cancel-discharged');
-
-        // Hiển thị modal xóa khi nhấn nút xóa
-        deleteBtn.onclick = function () {
-            deleteModal.style.display = 'flex';
-        }
-
-        // Hiển thị modal cập nhật khi nhấn nút xuất viện
-        dischargedBtn.onclick = function () {
-            dischargedModal.style.display = 'flex';
-        }
-
-        // Đóng modal khi nhấn vào nút hủy
-        cancelDelete.onclick = function () {
-            deleteModal.style.display = 'none';
-        }
-
-        cancelDischarged.onclick = function () {
-            dischargedModal.style.display = 'none';
-        }
-
-        // Đóng modal khi nhấn vào bên ngoài modal-content
-        // window.onclick = function (event) {
-        //     if (event.target === deleteModal) {
-        //         deleteModal.style.display = 'none';
-        //     } else if (event.target === dischargedModal) {
-        //         dischargedModal.style.display = 'none';
-        //     }
-        // }
-
-        // doctor select
-        document.querySelector('#doctor-select').addEventListener('click', function (event) {
-            const icon = this.querySelector('.selected-option i');
-            this.classList.toggle('open');
-            icon.classList.toggle('bx-rotate-180');
-        });
-
-        document.querySelectorAll('#doctor-select .options div').forEach(function (option) {
-            option.addEventListener('click', function (event) {
-                event.stopPropagation(); // Prevent the dropdown from immediately re-opening
-                const select = option.closest('.custom-select');
-                select.querySelector('.selected-option').innerHTML = option.innerText + " <i class='bx bx-chevron-down'></i>";
-                select.classList.remove('open');
-            });
-        });
-
-        // Close the dropdown if clicking outside of it
-        document.addEventListener('click', function (event) {
-            if (!event.target.closest('#doctor-select')) {
-                document.querySelector('#doctor-select').classList.remove('open');
-            }
-        });
-
-    })
+<script src="../config/config.js"></script>
+<script src="../js/detailHospitalization.js">
+    
 </script>
 
 </html>

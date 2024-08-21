@@ -93,14 +93,7 @@ document.getElementById('addBookingBtn').addEventListener('click', function () {
 
 
 // Lấy tất cả các mục hospitalized-item
-const hospitalizedItems = document.querySelectorAll('.hospitalized-item');
 
-// Thêm sự kiện click cho từng mục
-hospitalizedItems.forEach(item => {
-    item.addEventListener('click', function () {
-        window.location.href = 'detailHospitalized.html';
-    });
-});
 
 const checkboxes = document.querySelectorAll('.role-checkbox');
 
