@@ -231,30 +231,7 @@
                 <li>Dịch vụ</li>
             </ul>
             <div class="history-list-container">
-                <ul class="history-item">
-                    <li>2/3/2024</li>
-                    <li>2</li>
-                    <li>Tên bác sĩ</li>
-                    <li>Tẩy giun</li>
-                </ul>
-                <ul class="history-item">
-                    <li>2/3/2024</li>
-                    <li>2</li>
-                    <li>Tên bác sĩ</li>
-                    <li>Triệt sản</li>
-                </ul>
-                <ul class="history-item">
-                    <li>2/3/2024</li>
-                    <li>2</li>
-                    <li>Tên bác sĩ</li>
-                    <li>Tỉa lông</li>
-                </ul>
-                <ul class="history-item">
-                    <li>2/3/2024</li>
-                    <li>2</li>
-                    <li>Tên bác sĩ</li>
-                    <li>Tẩy giun</li>
-                </ul>
+                
             </div>
         </div>
     </div>
@@ -275,60 +252,9 @@
         </div>
     </footer>
 </body>
-<script>
-    // Bật subnav của customer
-    document.addEventListener('DOMContentLoaded', function () {
-        const headerBtn = document.querySelector('.header-btn');
-        const subNavLoggedIn = document.querySelector('.sub-nav.logged-in');
-
-        headerBtn.addEventListener('click', function () {
-            // Toggle hiển thị sub-nav
-            subNavLoggedIn.style.display = (subNavLoggedIn.style.display === 'block' ? 'none' : 'block');
-        });
-
-        // Đóng sub-nav khi nhấp ra ngoài
-        document.addEventListener('click', function (event) {
-            if (!headerBtn.contains(event.target)) {
-                subNavLoggedIn.style.display = 'none';
-            }
-        });
-    });
-
-    // Pet select
-    document.querySelector('#pet-select').addEventListener('click', function (event) {
-        const icon = this.querySelector('.selected-option i');
-        this.classList.toggle('open');
-        icon.classList.toggle('bx-rotate-180');
-    });
-
-    document.querySelectorAll('#pet-select .options div').forEach(function (option) {
-        option.addEventListener('click', function (event) {
-            event.stopPropagation(); // Prevent the dropdown from immediately re-opening
-            const select = option.closest('.custom-select');
-            select.querySelector('.selected-option').innerHTML = option.innerText + " <i class='bx bx-chevron-down'></i>";
-            select.classList.remove('open');
-        });
-    });
-
-    // Close the dropdown if clicking outside of it
-    document.addEventListener('click', function (event) {
-        if (!event.target.closest('#pet-select')) {
-            document.querySelector('#pet-select').classList.remove('open');
-        }
-    });
-    // Báo lỗi khi nhập tuổi âm
-    function validateAge() {
-            const ageInput = document.getElementById('pet-age');
-            const errorMessage = document.getElementById('age-error');
-
-            if (ageInput.value < 0) {
-                errorMessage.textContent = 'Tuổi không thể là số âm.';
-                errorMessage.style.display = 'block';
-            } else {
-                errorMessage.style.display = 'none';
-            }
-        }
-
+<script src="./config/config.js"></script>
+<script src="./js/petInfo.js">
+   
 </script>
 
 </html>

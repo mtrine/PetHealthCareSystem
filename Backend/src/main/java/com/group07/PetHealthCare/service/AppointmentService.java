@@ -206,5 +206,9 @@ public class AppointmentService {
         Customer customer = customerRepository.findByEmail(name).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         return getAppointmentByCustomerId(customer.getId());
     }
+
+    public List<AppointmentResponse> getAppointmentByPetId(String petId){
+        return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findByPetId(petId));
+    }
 }
 

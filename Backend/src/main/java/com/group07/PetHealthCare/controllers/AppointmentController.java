@@ -33,7 +33,7 @@ public class AppointmentController {
             return apiResponse;
     }
 
-    @GetMapping("/{veterinarianId}")
+    @GetMapping("/{veterinarianId}/veterinarians")
     public ApiResponse<List<AppointmentResponse>> getAppointmentByVeterinarianId(@PathVariable("veterinarianId") String veterinarianId) {
         ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(appointmentService.getAppointmentByVeterinarianId(veterinarianId));
@@ -64,6 +64,13 @@ public class AppointmentController {
     public ApiResponse<List<AppointmentResponse>> getMyAppointmentForCustomer() {
         ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(appointmentService.getMyAppointmentForCustomer());
+        return apiResponse;
+    }
+
+    @GetMapping("/{petId}/pets")
+    public  ApiResponse<List<AppointmentResponse>> getAppointmentByPetId(@PathVariable("petId") String petId) {
+        ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(appointmentService.getAppointmentByPetId(petId));
         return apiResponse;
     }
 }
