@@ -7,9 +7,10 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {IPetMapper.class,ICageMapper.class})
 public interface IHospitalizationMapper {
-    @Mapping(source="petID.name",target = "petName")
+    @Mapping(source="petID",target = "petResponse")
+    @Mapping(source="cage",target = "cageResponse")
     HospitalizationResponse toHospitalizationResponse(Hospitalization hospitalization);
     List<HospitalizationResponse> toHospitalizationResponseList(List<Hospitalization> hospitalizationList);
     Hospitalization toHospitalization(HospitalizationResponse hospitalizationResponse);
