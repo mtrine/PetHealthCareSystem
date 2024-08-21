@@ -131,7 +131,6 @@ public class AppointmentService {
     @Transactional
     @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF')")
     public List<AppointmentResponse> getAllAppointments() {
-
         return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findAll());
     }
     @Transactional
@@ -209,6 +208,11 @@ public class AppointmentService {
 
     public List<AppointmentResponse> getAppointmentByPetId(String petId){
         return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findByPetId(petId));
+    }
+
+    @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF')")
+    public AppointmentResponse getAppointmentDetail(String id){
+        return appointmentMapper.toAppointmentResponse(IAppointmentRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND)));
     }
 }
 

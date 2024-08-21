@@ -55,8 +55,6 @@ public class AppointmentControllerTest {
                 .appointmentDate(LocalDate.of(2024, 8, 15))
                 .deposit(BigDecimal.valueOf(100.00))
                 .veterinarianName("Dr. Smith")
-                .startTime(LocalTime.of(10, 0))
-                .endTime(LocalTime.of(11, 0))
                 .serviceName(Set.of("Vaccination"))
                 .build();
 

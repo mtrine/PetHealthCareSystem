@@ -6,6 +6,7 @@ import com.group07.PetHealthCare.dto.request.ApiResponse;
 import com.group07.PetHealthCare.dto.request.AppointmentRequest;
 import com.group07.PetHealthCare.dto.response.AppointmentResponse;
 import com.group07.PetHealthCare.pojo.Appointment;
+import com.group07.PetHealthCare.respositytory.IAppointmentRepository;
 import com.group07.PetHealthCare.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -71,6 +72,13 @@ public class AppointmentController {
     public  ApiResponse<List<AppointmentResponse>> getAppointmentByPetId(@PathVariable("petId") String petId) {
         ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(appointmentService.getAppointmentByPetId(petId));
+        return apiResponse;
+    }
+
+    @GetMapping(("/{appointmentId}"))
+    public ApiResponse<AppointmentResponse> getAppointmentByAppointmentId(@PathVariable("appointmentId") String appointmentId) {
+        ApiResponse<AppointmentResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(appointmentService.getAppointmentDetail(appointmentId));
         return apiResponse;
     }
 }

@@ -238,6 +238,76 @@
             /* End position */
             opacity: 1;
         }
+
+        .doctor-container .custom-select {
+            width: 320px;
+            height: 60px;
+            position: relative;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .custom-select .selected-option {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px 0 40px;
+            font-size: 25px;
+            color: #000;
+            background-color: #fff;
+            border-radius: 30px;
+        }
+
+        .custom-select .options {
+            display: none;
+            position: absolute;
+            text-align: center;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 30px;
+            box-shadow: 0px 4px 10px 5px #000;
+            z-index: 10;
+        }
+
+        .selected-option i {
+            font-size: 48px;
+        }
+
+        .options div {
+            padding: 15px 20px;
+            font-size: 25px;
+            cursor: pointer;
+            color: #5E5E5E;
+            border-bottom: 2px solid #ccc;
+        }
+
+        .options div:last-child {
+            border-bottom: none;
+        }
+
+        .custom-select.open .options {
+            display: block;
+        }
+        #choose-veterinarian{
+            width: 100px;
+            height: 50px;
+            border-radius: 10px;
+            border: none;
+            font-size: 30px;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            background-color: #000;
+            margin: 40px 0;
+            box-shadow: 0px 4px 5px 5px #00000040;
+        }
+        #choose-veterinarian:hover {
+            box-shadow: 0px 4px 10px 5px #ccc;
+        }
     </style>
 </head>
 
@@ -282,9 +352,10 @@
             </div>
 
             <div class="doctor-container">
-                <label for="doctor-name">Bác sĩ</label>
-                <h1 class="doctor-name">Nguyễn Văn A</h1>
+               
             </div>
+            
+
         </div>
 
         <div class="submit">
@@ -304,41 +375,13 @@
             </div>
         </div>
     </div>
-
     <!-- Thông báo xóa thành công -->
     <div id="success-message" class="success-message">
         <p>Xóa thành công!</p>
 </body>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var showModalButton = document.getElementById('show-modal');
-        var deleteModal = document.getElementById('delete-modal');
-        var confirmDeleteButton = document.getElementById('confirm-delete');
-        var cancelDeleteButton = document.getElementById('cancel-delete');
-        var successMessage = document.getElementById('success-message');
-
-        // Hiển thị modal khi nhấn vào nút "Xóa booking"
-        showModalButton.addEventListener('click', function () {
-            deleteModal.style.display = 'flex';
-        });
-
-        // Đóng modal và hiển thị thông báo xóa thành công khi nhấn vào nút "Xóa"
-        confirmDeleteButton.addEventListener('click', function () {
-            deleteModal.style.display = 'none';
-            successMessage.style.display = 'block';
-            successMessage.classList.add('show');
-
-            // Ẩn thông báo thành công sau 3 giây
-            setTimeout(function () {
-                successMessage.classList.remove('show');
-            }, 3000);
-        });
-
-        // Đóng modal khi nhấn vào nút "Hủy"
-        cancelDeleteButton.addEventListener('click', function () {
-            deleteModal.style.display = 'none';
-        });
-    });
+<script src="../config/config.js"></script>
+<script src="../js//detailBooking.js">
+    
 
 </script>
 

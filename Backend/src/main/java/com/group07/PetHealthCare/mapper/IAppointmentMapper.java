@@ -11,12 +11,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {IPetMapper.class})
 public interface IAppointmentMapper {
     @Mapping(source = "veterinarian.name", target = "veterinarianName")
-    @Mapping(source = "session.startTime", target = "startTime")
-    @Mapping(source = "session.endTime", target = "endTime")
-    @Mapping(source = "pet.name",target="petName")
+    @Mapping(source = "session", target = "sessionResponse")
+    @Mapping(source = "pet",target="pet")
     @Mapping(source = "appointmentServices", target = "serviceName", qualifiedByName = "mapServiceNames")
     AppointmentResponse toAppointmentResponse(Appointment appointment);
 
