@@ -55,7 +55,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    void getAllVeterinarians() throws Exception {
+    void getAllAdmin() throws Exception {
         // Mock the service response
         Mockito.when(adminService.getAllAdmins()).thenReturn(adminResponseList);
 
@@ -73,7 +73,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    void getVeterinarian() throws Exception {
+    void getAdmin() throws Exception {
         // Mock the service response
         Mockito.when(adminService.getAdminById(anyString())).thenReturn(adminResponse);
 
