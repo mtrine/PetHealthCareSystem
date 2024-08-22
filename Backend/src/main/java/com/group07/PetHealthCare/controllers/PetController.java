@@ -38,7 +38,7 @@ public class PetController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ApiResponse<PetResponse> updatePet(@PathVariable String id, @RequestBody PetUpdateRequest request) {
         ApiResponse<PetResponse>  apiResponse = new ApiResponse<>();
         try {
