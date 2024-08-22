@@ -155,6 +155,6 @@ document.querySelector("#logout").addEventListener("click", async function () {
 
     } catch (error) {
         console.error('Lỗi:', error);
-        alert('Đăng nhập thất bại, vui lòng kiểm tra lại thông tin');
+        alert('Đăng xuất thất bại');
     }
 })

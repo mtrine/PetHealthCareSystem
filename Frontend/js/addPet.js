@@ -77,6 +77,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     const value = option.getAttribute('data-value');
                     selectedOption.textContent = option.textContent;
                     selectedOption.dataset.value = value;
+                     selectedOption.innerHTML = `${option.textContent} <i class='bx bx-chevron-down'></i>`
+
                 });
             });
         } else {
@@ -111,7 +113,7 @@ document.getElementById('add-pet').addEventListener('click', async (event) => {
             gender:sex
         };
       
-        const data = await fetchWithToken(`${API_BASE_URL}/v1/pets/add-my-pet`, {
+        const data = await fetchWithToken(`${API_BASE_URL}/v1/pets/my-pet`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

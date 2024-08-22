@@ -398,7 +398,7 @@
         }
 
         /* Định kiểu cho bảng modal */
-        .delete-modal {
+        .update-modal {
             display: none;
             /* Ẩn modal theo mặc định */
             position: fixed;
@@ -414,7 +414,7 @@
             /* Đặt lên trên cùng */
         }
 
-        .delete-modal .modal-content {
+        .update-modal .modal-content {
             width: 346px;
             height: 300px;
             background-color: #fff;
@@ -424,29 +424,29 @@
             position: relative;
         }
 
-        .delete-modal .modal-content i {
+        .update-modal .modal-content i {
             font-size: 50px;
             margin-top: 10px;
             margin-bottom: 10px;
         }
 
-        .delete-modal .modal-content p {
+        .update-modal .modal-content p {
             padding: 0 10px;
             font-size: 25px;
             font-weight: 600;
         }
 
-        .delete-modal .modal-content p:nth-of-type(2) {
+        .update-modal .modal-content p:nth-of-type(2) {
             font-style: italic;
             font-size: 20px;
             font-weight: 400;
         }
 
-        .delete-modal .modal-buttons {
+         .update-modal .modal-buttons {
             margin-top: 30px;
         }
 
-        .delete-modal .modal-buttons button {
+         .update-modal .modal-buttons button {
             background-color: #000;
             color: #fff;
             border: none;
@@ -561,13 +561,19 @@
                 <div class="choose-date">
                     <label for="date">Ngày thăm khám</label>
                     <div class="date-container">
-                        <input type="date" id="date" name="date">
+                        <input type="date" class="date" name="date" value="">
                         <!-- <i class='bx bx-calendar-alt'></i> -->
                     </div>
                 </div>
 
                 <div class="doctor-container">
-                    
+                    <label for="doctor-name">Bác sĩ</label>
+                    <div id="doctor-select" class="custom-select">
+                        <div class="selected-option">Chọn bác sĩ<i class='bx bx-chevron-down'></i></div>
+                        <div class="options">
+                           
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -592,20 +598,20 @@
 
         <div class="submit">
             <button type="submit" id="update">Cập nhật</button>
-            <button type="submit" id="delete-btn">Xóa</button>
+            <button type="submit" id="set-visit-btn">Đặt lịch thăm</button>
             <button type="submit" id="discharged-btn">Xác nhận đã xuất viện</button>
         </div>
     </div>
 
     <!-- Bảng delete modal -->
-    <div id="delete-modal" class="delete-modal">
+    <div id="update-modal" class="update-modal">
         <div class="modal-content">
             <i class='bx bx-error'></i>
-            <p>Xác nhận xóa?</p>
-            <p>Thú cưng đã xóa sẽ không còn trong danh sách đang nhập viện</p>
+            <p>Xác nhận cập nhật?</p>
+            <p>Thú cưng sẽ được thay đổi thông tin mới và không quay lại được</p>
             <div class="modal-buttons">
-                <button id="confirm-delete">Xác nhận</button>
-                <button id="cancel-delete">Hủy</button>
+                <button id="confirm-update">Xác nhận</button>
+                <button id="cancel-update">Hủy</button>
             </div>
         </div>
     </div>

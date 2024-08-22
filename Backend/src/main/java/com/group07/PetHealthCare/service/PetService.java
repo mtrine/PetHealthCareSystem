@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -60,12 +61,8 @@ public class PetService {
         pet.setName(request.getName());
         pet.setAge(request.getAge());
         pet.setGender(request.getGender());
-
         Species species = ISpeciesRepository.findById(request.getSpeciesID()).orElseThrow(() -> new RuntimeException("Species not found"));
-        Customer customer = ICustomerRepository.findById(request.getCustomerID()).orElseThrow(() -> new RuntimeException("Customer not found"));
-
         pet.setSpecies(species);
-        pet.setCustomer(customer);
         return petMapper.toResponse(IPetRepository.save(pet));
     }
 
@@ -99,5 +96,11 @@ public class PetService {
     public PetResponse getPetById(String id) {
         Pet pet = IPetRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         return petMapper.toResponse(pet);
+    }
+
+    public Set<PetResponse> getPetByCustomerEmail(String email){
+        Customer customer=  ICustomerRepository.findByEmail(email).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND));
+        Set<Pet> pets = customer.getPets();
+        return petMapper.toResponseList(pets);
     }
 }

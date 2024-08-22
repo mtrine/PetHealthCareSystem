@@ -63,8 +63,7 @@ public class AuthService {
     @NonFinal
     @Value("${jwt.refreshable-duration}")
     protected long REFRESHABLE_DURATION;
-    @Autowired
-    private UserService userService;
+
 
 
     public UserResponse register(UserRequest request) {

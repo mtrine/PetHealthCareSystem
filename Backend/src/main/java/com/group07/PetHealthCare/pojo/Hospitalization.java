@@ -23,7 +23,7 @@ public class Hospitalization {
     private Pet petID;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cageNumber")
+    @JoinColumn(name = "cageNumber", unique = false)
     private Cage cage;
 
     @Column(name="reason_for_hospitalization")
@@ -37,5 +37,4 @@ public class Hospitalization {
 
     @Column(name = "endDate")
     private LocalDate endDate;
-
 }

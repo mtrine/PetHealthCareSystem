@@ -59,7 +59,7 @@ public class HospitalizationService {
                 .orElseThrow(() -> new RuntimeException("Pet not found"));
 
         hospitalization.setCage(cage);
-        cage.setStatus(!cage.getStatus());
+        cage.setStatus(true);
         hospitalization.setPetID(pet);
 
         return hospitalizationMapper.toHospitalizationResponse(hospitalizationRepository.save(hospitalization));
@@ -91,6 +91,8 @@ public class HospitalizationService {
             hospitalization.setStartDate(request.getStartDate());
         }
         if (request.getEndDate() != null) {
+            Cage cage=hospitalization.getCage();
+            cage.setStatus(!cage.getStatus());
             hospitalization.setEndDate(request.getEndDate());
         }
         if (request.getHealthCondition() != null) {
@@ -148,4 +150,6 @@ public class HospitalizationService {
         Customer customer=customerRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         return getHospitalizationByCustomerId(customer.getId());
     }
+
+
 }
