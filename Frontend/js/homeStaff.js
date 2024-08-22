@@ -111,3 +111,6 @@ checkboxes.forEach(checkbox => {
     });
 });
 
+document.querySelector('.add-hospitalized-btn').addEventListener('click', function () {
+    window.location.href = 'addHospitalized.html';
+})

@@ -105,7 +105,7 @@ async function fetchAppointment(petId) {
             historyItem.classList.add('history-item');
             historyItem.innerHTML = `
                 <li>${appointment.appointmentDate}</li>
-                <li>${appointment.startTime}-${appointment.endTime}</li>
+                <li>${appointment.sessionResponse.startTime}-${appointment.sessionResponse.endTime}</li>
                 <li>${appointment.veterinarianName}</li>
                 <li>${appointment.serviceName[0]}</li>
             `;

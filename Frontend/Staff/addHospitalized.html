@@ -339,6 +339,14 @@
         .submit button:hover {
             box-shadow: 0px 4px 10px 5px #ccc;
         }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+            /* Ban đầu ẩn dòng thông báo lỗi */
+        }
     </style>
 </head>
 
@@ -351,8 +359,9 @@
         <div class="detail-container">
             <div class="info-section">
                 <div class="phone-container">
-                    <label for="customer-phone">SĐT khách hàng</label>
-                    <input type="text" id="customer-phone" placeholder="Nhập số điện thoại KH">
+                    <label for="customer-email">Email khách hàng</label>
+                    <input type="text" id="customer-email" placeholder="Nhập email KH">
+                    <div id="email-error" class="error-message"></div>
                 </div>
                 <!-- Chọn pet -->
                 <div class="pet-select-container">
@@ -389,70 +398,22 @@
                     </div>
                 </div>
             </div>
-
+            <div class="status-container">
+                <label for="reason">Lí do nhập viện</label>
+                <input type="text" id="reason">
+            </div>
             <div class="status-container">
                 <label for="status">Tình trạng sức khỏe</label>
                 <input type="text" id="status">
             </div>
 
             <div class="submit">
-                <button type="submit" id="show-modal">Thêm</button>
+                <button type="submit" id="add-hospitalization">Thêm</button>
             </div>
         </div>
     </div>
 </body>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-        // pet select
-        document.querySelector('#pet-select').addEventListener('click', function (event) {
-            const icon = this.querySelector('.selected-option i');
-            this.classList.toggle('open');
-            icon.classList.toggle('bx-rotate-180');
-        });
-
-        document.querySelectorAll('#pet-select .options div').forEach(function (option) {
-            option.addEventListener('click', function (event) {
-                event.stopPropagation(); // Prevent the dropdown from immediately re-opening
-                const select = option.closest('.custom-select');
-                select.querySelector('.selected-option').innerHTML = option.innerText + " <i class='bx bx-chevron-down'></i>";
-                select.classList.remove('open');
-            });
-        });
-
-        // Close the dropdown if clicking outside of it
-        document.addEventListener('click', function (event) {
-            if (!event.target.closest('#pet-select')) {
-                document.querySelector('#pet-select').classList.remove('open');
-            }
-        });
-
-        // cage select
-        document.querySelector('#cage-select').addEventListener('click', function (event) {
-            const icon = this.querySelector('.selected-option i');
-            this.classList.toggle('open');
-            icon.classList.toggle('bx-rotate-180');
-        });
-
-        document.querySelectorAll('#cage-select .options div').forEach(function (option) {
-            option.addEventListener('click', function (event) {
-                event.stopPropagation(); // Prevent the dropdown from immediately re-opening
-                const select = option.closest('.custom-select');
-                select.querySelector('.selected-option').innerHTML = option.innerText + " <i class='bx bx-chevron-down'></i>";
-                select.classList.remove('open');
-            });
-        });
-
-        // Close the dropdown if clicking outside of it
-        document.addEventListener('click', function (event) {
-            if (!event.target.closest('#cage-select')) {
-                document.querySelector('#cage-select').classList.remove('open');
-            }
-        });
-
-    })
-
-
-</script>
+<script src="../config/config.js"></script>
+<script src="../js/addHospitalized.js"></script>
 
 </html>

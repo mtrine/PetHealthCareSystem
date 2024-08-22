@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
     if (data && data.code === 1000) {
         const appointments= data.result;
-       
+        console.log(appointments);
         appointments.forEach(appointment => {
             const appointmentItem = document.createElement('ul');
             appointmentItem.classList.add('appointment-item');
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             appointmentItem.innerHTML = `
                 <li>${appointment.appointmentDate}</li>
                     <li>${vetName}</li>
-                    <li>${appointment.petName}</li>
+                    <li>${appointment.pet.name}</li>
                     <li>${appointment.serviceName[0]}</li>
                     <li>${appointment.sessionResponse.startTime}-${appointment.sessionResponse.endTime}</li>
                     <li>${status} <div class="cancel" onclick="showModal()"><i class='bx bx-x-circle'></i></div>
