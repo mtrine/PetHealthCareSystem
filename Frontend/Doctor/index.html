@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Admin</title>
+    <link rel="stylesheet" href="../assets/font/boxicons-2.1.4/css/boxicons.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@100..900&display=swap');
+
+        /* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar Styling */
+aside {
+    width: 250px;
+    height: 100%;
+    background-color: #fff;
+    border-right: 1px solid #ccc;
+    border-radius: 0 25px 25px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 4px 10px 4px #00000040;
+}
+
+/* Sidebar Items */
+.sidebar-item {
+    width: 100%;
+    height: 90px;
+    text-align: center;
+    border-top: 1px solid #ccc;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar-item:last-child {
+    border-bottom: 1px solid #ccc;
+}
+
+.sidebar-item:hover {
+    background-color: #e6e6e6;
+}
+
+.sidebar-item img {
+    width: 50px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.sidebar-item span {
+    font-size: 25px;
+    font-weight: 500;
+}
+
+/* Main Content Styling */
+.content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.sidebar-logo img {
+    width: 150px;
+    height: auto;
+}
+
+.default-section {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.default-section img {
+    width: 150px;
+    text-align: center;
+}
+
+.default-section p {
+    font-size: 25px;
+    font-weight: 500;
+    color: #00000054;
+}
+
+/* Cage Section */
+.cage-section {
+    padding-top: 160px;
+    display: none;
+}
+
+.cage-section .cage-container {
+    width: 1000px;
+    height: 525.6px;
+    background-color: #fff;
+    box-shadow: 0px 4px 10px 5px #00000040;
+    margin: auto;
+}
+
+/* Header styling */
+.cage-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-bottom: 3px solid #E0E5E8;
+    border-top: 3px solid #E0E5E8;
+    list-style: none;
+    padding: 10px 0px;
+}
+
+.cage-list-header li {
+    flex: 1;
+    text-align: center;
+    font-size: 27px;
+    font-weight: 600;
+    color: #000;
+    padding: 20px;
+}
+
+.cage-list-body {
+    max-height: 428px;
+    overflow-y: auto;
+}
+
+/* List inside each pet item */
+.cage-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-bottom: 3px solid #E0E5E8;
+    list-style: none;
+}
+
+/* Individual item fields (li) styling */
+.cage-item li {
+    flex: 1;
+    font-size: 24px;
+    color: #000;
+    text-align: center;
+    list-style: none;
+    padding: 20px;
+}
+
+/* Booking Section */
+.booking-section {
+    padding-top: 100px;
+    display: none;
+}
+
+.booking-section .booking-container {
+    width: 1200px;
+    height: 500px;
+    background-color: #fff;
+    box-shadow: 0px 4px 10px 5px #00000040;
+    margin: auto;
+}
+
+.booking-section .add-booking-btn {
+    margin-left: auto;
+    margin-bottom: 20px;
+    display: inline-flex; /* Chuyển sang inline-flex */
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px; /* Thêm padding thay vì đặt chiều rộng cố định */
+    box-shadow: 0px 4px 10px 5px #00000040;
+    border-radius: 30px;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.booking-section .add-booking-btn i {
+    font-size: 30px;
+}
+
+.booking-section .add-booking-btn p {
+    font-size: 25px;
+    font-weight: 700;
+}
+
+/* Header styling */
+.booking-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-bottom: 3px solid #E0E5E8;
+    border-top: 3px solid #E0E5E8;
+    list-style: none;
+    padding: 10px 0px;
+}
+
+.booking-list-header li {
+    flex: 1;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 600;
+    color: #000;
+    padding: 20px 0;
+}
+
+.booking-list-body {
+    max-height: 404px;
+    overflow-y: auto;
+}
+
+/* List inside each pet item */
+.booking-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-bottom: 3px solid #E0E5E8;
+    list-style: none;
+}
+
+/* Individual item fields (li) styling */
+.booking-item li {
+    flex: 1;
+    font-size: 24px;
+    color: #000;
+    text-align: center;
+    list-style: none;
+    padding: 30px 10px;
+}
+
+.booking-item li a {
+    color: #000;
+}
+
+/* Pet Hospitalized Section */
+.pet-hospitalized-section {
+    padding-top: 100px;
+    display: none;
+}
+
+.pet-hospitalized-section .pet-hospitalized-container {
+    width: 1200px;
+    height: 500px;
+    background-color: #fff;
+    box-shadow: 0px 4px 10px 5px #00000040;
+    margin: auto;
+}
+
+.pet-hospitalized-section .add-hospitalized-btn {
+    margin-left: auto;
+    margin-bottom: 20px;
+    display: inline-flex; /* Chuyển sang inline-flex */
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px; /* Thêm padding thay vì đặt chiều rộng cố định */
+    box-shadow: 0px 4px 10px 5px #00000040;
+    border-radius: 30px;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.pet-hospitalized-section .add-hospitalized-btn i {
+    font-size: 30px;
+}
+
+.pet-hospitalized-section .add-hospitalized-btn p {
+    font-size: 25px;
+    font-weight: 700;
+}
+
+/* Header styling */
+.hospitalized-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-bottom: 3px solid #E0E5E8;
+    border-top: 3px solid #E0E5E8;
+    list-style: none;
+    padding: 10px 0px;
+}
+
+.hospitalized-list-header li {
+    flex: 1;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 600;
+    color: #000;
+    padding: 20px 10px;
+}
+
+.hospitalized-list-body {
+    max-height: 374.4px;
+    overflow-y: auto;
+}
+
+/* List inside each pet item */
+.hospitalized-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-bottom: 3px solid #E0E5E8;
+    list-style: none;
+}
+
+/* Individual item fields (li) styling */
+.hospitalized-item li {
+    flex: 1;
+    font-size: 24px;
+    color: #000;
+    text-align: center;
+    list-style: none;
+    padding: 20px 10px;
+}
+/* Checkbox styling */
+.booking-item input[type="checkbox"],
+.hospitalized-item input[type="checkbox"] {
+    width: 30px; /* Tăng kích thước checkbox */
+    height: 30px; /* Tăng kích thước checkbox */
+}
+ /* Modal background */
+ .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 250px;
+            position: relative;
+            text-align: center;
+        }
+
+        /* Close button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Modal buttons */
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            background-color: #000305;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-buttons button:hover {
+            background-color: #01070e;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <aside>
+        <!-- Logo Section -->
+        <div class="sidebar-logo">
+            <img src="../assets/img/logo_trang.png" alt="Logo">
+        </div>
+
+        <!-- Menu Items -->
+        <div class="sidebar-item" id="booking-item">
+            <span>Lịch Booking</span>
+        </div>
+        <div class="sidebar-item" id="hospitalized-item">
+            <span>Lịch thăm khám thú nhập viện</span>
+        </div>
+    </aside>
+    <div class="content">
+        <div class="default-section">
+            <img src="../assets/img/click.png" alt="">
+            <p>Click vào một trong các tác vụ bên trái</p>
+        </div>
+
+        <div class="booking-section">
+            <div class="add-booking-btn" id="addBookingBtn">
+                <i class='bx bx-plus'></i>
+                <p>Xác nhận đã thăm khám</p>
+            </div>
+            <div class="booking-container">
+                <ul class="booking-list-header">
+                    <li></li>
+                    <li>Ngày</li>
+                    <li>Ca</li>
+                    <li>ID thú</li>
+                    <li>ID khách</li>
+                    <li>Dịch vụ</li>
+                </ul>
+                <div class="booking-list-body">
+                    <ul class="booking-item">
+                        <li><input type="checkbox" name="select-item"></li>
+                        <li>15/08/2023</li>
+                        <li>2</li>
+                        <li>123-xyz</li>
+                        <li>123-xyz-abc</li>
+                        <li>Tiêm phòng</li>
+                    </ul>
+            
+                </div>
+            </div>
+        </div>
+        <div class="pet-hospitalized-section">
+            <div class="add-hospitalized-btn" id="addhospitalizedbtn">
+                <i class='bx bx-plus'></i>
+                <p>Xác nhận đã thăm khám</p>
+            </div>
+            <div class="pet-hospitalized-container">
+                <ul class="hospitalized-list-header">
+                    <li></li>
+                    <li>Ngày thăm khám</li>
+                    <li>Ca</li>
+                    <li>ID thú</li>
+                    <li>Chuồng</li>
+                    <li>Lịch thăm khám gần nhất</li>
+                </ul>
+                <div class="hospitalized-list-body">
+                    <ul class="hospitalized-item">
+                        <li><input type="checkbox" name="select-item"></li>
+                        <li>15/08/2023</li>
+                        <li>2</li>
+                        <li>123-xyz</li>
+                        <li>1</li>
+                        <li>12/08/2024</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script>
+            // Get elements
+            const bookingItem = document.getElementById('booking-item');
+            const hospitalizedItem = document.getElementById('hospitalized-item');
+            const defaultSection = document.querySelector('.default-section');
+            const bookingSection = document.querySelector('.booking-section');
+            const petHospitalizedSection = document.querySelector('.pet-hospitalized-section');
+        
+            // Event listeners for sidebar items
+            bookingItem.addEventListener('click', () => {
+                // Hide all sections first
+                defaultSection.style.display = 'none';
+                bookingSection.style.display = 'block';
+                petHospitalizedSection.style.display = 'none';
+            });
+        
+            hospitalizedItem.addEventListener('click', () => {
+                // Hide all sections first
+                defaultSection.style.display = 'none';
+                bookingSection.style.display = 'none';
+                petHospitalizedSection.style.display = 'block';
+            });
+        </script>    
+</div>
+<div id="confirmation-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Đã thăm khám?</h2>
+        <p>Lịch booking sau khi đã xác nhận thăm khám sẽ không còn hiện trong danh sách này.</p>
+        <div class="modal-buttons">
+            <button id="cancel-btn">Hủy</button>
+            <button id="confirm-btn">Xác nhận</button>
+        </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const addBookingBtn = document.getElementById('addBookingBtn');
+    const addhospitalizedbtn = document.getElementById('addhospitalizedbtn');
+    const confirmationModal = document.getElementById('confirmation-modal');
+    const closeBtn = document.querySelector('.modal .close');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const confirmBtn = document.getElementById('confirm-btn');
+    
+    // Function to open modal
+    function openModal() {
+        confirmationModal.style.display = 'block';
+    }
+    // Function to close modal
+    function closeModal() {
+        confirmationModal.style.display = 'none';
+    }
+    // Event listener for Add Booking button
+    addBookingBtn.addEventListener('click', openModal);
+    addhospitalizedbtn.addEventListener('click', openModal);
+    // Event listener for close button in modal
+    closeBtn.addEventListener('click', closeModal);
+    // Event listener for Cancel button in modal
+    cancelBtn.addEventListener('click', closeModal);
+    // Event listener for Confirm button in modal
+    confirmBtn.addEventListener('click', () => {
+        
+        closeModal();
+    });
+    
+    });
+
+</script>  
+</div>
+
+
+</body>
+</html>
