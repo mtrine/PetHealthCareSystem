@@ -18,8 +18,7 @@ public class AppointmentResponse {
     private LocalDate appointmentDate;
     private BigDecimal deposit;
     private String veterinarianName;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private SessionResponse sessionResponse;
     private Set<String> serviceName;
-    private String petName;
+    private PetResponse pet;
 }

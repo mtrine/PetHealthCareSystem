@@ -197,27 +197,14 @@
         <h1>ĐĂNG NHẬP</h1>
         <form>
             <div class="input-box">
-                <label for="phone">Số điện thoại</label>
-                <input type="text" id="phone" name="phone" required>
+                <label for="email">Email<label>
+                <input type="text" id="email" name="email" required>
             </div>
             <div class="input-box">
                 <label for="password">Mật khẩu</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <div class="role-container">
-
-                <label class="checkbox">
-                    <input type="checkbox" id="admin" name="role" class="role-checkbox">
-                    <span class="checkmark"></span>
-                    <label for="admin">ADMIN</label>
-                </label>
-                <label class="checkbox">
-                    <input type="checkbox" id="doctor" name="role" class="role-checkbox">
-                    <span class="checkmark"></span>
-                    <label for="doctor">BÁC SĨ</label>
-                </label>
-
-            </div>
+           
 
             <div class="login-btn">
                 <p>ĐĂNG NHẬP</p>
@@ -229,23 +216,7 @@
 
     </div>
 </body>
-<script>
-    // Lấy tất cả checkbox trong class role-checkbox
-    const checkboxes = document.querySelectorAll('.role-checkbox');
-
-    // Thêm sự kiện change cho từng checkbox
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            // Nếu checkbox được chọn, bỏ chọn các checkbox khác
-            if (checkbox.checked) {
-                checkboxes.forEach(cb => {
-                    if (cb !== checkbox) {
-                        cb.checked = false;
-                    }
-                });
-            }
-        });
-    });
-</script>
+<script src="../config/config.js"></script>
+<script src="../js/loginStaff.js"></script>
 
 </html>

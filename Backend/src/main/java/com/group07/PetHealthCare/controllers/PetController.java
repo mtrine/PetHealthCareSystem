@@ -38,7 +38,7 @@ public class PetController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ApiResponse<PetResponse> updatePet(@PathVariable String id, @RequestBody PetUpdateRequest request) {
         ApiResponse<PetResponse>  apiResponse = new ApiResponse<>();
         try {
@@ -48,6 +48,12 @@ public class PetController {
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());
         }
+        return apiResponse;
+    }
+    @GetMapping("/{id}")
+    public ApiResponse<PetResponse> getPet(@PathVariable("id") String id) {
+        ApiResponse<PetResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(petService.getPetById(id));
         return apiResponse;
     }
 
@@ -62,18 +68,26 @@ public class PetController {
         }
         return apiResponse;
     }
-    @PostMapping("/add-my-pet")
+    @PostMapping("/my-pet")
     public ApiResponse<PetResponse> addMyPet(@RequestBody PetCreationRequest request) {
         ApiResponse<PetResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(petService.addMyPet(request));
         return apiResponse;
     }
 
-    @GetMapping("/get-my-pet-list")
+    @GetMapping("/my-pet")
     public ApiResponse<Set<PetResponse>> getMyPetList() {
         ApiResponse<Set<PetResponse>> apiResponse = new ApiResponse<>();
         Set<PetResponse> pets = petService.getMyPetList();
         apiResponse.setResult(pets);
+        return apiResponse;
+    }
+
+    @GetMapping("/customer-email/{email}")
+    public ApiResponse<Set<PetResponse>> getPetByCustomerEmail(@PathVariable String email) {
+        ApiResponse<Set<PetResponse>> apiResponse = new ApiResponse<>();
+        Set<PetResponse> petResponses = petService.getPetByCustomerEmail(email);
+        apiResponse.setResult(petResponses);
         return apiResponse;
     }
 }

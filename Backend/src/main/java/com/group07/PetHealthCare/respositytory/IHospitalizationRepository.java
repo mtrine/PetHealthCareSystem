@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface IHospitalizationRepository extends JpaRepository<Hospitalization, String>{
     List<Hospitalization> findAllByPetID(Pet pet);
+
 }

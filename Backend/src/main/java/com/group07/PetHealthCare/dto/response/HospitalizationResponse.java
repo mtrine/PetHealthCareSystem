@@ -18,4 +18,6 @@ public class HospitalizationResponse {
     private String healthCondition;
     private LocalDate startDate;
     private LocalDate endDate;
+    private PetResponse petResponse;
+    private CageResponse cageResponse;
 }

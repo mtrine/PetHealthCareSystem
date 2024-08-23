@@ -131,7 +131,6 @@ public class AppointmentService {
     @Transactional
     @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF')")
     public List<AppointmentResponse> getAllAppointments() {
-
         return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findAll());
     }
     @Transactional
@@ -196,6 +195,10 @@ public class AppointmentService {
                 IAppointmentServicesRepository.save(appointmentServices);
             }
         }
+        if(request.getVeterinarianId()!=null){
+            Veterinarian veterinarian= IVeterinarianRepository.findById(request.getVeterinarianId()).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+            appointment.setVeterinarian(veterinarian);
+        }
 
         return appointmentMapper.toAppointmentResponse(IAppointmentRepository.save(appointment));
     }
@@ -205,6 +208,15 @@ public class AppointmentService {
         String name = context.getAuthentication().getName();
         Customer customer = customerRepository.findByEmail(name).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         return getAppointmentByCustomerId(customer.getId());
+    }
+
+    public List<AppointmentResponse> getAppointmentByPetId(String petId){
+        return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findByPetId(petId));
+    }
+
+    @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF')")
+    public AppointmentResponse getAppointmentDetail(String id){
+        return appointmentMapper.toAppointmentResponse(IAppointmentRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND)));
     }
 }
 

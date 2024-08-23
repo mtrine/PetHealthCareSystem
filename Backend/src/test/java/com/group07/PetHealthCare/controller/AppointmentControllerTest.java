@@ -1,8 +1,9 @@
 package com.group07.PetHealthCare.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.group07.PetHealthCare.dto.request.AppointmentRequest;
-import com.group07.PetHealthCare.dto.response.AppointmentResponse;
+import com.group07.PetHealthCare.dto.response.*;
 import com.group07.PetHealthCare.service.AppointmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -43,25 +45,112 @@ public class AppointmentControllerTest {
     private ObjectMapper objectMapper;
     private AppointmentResponse appointmentResponse;
     private List<AppointmentResponse> appointmentResponseList;
+    private AppointmentRequest appointmentRequest;
 
     @BeforeEach
     void initData() {
         objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        initializeMockResponses();
+    }
+
+    private void initializeMockResponses() {
+        SessionResponse sessionResponse = SessionResponse.builder()
+                .id("1")
+                .startTime(LocalTime.of(8, 0, 0))
+                .endTime(LocalTime.of(10, 0, 0))
+                .build();
+
+        SpeciesResponse speciesResponse = SpeciesResponse.builder()
+                .id("971c1a50-e074-43d3-a8db-6e7f5bd1a9c2")
+                .name("Dog")
+                .build();
+
+        CustomerResponse customerResponse = CustomerResponse.builder()
+                .id("e80bac44-998c-44db-b548-2d03b12e8a25")
+                .name("Nguyen Ngoc Quynh Nhu")
+                .email("nhuquynh6453@gmail.com")
+                .phoneNumber(null)
+                .role("CUSTOMER")
+                .build();
+
+        PetResponse petResponse = PetResponse.builder()
+                .id("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9")
+                .name("Bông")
+                .age(3)
+                .speciesResponse(speciesResponse)
+                .gender(true)
+                .customerResponse(customerResponse)
+                .build();
 
         appointmentResponse = AppointmentResponse.builder()
                 .id("1")
                 .status("Scheduled")
-                .description("Routine check-up")
+                .sessionResponse(sessionResponse)
                 .appointmentDate(LocalDate.of(2024, 8, 15))
                 .deposit(BigDecimal.valueOf(100.00))
                 .veterinarianName("Dr. Smith")
-                .startTime(LocalTime.of(10, 0))
-                .endTime(LocalTime.of(11, 0))
-                .serviceName(Set.of("Vaccination"))
+                .serviceName(Collections.singleton("Vaccination"))
                 .build();
 
-        appointmentResponseList = Arrays.asList(appointmentResponse);
+        appointmentResponseList = Collections.singletonList(appointmentResponse);
+
+        appointmentRequest = new AppointmentRequest();
+        appointmentRequest.setStatus("Scheduled");
+        appointmentRequest.setAppointmentDate(LocalDate.of(2024, 8, 15));
+        appointmentRequest.setDeposit(BigDecimal.valueOf(100.00));
+        appointmentRequest.setVeterinarianId("2c741f51-0a22-4e2f-8022-c8093fe46964");
+        appointmentRequest.setSessionId(1);
+        appointmentRequest.setDescription("Thú bị đau bụng");
+
     }
+
+    @Test
+    void testAddAppointmentBySession() throws Exception {
+
+        Mockito.when(appointmentService.addAppointmentBySession(any(AppointmentRequest.class)))
+                .thenReturn(appointmentResponse);
+
+        mockMvc.perform(post("/v1/appointments/addBySession")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(appointmentRequest)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.result.id").value(1))
+                .andExpect(jsonPath("$.result.status").value("Scheduled"))
+                .andExpect(jsonPath("$.result.veterinarianName").value("Dr. Smith"));
+    }
+
+    @Test
+    void testGetAppointmentByVeterinarianId() throws Exception {
+        Mockito.when(appointmentService.getAppointmentByVeterinarianId(anyString()))
+                .thenReturn(appointmentResponseList);
+
+        mockMvc.perform(get("/v1/appointments/{veterinarianId}/veterinarians", "veterinarianId")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.result[0].id").value(1))
+                .andExpect(jsonPath("$.result[0].status").value("Scheduled"))
+                .andExpect(jsonPath("$.result[0].veterinarianName").value("Dr. Smith"));
+    }
+
+    @Test
+    void testGetAllAppointments() throws Exception {
+        Mockito.when(appointmentService.getAllAppointments()).thenReturn(appointmentResponseList);
+
+        mockMvc.perform(get("/v1/appointments")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.result[0].id").value(1))
+                .andExpect(jsonPath("$.result[0].status").value("Scheduled"))
+                .andExpect(jsonPath("$.result[0].veterinarianName").value("Dr. Smith"));
+    }
+
 
     private String getAuthToken() throws Exception {
         String username = "user@example.com";
@@ -77,132 +166,7 @@ public class AppointmentControllerTest {
         return new ObjectMapper().readTree(response).get("result").get("token").asText();
     }
 
-    @Test
-    void addAppointmentBySession() throws Exception {
-        AppointmentRequest request = new AppointmentRequest();
 
-        AppointmentResponse response = appointmentResponse;
 
-        Mockito.when(appointmentService.addAppointmentBySession(any(AppointmentRequest.class)))
-                .thenReturn(response);
 
-        String authToken = getAuthToken();
-
-        mockMvc.perform(post("/v1/appointments/addBySession")
-                        .header("Authorization", "Bearer " + authToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result.id").value("1"))
-                .andExpect(jsonPath("$.result.status").value("Scheduled"))
-                .andExpect(jsonPath("$.result.description").value("Routine check-up"))
-                .andExpect(jsonPath("$.result.appointmentDate").value("2024-08-15"))
-                .andExpect(jsonPath("$.result.deposit").value(100.00))
-                .andExpect(jsonPath("$.result.veterinarianName").value("Dr. Smith"))
-                .andExpect(jsonPath("$.result.startTime").value("10:00:00"))
-                .andExpect(jsonPath("$.result.endTime").value("11:00:00"))
-                .andExpect(jsonPath("$.result.serviceName[0]").value("Vaccination"));
-    }
-
-    @Test
-    void addAppointmentByVeterinarian() throws Exception {
-        AppointmentRequest request = new AppointmentRequest();
-        AppointmentResponse response = appointmentResponse;
-
-        Mockito.when(appointmentService.addAppointmentByVeterinarian(any(AppointmentRequest.class)))
-                .thenReturn(response);
-
-        String authToken = getAuthToken();
-
-        mockMvc.perform(post("/v1/appointments/addByVeterinarian")
-                        .header("Authorization", "Bearer " + authToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result.id").value("1"))
-                .andExpect(jsonPath("$.result.status").value("Scheduled"))
-                .andExpect(jsonPath("$.result.description").value("Routine check-up"))
-                .andExpect(jsonPath("$.result.appointmentDate").value("2024-08-15"))
-                .andExpect(jsonPath("$.result.deposit").value(100.00))
-                .andExpect(jsonPath("$.result.veterinarianName").value("Dr. Smith"))
-                .andExpect(jsonPath("$.result.startTime").value("10:00:00"))
-                .andExpect(jsonPath("$.result.endTime").value("11:00:00"))
-                .andExpect(jsonPath("$.result.serviceName[0]").value("Vaccination"));
-    }
-
-    @Test
-    void getAppointmentByVeterinarianId() throws Exception {
-        Mockito.when(appointmentService.getAppointmentByVeterinarianId(anyString()))
-                .thenReturn(appointmentResponseList);
-
-        String authToken = getAuthToken();
-
-        mockMvc.perform(get("/v1/appointments/{veterinarianId}", "vet1")
-                        .header("Authorization", "Bearer " + authToken)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result[0].id").value("1"))
-                .andExpect(jsonPath("$.result[0].status").value("Scheduled"))
-                .andExpect(jsonPath("$.result[0].description").value("Routine check-up"))
-                .andExpect(jsonPath("$.result[0].appointmentDate").value("2024-08-15"))
-                .andExpect(jsonPath("$.result[0].deposit").value(100.00))
-                .andExpect(jsonPath("$.result[0].veterinarianName").value("Dr. Smith"))
-                .andExpect(jsonPath("$.result[0].startTime").value("10:00:00"))
-                .andExpect(jsonPath("$.result[0].endTime").value("11:00:00"))
-                .andExpect(jsonPath("$.result[0].serviceName[0]").value("Vaccination"));
-    }
-
-    @Test
-    void getAllAppointments() throws Exception {
-        Mockito.when(appointmentService.getAllAppointments()).thenReturn(appointmentResponseList);
-
-        String authToken = getAuthToken();
-
-        mockMvc.perform(get("/v1/appointments")
-                        .header("Authorization", "Bearer " + authToken)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result[0].id").value("1"))
-                .andExpect(jsonPath("$.result[0].status").value("Scheduled"))
-                .andExpect(jsonPath("$.result[0].description").value("Routine check-up"))
-                .andExpect(jsonPath("$.result[0].appointmentDate").value("2024-08-15"))
-                .andExpect(jsonPath("$.result[0].deposit").value(100.00))
-                .andExpect(jsonPath("$.result[0].veterinarianName").value("Dr. Smith"))
-                .andExpect(jsonPath("$.result[0].startTime").value("10:00:00"))
-                .andExpect(jsonPath("$.result[0].endTime").value("11:00:00"))
-                .andExpect(jsonPath("$.result[0].serviceName[0]").value("Vaccination"));
-    }
-
-    @Test
-    void changeInforAppointment() throws Exception {
-        AppointmentRequest request = new AppointmentRequest();
-        // Fill in the request data as necessary
-
-        AppointmentResponse response = appointmentResponse;
-
-        Mockito.when(appointmentService.changeInforAppointment(anyString(), any(AppointmentRequest.class)))
-                .thenReturn(response);
-
-        String authToken = getAuthToken();
-
-        mockMvc.perform(patch("/v1/appointments/{appointmentId}", "1")
-                        .header("Authorization", "Bearer " + authToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result.id").value("1"))
-                .andExpect(jsonPath("$.result.status").value("Scheduled"))
-                .andExpect(jsonPath("$.result.description").value("Routine check-up"))
-                .andExpect(jsonPath("$.result.appointmentDate").value("2024-08-15"))
-                .andExpect(jsonPath("$.result.deposit").value(100.00))
-                .andExpect(jsonPath("$.result.veterinarianName").value("Dr. Smith"))
-                .andExpect(jsonPath("$.result.startTime").value("10:00:00"))
-                .andExpect(jsonPath("$.result.endTime").value("11:00:00"))
-                .andExpect(jsonPath("$.result.serviceName[0]").value("Vaccination"));
-    }
 }

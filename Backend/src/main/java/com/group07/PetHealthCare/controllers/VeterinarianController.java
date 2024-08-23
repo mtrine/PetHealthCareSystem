@@ -43,5 +43,14 @@ public class VeterinarianController {
         apiResponse.setResult(availableSessions);
         return apiResponse;
     }
+
+    @GetMapping("/{sessionId}/get-available-veterinarian-session")
+    public ApiResponse<List<VeterinarianResponse>> getAvailableVeterinariansForSessionAndDate(
+            @PathVariable("sessionId") int sessionId,
+            @RequestParam("date") LocalDate appointmentDate) {
+        ApiResponse<List<VeterinarianResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(veterinarianService.getAvailableVeterinariansForSessionAndDate(sessionId, appointmentDate));
+        return apiResponse;
+    }
 }
 

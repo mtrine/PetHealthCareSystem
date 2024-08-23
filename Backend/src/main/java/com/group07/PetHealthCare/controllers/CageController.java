@@ -29,4 +29,11 @@ public class CageController {
         apiResponse.setResult(cagesService.addCage(request));
         return apiResponse;
     }
+
+    @GetMapping("/{id}")
+    public ApiResponse<CageResponse> getCageById(@PathVariable Integer id) {
+        ApiResponse<CageResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(cagesService.changeStatusCage(id));
+        return apiResponse;
+    }
 }
