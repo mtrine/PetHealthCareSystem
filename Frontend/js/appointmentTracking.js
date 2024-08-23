@@ -37,7 +37,7 @@ function hideModal() {
 }
 document.addEventListener('DOMContentLoaded', async function () {
     const appointmentContainer = document.querySelector('.appointment-list-section');
-    const data = await fetchWithToken(`${API_BASE_URL}/v1/appointments/get-my-appointment-for-customer`, {
+    const data = await fetchWithToken(`${API_BASE_URL}/v1/appointments/my-appointment-for-customer`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

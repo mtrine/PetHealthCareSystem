@@ -136,9 +136,10 @@ public class PetControllerTest {
                 .andExpect(jsonPath("$.result.customerResponse.id").value(customerResponse.getId()))
                 .andExpect(jsonPath("$.result.customerResponse.name").value(customerResponse.getName()));
     }
+
     private String getAuthToken() throws Exception {
-        String username = "nhuquynh6453@gmail.com";
-        String password = "quynhnhu";
+        String username = "mtriS@gmail.com";
+        String password = "123456";
 
         String response = mockMvc.perform(post("/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

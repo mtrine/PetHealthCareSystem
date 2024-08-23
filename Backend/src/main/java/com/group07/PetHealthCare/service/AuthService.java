@@ -51,7 +51,8 @@ public class AuthService {
     private IInvalidatedTokenRepository invalidatedTokenRepository;
     @Autowired
     private IUserMapper userMapper;
-
+    @Autowired
+    private IAdminRepository IAdminRepository;
     @NonFinal
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
@@ -73,23 +74,13 @@ public class AuthService {
         }
 
         // Create a new user based on role
-        User newUser;
-        switch (request.getRole()) {
-            case "CUSTOMER":
-                newUser = new Customer();
-                break;
-            case "STAFF":
-                newUser = new Staff();
-                break;
-            case "VETERINARIAN":
-                newUser = new Veterinarian();
-                break;
-            case "ADMIN":
-                newUser = new Admin();
-                break;
-            default:
-                throw new AppException(ErrorCode.INVALID_ROLE);
-        }
+        User newUser = switch (request.getRole()) {
+            case "CUSTOMER" -> new Customer();
+            case "STAFF" -> new Staff();
+            case "VETERINARIAN" -> new Veterinarian();
+            case "ADMIN" -> new Admin();
+            default -> throw new AppException(ErrorCode.INVALID_ROLE);
+        };
 
         newUser.setName(request.getName());
         newUser.setEmail(request.getEmail());
@@ -104,9 +95,13 @@ public class AuthService {
             return userMapper.toUserRespone(ICustomerRepository.save((Customer) newUser)) ;
         } else if (newUser instanceof Staff) {
             return userMapper.toUserRespone(IStaffRepository.save((Staff) newUser));
-        } else {
+        } else if(newUser instanceof Veterinarian) {
             return userMapper.toUserRespone(IVeterinarianRepository.save((Veterinarian) newUser));
         }
+        else{
+            return userMapper.toUserRespone(IAdminRepository.save((Admin) newUser));
+        }
+
     }
 
     public AuthResponse login(UserRequest request)  {
@@ -153,36 +148,36 @@ public class AuthService {
         return user.getRole().name();
     }
 
-   public IntrospectRespone introspect(IntrospectRequest request) throws JOSEException, ParseException {
+    public IntrospectRespone introspect(IntrospectRequest request) throws JOSEException, ParseException {
         String token = request.getToken();
         boolean isValid=true;
 
-       try{
-           verifyToken(token,false);
-       }catch (AppException e) {
+        try{
+            verifyToken(token,false);
+        }catch (AppException e) {
             isValid=false;
-       }
-       return IntrospectRespone.builder()
-               .valid(isValid)
-               .build();
-   }
+        }
+        return IntrospectRespone.builder()
+                .valid(isValid)
+                .build();
+    }
 
-   public AuthResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
-       SignedJWT  signJWT = verifyToken(request.getToken(),true);
-       String jit = signJWT.getJWTClaimsSet().getJWTID();
-       Date expiryTime = signJWT.getJWTClaimsSet().getExpirationTime();
-       InvalidatedToken invalidatedToken =
-               InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
+    public AuthResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
+        SignedJWT  signJWT = verifyToken(request.getToken(),true);
+        String jit = signJWT.getJWTClaimsSet().getJWTID();
+        Date expiryTime = signJWT.getJWTClaimsSet().getExpirationTime();
+        InvalidatedToken invalidatedToken =
+                InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
 
-       invalidatedTokenRepository.save(invalidatedToken);
+        invalidatedTokenRepository.save(invalidatedToken);
         String email =signJWT.getJWTClaimsSet().getSubject();
         User user = IUserRepository.findByEmail(email).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND));
         String token =generateToken(user);
-       return AuthResponse.builder()
-               .token(token)
-               .userResponse(userMapper.toUserRespone(user))
-               .build();
-   }
+        return AuthResponse.builder()
+                .token(token)
+                .userResponse(userMapper.toUserRespone(user))
+                .build();
+    }
 
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());

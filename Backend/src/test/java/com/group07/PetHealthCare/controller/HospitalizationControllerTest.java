@@ -160,8 +160,8 @@ public class HospitalizationControllerTest {
     }
 
     private String getAuthToken() throws Exception {
-        String username = "user@example.com";
-        String password = "securepassword";
+        String username = "mtriS2@gmail.com";
+        String password = "123456";
 
         String response = mockMvc.perform(post("/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

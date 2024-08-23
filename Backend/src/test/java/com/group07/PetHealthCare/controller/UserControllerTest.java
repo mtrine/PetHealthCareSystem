@@ -66,7 +66,7 @@ public class UserControllerTest {
     @Test
     void deleteUser() throws Exception {
 
-        String userId = "10a6a291-5bd4-4fea-ab04-ef4ecaa83086";
+        String userId = "dcad4277-0d82-4a5e-a3fe-8dee26dc3462";
         Mockito.doNothing().when(userService).deleteUser(anyString());
 
         mockMVC.perform(delete("/v1/users/{id}", userId)
@@ -79,8 +79,8 @@ public class UserControllerTest {
 
     private String getAuthToken() throws Exception {
 
-        String username = "user@example.com";
-        String password = "securepassword";
+        String username = "admin@group07.com";
+        String password = "admin123";
 
         String response = mockMVC.perform(post("/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +94,7 @@ public class UserControllerTest {
 
     @Test
     void updateUser() throws Exception {
-        String userId = "10a6a291-5bd4-4fea-ab04-ef4ecaa83086";
+        String userId = "dcad4277-0d82-4a5e-a3fe-8dee26dc3462";
         UserRequest userRequest = new UserRequest();
         userRequest.setName("Jane Doe");
         userRequest.setEmail("jane.doe@example.com");
