@@ -139,6 +139,30 @@
             font-style: italic;
             font-family: 'Inter', sans-serif;
         }
+
+        .submit {
+            display: flex;
+            justify-content: center;
+           
+        }
+
+        .submit button {
+            width: 300px;
+            height: 90px;
+            border-radius: 40px;
+            border: none;
+            font-size: 30px;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            background-color: #000;
+            margin: 40px 0;
+            box-shadow: 0px 4px 5px 5px #00000040;
+        }
+
+        .submit button:hover {
+            box-shadow: 0px 4px 10px 5px #ccc;
+        }
     </style>
 </head>
 
@@ -217,10 +241,12 @@
                 <textarea required="" placeholder="Viết đánh giá ở đây" class="form-comment" name="comment"
                     id="comment"></textarea>
             </div>
-
         </div>
+        
     </div>
-
+    <div class="submit">
+        <button type="submit" id="create-review">Gửi đánh giá</button>
+    </div>
     <footer id="footer">
         <div class="footer-content">
             <div class="footer-item">
@@ -235,26 +261,9 @@
         </div>
     </footer>
 </body>
-
-<script>
-    // Bật subnav của customer
-    document.addEventListener('DOMContentLoaded', function () {
-        const headerBtn = document.querySelector('.header-btn');
-        const subNavLoggedIn = document.querySelector('.sub-nav.logged-in');
-
-        headerBtn.addEventListener('click', function () {
-            // Toggle hiển thị sub-nav
-            subNavLoggedIn.style.display = (subNavLoggedIn.style.display === 'block' ? 'none' : 'block');
-        });
-
-        // Đóng sub-nav khi nhấp ra ngoài
-        document.addEventListener('click', function (event) {
-            if (!headerBtn.contains(event.target)) {
-                subNavLoggedIn.style.display = 'none';
-            }
-        });
-    });
-
+<script src="./config/config.js"></script>
+<script src="./js/apointmentDetail.js">
+   
 </script>
 
 </html>

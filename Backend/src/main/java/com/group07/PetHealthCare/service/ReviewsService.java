@@ -15,6 +15,8 @@ import com.group07.PetHealthCare.respositytory.ICustomerRepository;
 import com.group07.PetHealthCare.respositytory.IReviewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -57,6 +59,15 @@ public class ReviewsService {
         // Save and return response
         return reviewsMapper.toReviewsResponse(reviewsRepository.save(reviews));
     }
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public ReviewsResponse createMyReview(ReviewsRequest reviewsRequest) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        Customer customer = customerRepository.findByEmail(name).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        reviewsRequest.setUserId(customer.getId());
+        return createReview(reviewsRequest);
+    }
+
 
     public List<ReviewsResponse> getAllReviews() {
         List<Reviews> reviews = reviewsRepository.findAll();

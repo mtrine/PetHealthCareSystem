@@ -86,7 +86,7 @@ public class CustomerControllerTest {
 
     @Test
     public void getCustomerById() throws Exception {
-        String userId = "10a6a291-5bd4-4fea-ab04-ef4ecaa83086";
+        String userId = "dcad4277-0d82-4a5e-a3fe-8dee26dc3462";
 
         CustomerResponse customerResponse = CustomerResponse.builder()
                 .id(userId)
@@ -112,8 +112,8 @@ public class CustomerControllerTest {
 
 
     private String getAuthToken() throws Exception {
-        String username = "user@example.com";
-        String password = "securepassword";
+        String username = "admin@group07.com";
+        String password = "admin123";
 
         String response = mockMvc.perform(post("/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

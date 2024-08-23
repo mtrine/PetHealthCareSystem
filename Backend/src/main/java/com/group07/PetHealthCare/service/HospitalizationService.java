@@ -146,7 +146,6 @@ public class HospitalizationService {
     public List<HospitalizationResponse> getMyHospitalization() {
         SecurityContext context = SecurityContextHolder.getContext();
         String email = context.getAuthentication().getName();
-        log.info(email);
         Customer customer=customerRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         return getHospitalizationByCustomerId(customer.getId());
     }

@@ -214,7 +214,7 @@ public class AppointmentService {
         return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findByPetId(petId));
     }
 
-    @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF')")
+    @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF','CUSTOMER')")
     public AppointmentResponse getAppointmentDetail(String id){
         return appointmentMapper.toAppointmentResponse(IAppointmentRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND)));
     }

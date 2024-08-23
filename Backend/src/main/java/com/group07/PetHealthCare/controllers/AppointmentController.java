@@ -61,7 +61,7 @@ public class AppointmentController {
         return apiResponse;
     }
 
-    @GetMapping("/get-my-appointment-for-customer")
+    @GetMapping("/my-appointment-for-customer")
     public ApiResponse<List<AppointmentResponse>> getMyAppointmentForCustomer() {
         ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(appointmentService.getMyAppointmentForCustomer());
