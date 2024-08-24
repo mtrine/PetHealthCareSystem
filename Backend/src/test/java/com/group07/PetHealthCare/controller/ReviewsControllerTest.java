@@ -76,7 +76,7 @@ public class ReviewsControllerTest {
                 .appointmentDate(LocalDate.of(2024, 8, 15))
                 .deposit(BigDecimal.valueOf(100.00))
                 .veterinarianName("Dr. Smith")
-                .serviceName(Collections.singleton("Vaccination"))
+//                .serviceName(Collections.singleton("Vaccination"))
                 .build();
 
         reviewsResponse = ReviewsResponse.builder()

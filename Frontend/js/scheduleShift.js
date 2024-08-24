@@ -12,22 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("payment-modal").style.display = "flex";
     });
 
-    const okButton = document.querySelector(".action-button.ok");
-    okButton.addEventListener("click", function () {
-        const selectedPayment = document.querySelector('input[name="payment"]:checked');
-        if (selectedPayment) {
-            if (selectedPayment.value === "prepay") {
-                // Redirect to the payment method selection page
-                window.location.href = "payment-method.html"; // Replace with your actual page
-            } else if (selectedPayment.value === "pay-later") {
-                // Handle the pay later option
-                alert("You have selected to pay later.");
-                closePaymentModal();
-            }
-        } else {
-            alert("Please select a payment method.");
-        }
-    });
 });
 
 
@@ -183,7 +167,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const optionsContainer = petSelect.querySelector('.options');
     try {
         // Fetch data from the API
-        const response = await fetchWithToken(`${API_BASE_URL}/v1/pets/get-my-pet-list`); // Thay thế URL nếu cần
+        const response = await fetchWithToken(`${API_BASE_URL}/v1/pets/my-pet`); // Thay thế URL nếu cần
    
 
         if (response.code === 1000 && Array.isArray(response.result)) {
@@ -226,10 +210,13 @@ document.querySelector("#submitSchedule").addEventListener('click', async functi
     if (selectedRadio) {
         selectedValue = selectedRadio.getAttribute('data-value');
     }
+    if (!serviceId || !petId || !date || !selectedValue) {
+        alert('Vui lòng điền đầy đủ thông tin.');
+        return; // Dừng việc tiếp tục thực hiện khi có trường trống
+    }
     var appointment = {
         status: "Processing",
         appointmentDate: date,
-        deposit: 50000,
         petId: petId,
         serviceId: [serviceId],
         sessionId:  selectedValue,
@@ -241,10 +228,5 @@ document.querySelector("#submitSchedule").addEventListener('click', async functi
         },
         body: JSON.stringify(appointment)
     });
-
-    if (data.code === 1000) {
-        alert('Đặt lịch thành công');
-    } else {
-        alert('Đặt lịch không thành công');
-    }
+    console.log(data.result.id);
 });

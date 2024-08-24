@@ -12,7 +12,7 @@ async function fetchWithToken(url, options = {}) {
 
     try {
         let response = await fetch(url, options);
-        
+            
         if (response.status === 401) { // Unauthorized
             // Attempt to refresh token
             const refreshResponse = await fetch(`${API_BASE_URL}/v1/auth/refresh`, {
@@ -27,18 +27,13 @@ async function fetchWithToken(url, options = {}) {
                 const data = await refreshResponse.json();
                 // Store new tokens
                 localStorage.setItem('authToken', data.result.token);
-                
-                
-                // Retry the original request
-                options.headers['Authorization'] = `Bearer ${refreshData.accessToken}`;
+                options.headers['Authorization'] = `Bearer ${data.result.token}`;
                 response = await fetch(url, options);
             } else {
                 // Handle refresh token failure (e.g., logout user)
                 console.error('Refresh token failed');
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('authToken');
                 // Redirect to login or show an error message
-                window.location.href = '/login';
                 return;
             }
         }

@@ -19,6 +19,6 @@ public class AppointmentResponse {
     private BigDecimal deposit;
     private String veterinarianName;
     private SessionResponse sessionResponse;
-    private Set<String> serviceName;
+    private Set<ServicesResponse> servicesResponsesList;
     private PetResponse pet;
 }

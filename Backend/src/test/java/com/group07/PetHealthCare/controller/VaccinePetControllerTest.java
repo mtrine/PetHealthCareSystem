@@ -41,12 +41,12 @@ public class VaccinePetControllerTest {
         vaccinePetRequest.setStingDate(LocalDate.of(2024, 8, 18));
         vaccinePetRequest.setReStingDate(LocalDate.of(2025, 8, 18));
 
-        vaccinePetResponse = VaccinePetResponse.builder()
+       /* vaccinePetResponse = VaccinePetResponse.builder()
                 .petId("4543d3af-e527-48a8-ab25-c85873f78d95")
                 .vaccineId("df797e5a-1707-41da-946f-201becfd1552")
                 .stingDate(LocalDate.of(2024,8,18))
                 .reStingDate(LocalDate.of(2025,8,18))
                 .build();
-
+*/
     }
 }

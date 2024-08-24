@@ -207,7 +207,7 @@ document.querySelector('#set-visit-btn').addEventListener('click', async functio
 
     if (response.code == 1000) {
         alert("Đặt lịch thăm thành công");
-        window.location.href = 'hospitalization.html';
+        window.location.href = 'index.html';
     }
     else {
         alert("Đã có lỗi xảy ra: " + response.message);

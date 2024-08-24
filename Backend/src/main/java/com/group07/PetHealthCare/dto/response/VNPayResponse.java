@@ -1,19 +1,18 @@
 package com.group07.PetHealthCare.dto.response;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
-@Builder
+@Slf4j
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServicesResponse {
-    private String id;
-    private String name;
-    private BigDecimal unitPrice;
+@Builder
+public class VNPayResponse {
+    private String code;
+    private String message;
+    private String paymentUrl;
 }

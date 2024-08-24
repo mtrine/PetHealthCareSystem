@@ -7,44 +7,55 @@ document.addEventListener('DOMContentLoaded', async function () {
     var doctorContainer = document.querySelector('.doctor-container');
     const urlParams = new URLSearchParams(window.location.search);
     const appointmentId = urlParams.get('id');
-    
-    const data = await fetchWithToken(`${API_BASE_URL}/v1/appointments/${appointmentId}`,{
-        method:'GET',
-        headers:{
-            'Content-Type':'application/json'
+
+    const data = await fetchWithToken(`${API_BASE_URL}/v1/appointments/${appointmentId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
         }
     });
-    const appointment=data.result;
-   
+    const appointment = data.result;
+
     // Hiển thị nội dung tùy theo điều kiện isDoctorAssigned
-    if(data.code==1000){
+    if (data.code == 1000) {
         document.querySelector('.pet-id').innerText = appointment.id;
         document.querySelector('#customer-id').innerText = appointment.pet.customerResponse.id;
         document.querySelector('.customer-phone').innerText = appointment.pet.customerResponse.phoneNumber;
         document.querySelector('#customer-pet-id').innerText = appointment.pet.id;
         document.querySelector('#visit-date').innerText = appointment.appointmentDate;
         document.querySelector('.shift').innerText = `${appointment.sessionResponse.startTime} - ${appointment.sessionResponse.endTime}`;
-        document.querySelector('.service').innerText = appointment.serviceName[0];
+        const serviceContainer = document.querySelector('.service');
+        serviceContainer.innerHTML = ''; // Xóa nội dung cũ
+
+        appointment.servicesResponsesList.forEach(service => {
+            if (serviceContainer.innerText === '') {
+                // Nếu là phần tử đầu tiên, không thêm dấu phẩy
+                serviceContainer.innerText = service.name;
+            } else {
+                // Nếu không phải phần tử đầu tiên, thêm dấu phẩy trước khi thêm tên dịch vụ
+                serviceContainer.innerText += "," + service.name;
+            }
+        });
         if (appointment.veterinarianName) {
             doctorContainer.innerHTML = `
                     <label for="doctor-name">Bác sĩ</label>
                     <h1 class="doctor-name">${appointment.veterinarianName}</h1> 
             `;
         } else {
-            const dataVeterinarian=await fetchWithToken(`${API_BASE_URL}/v1/veterinarians/${appointment.sessionResponse.id}/get-available-veterinarian-session?date=${appointment.appointmentDate}`,{
-                method:'GET',
-                headers:{
-                    'Content-Type':'application/json'
+            const dataVeterinarian = await fetchWithToken(`${API_BASE_URL}/v1/veterinarians/${appointment.sessionResponse.id}/get-available-veterinarian-session?date=${appointment.appointmentDate}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
                 }
             })
-            if(dataVeterinarian.code==1000){
-                const veterinarians=dataVeterinarian.result;
+            if (dataVeterinarian.code == 1000) {
+                const veterinarians = dataVeterinarian.result;
                 doctorContainer.innerHTML = ` 
                     <label for="doctor-name">Bác sĩ</label>
                     <div id="doctor-select" class="custom-select">
                         <div class="selected-option">Chọn bác sĩ<i class='bx bx-chevron-down'></i></div>
                         <div class="options">
-                            ${veterinarians.map(veterinarian=>`
+                            ${veterinarians.map(veterinarian => `
                                 <div data-value="${veterinarian.id}">${veterinarian.name}</div>
                             `).join('')}
                         </div>
@@ -54,8 +65,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
     }
-    else{
-        alert("Đã có lỗi xảy ra: ",data.message);
+    else {
+        alert("Đã có lỗi xảy ra: ", data.message);
     }
 
     // Xử lý sự kiện cho modal
@@ -117,12 +128,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 veterinarianId: veterinarianId
             })
         });
-        
+
         if (dataAppointment.code == 1000) {
             alert("Chọn bác sĩ thành công");
             location.reload();
         } else {
-            alert("Đã có lỗi xảy ra: ",data.message);
+            alert("Đã có lỗi xảy ra: ", data.message);
         }
     })
 });

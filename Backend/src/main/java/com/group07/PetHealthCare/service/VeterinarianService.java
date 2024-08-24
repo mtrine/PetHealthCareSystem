@@ -57,23 +57,17 @@ public class VeterinarianService {
 
 
     public List<SessionResponse> getAvailableSessionsForVeterinarian(String veterinarianId, LocalDate appointmentDate) {
-        // Lấy tất cả các ca làm việc
+        // Lấy tất cả các session của bác sĩ trong ngày đó
         List<Session> allSessions = ISessionsRepository.findAll();
 
         // Lấy tất cả các lịch hẹn của bác sĩ trong ngày đó
         List<Appointment> appointments = IAppointmentRepository.findByVeterinarianIdAndAppointmentDate(veterinarianId, appointmentDate);
 
-        // Loại bỏ các ca đã có lịch hẹn
-        for (Appointment appointment : appointments) {
-            allSessions.removeIf(session -> {
-                boolean isSameSession = session.getId()==appointment.getSession().getId();
-                VisitSchedule visitSchedule = visitScheduleRepository
-                        .findByVeterinarianIdAndVisitDateAndSessionId(veterinarianId, appointmentDate, session.getId())
-                        .orElse(null);
-
-                return isSameSession && visitSchedule != null;
-            });
-        }
+        // Loại bỏ các session đã có lịch hẹn hoặc đã được lên lịch trong VisitSchedule
+        allSessions.removeIf(session ->
+                appointments.stream().anyMatch(appointment -> appointment.getSession().getId() == session.getId()) ||
+                        visitScheduleRepository.findByVeterinarianIdAndVisitDateAndSessionId(veterinarianId, appointmentDate, session.getId()).isPresent()
+        );
 
         return sessionsMapper.toSessionResponseList(allSessions);
     }
