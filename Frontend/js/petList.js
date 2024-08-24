@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <li>${pet.name}</li>
                 <li>${pet.age}</li>
                 <li>${pet.speciesResponse.name}/${gender}</li> 
-                <li>
+                <li>    
                     <button onclick="showModal()" class="delete-btn" data-id="${pet.id}">
                         <i class='bx bx-trash' style='color:#5E5E5E'></i>
                     </button>

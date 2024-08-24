@@ -89,8 +89,8 @@ public class SessionsControllerTest {
     }
 
     private String getAuthToken() throws Exception {
-        String username = "user@example.com";
-        String password = "securepassword";
+        String username = "admin@group07.com";
+        String password = "admin123";
 
         String response = mockMvc.perform(post("/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

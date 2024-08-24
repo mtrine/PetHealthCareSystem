@@ -30,4 +30,11 @@ public class ReviewsController {
         apiResponse.setResult(reviewsResponse);
         return apiResponse;
     }
+
+    @PostMapping("/my-reviews")
+    public ApiResponse<ReviewsResponse> createMyReview(@RequestBody ReviewsRequest reviewsRequest) {
+        ApiResponse<ReviewsResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(reviewsService.createMyReview(reviewsRequest));
+        return apiResponse;
+    }
 }

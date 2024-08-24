@@ -61,7 +61,7 @@ public class HospitalizationController {
         return apiResponse;
     }
 
-    @GetMapping("/get-my-hospitalization")
+    @GetMapping("/my-hospitalization")
     public ApiResponse<List<HospitalizationResponse>> getMyHospitalization() {
         ApiResponse<List<HospitalizationResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(hospitalizationService.getMyHospitalization());
