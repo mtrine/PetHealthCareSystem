@@ -12,12 +12,12 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/v1/pets/vaccines")
+@RequestMapping("/v1/vaccines-pet")
 public class VaccinePetController {
     @Autowired
     private VaccinePetService vaccinePetService;
 
-    @GetMapping("/{petId}")
+    @GetMapping("/{petId}/pets")
     public ApiResponse<List<VaccinePetResponse>> getVaccinePetByPetId(@PathVariable("petId") String id) {
         ApiResponse<List<VaccinePetResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(vaccinePetService.getVaccinePetByPetId(id));

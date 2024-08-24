@@ -52,7 +52,7 @@ var authToken=localStorage.getItem("authToken")
             document.addEventListener('click', function (event) {
                 if (!headerBtn.contains(event.target)) {
                     subNav.style.display = 'none';
-                }
+                }   
             });}
 
     });

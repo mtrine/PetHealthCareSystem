@@ -119,7 +119,7 @@ public class HospitalizationService {
         Hospitalization hospitalization = hospitalizationRepository.findById(id).orElseThrow(() -> new RuntimeException("Hospitalization not found"));
         hospitalizationRepository.delete(hospitalization);
     }
-    @PreAuthorize("hasAnyRole('VETERINARIAN','STAFF')")
+    @PreAuthorize("hasAnyRole('VETERINARIAN','STAFF','CUSTOMER')")
     public List<HospitalizationResponse> getHospitalizationByPetId(String petId) {
         if (petId == null) {
             throw new IllegalArgumentException("Pet ID must not be null");

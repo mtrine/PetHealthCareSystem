@@ -261,6 +261,10 @@ async function fetchSessionAvailable() {
         const response = await fetchWithToken(`${API_BASE_URL}/v1/veterinarians/${doctorId}/available-sessions?date=${date}`);
         
         if (response.code === 1000 && Array.isArray(response.result)) {
+            if(response.result.length === 0) {
+                sessionContainer.innerHTML = 'Không có ca trống';
+                return;
+            }
             response.result.forEach((session, index) => {
                 // Tạo id và checked status cho các session
                 const sessionId = `radio-${index + 1}`;
@@ -331,7 +335,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const optionsContainer = petSelect.querySelector('.options');
     try {
         // Fetch data from the API
-        const response = await fetchWithToken(`${API_BASE_URL}/v1/pets/get-my-pet-list`); // Thay thế URL nếu cần
+        const response = await fetchWithToken(`${API_BASE_URL}/v1/pets/my-pet`); // Thay thế URL nếu cần
    
 
         if (response.code === 1000 && Array.isArray(response.result)) {
@@ -375,10 +379,13 @@ document.querySelector("#submitSchedule").addEventListener('click', async functi
     if (selectedRadio) {
         selectedValue = selectedRadio.getAttribute('data-value');
     }
+    if (!serviceId || !petId || !date || !selectedValue|| !doctorId) {
+        alert('Vui lòng điền đầy đủ thông tin.');
+        return; // Dừng việc tiếp tục thực hiện khi có trường trống
+    }
     var appointment = {
         status: "Processing",
         appointmentDate: date,
-        deposit: 50000,
         petId: petId,
         serviceId: [serviceId],
         sessionId:  selectedValue,
@@ -393,7 +400,9 @@ document.querySelector("#submitSchedule").addEventListener('click', async functi
     });
 
     if (data.code === 1000) {
+        const appointmentId = data.result.id;
         alert('Đặt lịch thành công');
+        window.location.href = `paymentMethods.html?${appointmentId}`;
     } else {
         alert('Đặt lịch không thành công');
     }

@@ -61,6 +61,8 @@ document.addEventListener("DOMContentLoaded", function () {
       
         fetchPetDetails(petId);
         fetchAppointment(petId);
+        fetchHospitalization(petId);
+        fetchVaccinePet(petId);
     } else {
         alert('Không tìm thấy thông tin thú cưng!');
     }
@@ -100,16 +102,82 @@ async function fetchAppointment(petId) {
     });
     if (data && data.code === 1000) {
         const appointments=data.result;
+        if(appointments.length==0){
+            historyContainer.innerText="Không có lịch sử phòng khám"
+            historyContainer.style.textAlign="center"
+        }
         appointments.forEach(appointment => {
             const historyItem = document.createElement('ul');
             historyItem.classList.add('history-item');
             historyItem.innerHTML = `
                 <li>${appointment.appointmentDate}</li>
                 <li>${appointment.sessionResponse.startTime}-${appointment.sessionResponse.endTime}</li>
-                <li>${appointment.veterinarianName}</li>
-                <li>${appointment.serviceName[0]}</li>
+                <li>${appointment.veterinarianName?appointment.veterinarianName:"Chưa có"}</li>
+                <li>${appointment.servicesResponsesList[0].name}</li>
             `;
             historyContainer.appendChild(historyItem);
         });
+    }
+}
+
+async function fetchHospitalization(petId){
+    const historyContainer = document.getElementById('history-container-hospitalization');
+    const data=await fetchWithToken(`${API_BASE_URL}/v1/hospitalizations?petId=${petId}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    });
+    if (data && data.code === 1000) {
+        const hospitalizations=data.result;
+        if(hospitalizations.length==0){
+            historyContainer.innerText="Không có lịch sử nhập viện"
+            historyContainer.style.textAlign="center"
+        }
+        hospitalizations.forEach(hospitalization => {
+            const historyItem = document.createElement('ul');
+            historyItem.classList.add('history-item');
+            historyItem.innerHTML = `
+                <li>${hospitalization.startDate}</li>
+                <li>${hospitalization.endDate?hospitalization.endDate:"Chưa ra viện"}</li>
+                <li>${hospitalization.cageResponse.cageNumber}</li>
+                <li>${hospitalization.reasonForHospitalization}</li>
+            `;
+            historyContainer.appendChild(historyItem);
+        });
+    }
+    else{
+        alert('Không tìm thấy thông tin lịch sử phòng khám!');
+    }
+}
+
+async function fetchVaccinePet(petId){
+    const historyContainer = document.getElementById('history-container-vaccine');
+    const data=await fetchWithToken(`${API_BASE_URL}/v1/vaccines-pet/${petId}/pets`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    });
+    
+    if (data && data.code === 1000) {
+        const vaccines=data.result;
+        if(vaccines.length==0){
+            historyContainer.innerText="Không có lịch sử  tiêm"
+            historyContainer.style.textAlign="center"
+        }
+        vaccines.forEach(vaccine => {
+            const historyItem = document.createElement('ul');
+            historyItem.classList.add('history-item');
+            historyItem.innerHTML = `
+                <li>${vaccine.vaccineResponse.name}</li>
+                <li>${vaccine.stingDate}</li>
+                <li>${vaccine.reStingDate}</li>
+            `;
+            historyContainer.appendChild(historyItem);
+        });
+    }
+    else{
+        alert('Không tìm thấy thông tin lịch sử phòng khám!');
     }
 }
