@@ -309,6 +309,71 @@
         #choose-veterinarian:hover {
             box-shadow: 0px 4px 10px 5px #ccc;
         }
+        .add-service-modal {
+            display: none;
+            /* Ẩn modal theo mặc định */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            padding:10px
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Màu nền nửa trong suốt */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Đặt lên trên cùng */
+        }
+
+        .add-service-modal .modal-content {
+            width: 418px;
+            height: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .add-service-modal .modal-content i {
+            font-size: 50px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .add-service-modal .modal-content p {
+            padding: 0 10px;
+            font-size: 25px;
+            font-weight: 600;
+        }
+
+        .add-service-modal .modal-content p:nth-of-type(2) {
+            font-style: italic;
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .add-service-modal .modal-buttons {
+            margin-top: 40px;
+        }
+
+        .add-service-modal .modal-buttons button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 8px 30px;
+            font-size: 30px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 0 14px;
+            transition: background-color 0.3s;
+        }
+
+        .add-service-modal .modal-buttons button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
     </style>
 </head>
 
@@ -361,7 +426,7 @@
         
         <div class="submit">
             <button type="submit" id="show-modal">Hủy booking</button>
-            <button type="submit" id="show-modal">Thanh toán</button>
+            <button type="submit" id="payment">Thanh toán</button>
             <button type="submit" id="add-service">Thêm dịch vụ</button>
         </div>
 
@@ -376,7 +441,26 @@
             <p>&lt; Hành động không thể hoàn tác &gt;</p>
             <div class="modal-buttons">
                 <button id="cancel-delete">Quay lại</button>
-                <button id="confirm-delete">Hủy</button>
+                <button id="confirm-delete" style="background-color: red;">Hủy</button>
+            </div>
+        </div>
+    </div>
+    <div id="add-service-modal" class="add-service-modal">
+        <div class="modal-content">
+            <i class='bx bx-error'></i>
+            <p>Dịch vụ muốn thêm:</p>
+            <div id="service-select" class="custom-select">
+                <div class="selected-option">Chọn dịch vụ<i class='bx bx-chevron-down'></i></div>
+                <div class="options">
+                    <div>Triệt sản</div>
+                    <div>Chữa bệnh</div>
+                    <div>Khám sức khỏe</div>
+                    <div>Phẫu thuật</div>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button id="cancel-delete" >Quay lại</button>
+                <button id="confirm-delete">Thêm</button>
             </div>
         </div>
     </div>
