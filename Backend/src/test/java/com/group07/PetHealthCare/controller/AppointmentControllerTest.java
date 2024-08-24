@@ -151,8 +151,8 @@ public class AppointmentControllerTest {
 
 
     private String getAuthToken() throws Exception {
-        String username = "mtriS@gmail.com";
-        String password = "123456";
+        String username = "customer@gmail.com";
+        String password = "customerpass";
 
         String response = mockMvc.perform(post("/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

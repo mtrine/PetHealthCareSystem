@@ -20,7 +20,7 @@ public class ApplicationInitConfig {
                 User user = new Admin();
                 user.setRole(Role.ADMIN);
                 user.setEmail("admin@group07.com");
-                user.setPassword("admin");
+                user.setPassword("admin123");
                 userRepository.save(user);
                 log.warn("admin user has been created with default password: admin");
             }

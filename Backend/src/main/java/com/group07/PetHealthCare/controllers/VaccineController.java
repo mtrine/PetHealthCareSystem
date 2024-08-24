@@ -39,8 +39,8 @@ public class VaccineController {
     }
 
 
-    @PutMapping("/{Vaccineid}")
-    ApiResponse<VaccineResponse> updateVaccine(@PathVariable String vaccineid ,@RequestBody VaccineRequest request) {
+    @PatchMapping("/{Vaccineid}")
+    ApiResponse<VaccineResponse> updateVaccine(@PathVariable("Vaccineid") String vaccineid ,@RequestBody VaccineRequest request) {
         ApiResponse<VaccineResponse> apiResponse= new ApiResponse<>();
         apiResponse.setResult(vaccineService.updateVaccine(vaccineid,request));
         return apiResponse;

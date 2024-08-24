@@ -20,7 +20,7 @@ public class VeterinarianController {
     private VeterinarianService veterinarianService;
 
     @GetMapping
-    public ApiResponse<List<VeterinarianResponse>> getAllCustomers() {
+    public ApiResponse<List<VeterinarianResponse>> getAllVeterinarian() {
         ApiResponse<List<VeterinarianResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(veterinarianService.getAllVeterinarian());
         return apiResponse;
