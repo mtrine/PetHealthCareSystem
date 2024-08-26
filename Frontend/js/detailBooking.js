@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     var addServiceModal = document.getElementById('add-service-modal');
     var confirmDeleteButton = document.getElementById('confirm-delete');
     var cancelDeleteButton = document.getElementById('cancel-delete');
+    var cancelAddServiceButton = document.getElementById('cancel-delete-add-service');
+    var confirmAddServiceButton = document.getElementById('confirm-delete-add-service');
     var successMessage = document.getElementById('success-message');
     var doctorContainer = document.querySelector('.doctor-container');
     const urlParams = new URLSearchParams(window.location.search);
@@ -183,4 +185,37 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         });
     }
+    else{
+        alert("Đã có lỗi xảy ra: ", dataServices.message);
+    }
+
+    cancelAddServiceButton.addEventListener('click', function () {
+        addServiceModal.style.display = 'none';
+    });
+    confirmAddServiceButton.addEventListener('click', async function () {
+        const selectedOption = document.querySelector('#service-select .selected-option');
+        const serviceId = selectedOption.getAttribute('data-value');
+        var serviceArray = appointment.servicesResponsesList.map(service => service.id);
+        if (serviceArray.includes(serviceId)) {
+            alert("Dịch vụ đã sử dụng.");
+        } else {
+            serviceArray.push(serviceId);
+        }
+        const dataAppointment = await fetchWithToken(`${API_BASE_URL}/v1/appointments/${appointmentId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                serviceId: serviceArray
+            })
+        });
+
+        if (dataAppointment.code == 1000) {
+            alert("Thêm dịch vụ thành công");
+            location.reload();
+        } else {
+            alert("Đã có lỗi xảy ra: ", data.message);
+        }
+    });
 });

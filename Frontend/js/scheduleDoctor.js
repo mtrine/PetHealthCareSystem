@@ -402,7 +402,7 @@ document.querySelector("#submitSchedule").addEventListener('click', async functi
     if (data.code === 1000) {
         const appointmentId = data.result.id;
         alert('Đặt lịch thành công');
-        window.location.href = `paymentMethods.html?${appointmentId}`;
+        window.location.href = `paymentMethods.html?id=${appointmentId}`;
     } else {
         alert('Đặt lịch không thành công');
     }
