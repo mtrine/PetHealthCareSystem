@@ -29,6 +29,8 @@ public class PaymentService {
         queryUrl += "&vnp_SecureHash=" + vnpSecureHash;
         String paymentUrl = vnPayConfig.getVnp_PayUrl() + "?" + queryUrl;
         return VNPayResponse.builder()
+                .code("00")
+                .message("Successful")
                 .paymentUrl(paymentUrl).build();
     }
 
