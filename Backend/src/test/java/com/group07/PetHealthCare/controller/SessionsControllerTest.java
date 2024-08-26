@@ -62,7 +62,7 @@ public class SessionsControllerTest {
     }
 
     @Test
-    public void addSessionTest() throws Exception {
+    public void addSession() throws Exception {
         when(sessionsService.createSession(sessionsRequest)).thenReturn(sessionResponse);
 
         mockMvc.perform(post("/v1/sessions")
@@ -74,7 +74,7 @@ public class SessionsControllerTest {
     }
 
     @Test
-    public void getAllSessionsTest() throws Exception {
+    public void getAllSessions() throws Exception {
         List<SessionResponse> sessionResponses = Collections.singletonList(sessionResponse);
 
         when(sessionsService.getAllSession()).thenReturn(sessionResponses);
