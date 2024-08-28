@@ -51,6 +51,8 @@ public class ReviewsService {
         Reviews reviews = new Reviews();
         reviews.setId(reviewsId); // Setting the composite key
         reviews.setAppointment(appointment);
+        appointment.setStatus("REVIEWED");
+        appointmentRepository.save(appointment);
         reviews.setCustomer(customer);
         reviews.setGrades(reviewsRequest.getGrades());
         reviews.setComment(reviewsRequest.getComments());

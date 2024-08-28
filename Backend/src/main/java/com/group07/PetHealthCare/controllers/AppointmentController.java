@@ -81,4 +81,11 @@ public class AppointmentController {
         apiResponse.setResult(appointmentService.getAppointmentDetail(appointmentId));
         return apiResponse;
     }
+
+    @GetMapping("/my-appointment-for-veterinarian")
+    public ApiResponse<List<AppointmentResponse>> getMyAppointmentForVeterinarian() {
+        ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(appointmentService.getMyAppointmentForVeterinarian());
+        return apiResponse;
+    }
 }

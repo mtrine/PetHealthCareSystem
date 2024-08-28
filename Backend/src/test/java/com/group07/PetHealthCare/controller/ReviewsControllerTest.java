@@ -74,7 +74,7 @@ public class ReviewsControllerTest {
                 .status("Scheduled")
                 .sessionResponse(sessionResponse)
                 .appointmentDate(LocalDate.of(2024, 8, 15))
-                .deposit(BigDecimal.valueOf(100.00))
+//                .deposit(BigDecimal.valueOf(100.00))
                 .veterinarianName("Dr. Smith")
 //                .serviceName(Collections.singleton("Vaccination"))
                 .build();

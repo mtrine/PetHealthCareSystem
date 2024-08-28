@@ -27,6 +27,9 @@ public class VisitSchedule {
     @Column(name = "visit_date", nullable = false)
     private LocalDate visitDate;
 
+    @Column(name = "status", nullable = false)
+    private boolean status=false;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="sessionId")
     private Session session;

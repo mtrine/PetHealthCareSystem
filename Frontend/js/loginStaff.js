@@ -32,12 +32,10 @@ document.querySelector(".login-btn").addEventListener("click", async function ()
             }
             else if (data.result.userResponse.role === "ADMIN") {
                 window.location.href = "indexAdmin.html";
-
             }
             else {
-
-                window.location.href = "indexVeterinarian.html";
-
+                localStorage.setItem('authToken', data.result.token);
+                window.location.href = "/Doctor/index.html";
             }
 
         } else {

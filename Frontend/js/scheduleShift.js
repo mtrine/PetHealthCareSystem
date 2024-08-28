@@ -87,41 +87,65 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+document.getElementById('date').addEventListener('change', fetchSession);
 
-document.addEventListener('DOMContentLoaded', async function () {
+async function fetchSession() {
     const sessionContainer = document.querySelector('.tabs');
+    const selectedDate = document.getElementById('date').value; // Ngày được chọn từ input
+    const currentDate = new Date(); // Ngày và giờ hiện tại
 
     // Xóa các session cũ trước khi thêm session mới
     sessionContainer.innerHTML = '';
 
     try {
         const response = await fetchWithToken(`${API_BASE_URL}/v1/sessions`);
-        
+
         if (response.code === 1000 && Array.isArray(response.result)) {
             response.result.forEach((session, index) => {
+                // Lấy ngày và giờ từ session
+                const sessionDateTime = new Date(`${selectedDate}T${session.startTime}`);
+                const currentDateTime = new Date(); // Ngày và giờ hiện tại
+
+                // Kiểm tra nếu giờ của session đã qua so với giờ hiện tại
+                if (sessionDateTime <= currentDateTime) {
+                    return; // Bỏ qua session nếu giờ đã qua
+                }
+
                 // Tạo id và checked status cho các session
                 const sessionId = `radio-${index + 1}`;
                 const isChecked = index === 0 ? 'checked' : ''; // Checked session đầu tiên
                 const startTime = session.startTime.slice(0, 5); // Lấy từ 0 đến 5 để giữ lại HH:MM
                 const endTime = session.endTime.slice(0, 5);
+
                 // Thêm radio button và label tương ứng
                 const radioInput = `
                     <input type="radio" id="${sessionId}" name="time" data-value="${session.id}" ${isChecked}>
                     <label class="tab" for="${sessionId}">${startTime} - ${endTime}</label>
                 `;
                 sessionContainer.insertAdjacentHTML('beforeend', radioInput);
+               
             });
+            if(  sessionContainer.innerHTML == ''){
+                const radioInput = `
+                    <p>Không có ca trống</p>
+                `;
+                sessionContainer.insertAdjacentHTML('beforeend', radioInput);
+            }
+            else{
+                const glider = `<span class="glider"></span>`;
+                sessionContainer.insertAdjacentHTML('beforeend', glider);
+            }
 
-            // Add the glider span at the end
-            const glider = `<span class="glider"></span>`;
-            sessionContainer.insertAdjacentHTML('beforeend', glider);
+            // Thêm glider vào cuối cùng
+            
         } else {
             console.error('Failed to fetch available sessions:', response.message);
         }
     } catch (error) {
         console.error('Error fetching data:', error);
     }
-});
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
     const serviceSelect = document.getElementById('service-select');
     const selectedOption = serviceSelect.querySelector('.selected-option');
