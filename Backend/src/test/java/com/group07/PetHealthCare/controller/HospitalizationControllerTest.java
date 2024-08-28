@@ -54,7 +54,7 @@ public class HospitalizationControllerTest {
         hospitalizationRequest.setEndDate(LocalDate.of(2024, 8, 20));
 
         hospitalizationResponse = new HospitalizationResponse();
-        hospitalizationResponse.setId("hospitalization123"); // Corrected duplicate id assignment
+        hospitalizationResponse.setId("hospitalization123");
         hospitalizationResponse.setReasonForHospitalization("Đau bụng");
         hospitalizationResponse.setHealthCondition("Yếu");
         hospitalizationResponse.setStartDate(LocalDate.of(2024, 8, 18));

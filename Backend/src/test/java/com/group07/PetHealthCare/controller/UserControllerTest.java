@@ -14,9 +14,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -130,5 +132,73 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.sex").value(false))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.role").value("ADMIN"));
     }
+
+    @Test
+    void updateUserInfo() throws Exception {
+        String userId = "dcad4277-0d82-4a5e-a3fe-8dee26dc3462";
+        UserRequest userRequest = new UserRequest();
+        userRequest.setName("Jane Doe");
+        userRequest.setEmail("jane.doe@example.com");
+        userRequest.setPhoneNumber("0987654321");
+        userRequest.setAddress("456 Another St");
+        userRequest.setSex(false);
+        userRequest.setPassword("newpassword123");
+        userRequest.setRole("ADMIN");
+
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(userId);
+        userResponse.setName("Jane Doe");
+        userResponse.setEmail("jane.doe@example.com");
+        userResponse.setPhoneNumber("0987654321");
+        userResponse.setAddress("456 Another St");
+        userResponse.setSex(false);
+        userResponse.setPassword("hashednewpassword");
+        userResponse.setRole("ADMIN");
+
+        Mockito.when(userService.updateMyInfo(any(UserRequest.class))).thenReturn(userResponse);
+
+        String requestJson = new ObjectMapper().writeValueAsString(userRequest);
+
+        mockMVC.perform(MockMvcRequestBuilders.patch("/v1/users/update-my-info", userId)
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.name").value("Jane Doe"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.email").value("jane.doe@example.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.phoneNumber").value("0987654321"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.address").value("456 Another St"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.sex").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.role").value("ADMIN"));
+    }
+
+    @Test
+    void getUserInfo() throws Exception {
+        String userId = "10a6a291-5bd4-4fea-ab04-ef4ecaa83086"; // The user ID to test
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(userId);
+        userResponse.setName("Jane Doe");
+        userResponse.setEmail("jane.doe@example.com");
+        userResponse.setPhoneNumber("0987654321");
+        userResponse.setAddress("456 Another St");
+        userResponse.setSex(false);
+        userResponse.setPassword("hashednewpassword");
+        userResponse.setRole("ADMIN");
+
+        Mockito.when(userService.getMyInfo()).thenReturn(userResponse);
+
+        mockMVC.perform(MockMvcRequestBuilders.get("/v1/users/my-info")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.id").value(userId))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.name").value("Jane Doe"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.email").value("jane.doe@example.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.phoneNumber").value("0987654321"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.address").value("456 Another St"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.sex").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.result.role").value("ADMIN"));
+    }
+
 
 }

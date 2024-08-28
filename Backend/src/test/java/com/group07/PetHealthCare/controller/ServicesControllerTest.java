@@ -44,6 +44,7 @@ public class ServicesControllerTest {
     private ObjectMapper objectMapper;
     private ServiceRequest serviceRequest;
     private ServicesResponse servicesResponse;
+    private List<ServicesResponse> servicesResponseList;
 
     @BeforeEach
     void initData() {
@@ -59,6 +60,7 @@ public class ServicesControllerTest {
                 .name("Cắt lông")
                 .build();
 
+        servicesResponseList = Collections.singletonList(servicesResponse);
     }
 
     @Test
@@ -78,8 +80,18 @@ public class ServicesControllerTest {
 
         @Test
     public void getAllServicesTest() throws Exception {
+            when(servicesService.getAllServices()).thenReturn(servicesResponseList);
+            mockMvc.perform(get("/v1/services")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header("Authorization", "Bearer " + getAuthToken())
+                            .content(objectMapper.writeValueAsString(serviceRequest)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.result[0].id").value(servicesResponse.getId()))
+                    .andExpect(jsonPath("$.result[0].name").value(servicesResponse.getName()))
+                    .andExpect(jsonPath("$.result[0].unitPrice").value(servicesResponse.getUnitPrice()));
 
-    }
+
+        }
 
     private String getAuthToken() throws Exception {
         String username = "admin@group07.com";

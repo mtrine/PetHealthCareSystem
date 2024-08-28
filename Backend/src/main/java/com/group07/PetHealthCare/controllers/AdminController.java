@@ -18,14 +18,14 @@ public class AdminController {
     AdminService adminService;
 
     @GetMapping
-    public ApiResponse<List<AdminResponse>> getAllVeterinarian() {
+    public ApiResponse<List<AdminResponse>> getAllAdmin() {
         ApiResponse<List<AdminResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(adminService.getAllAdmins());
         return apiResponse;
     }
 
     @GetMapping("/{userId}")
-    public ApiResponse<AdminResponse> getVeterinarian(@PathVariable String userId) {
+    public ApiResponse<AdminResponse> getAdmin(@PathVariable String userId) {
         ApiResponse<AdminResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(adminService.getAdminById(userId));
         return apiResponse;

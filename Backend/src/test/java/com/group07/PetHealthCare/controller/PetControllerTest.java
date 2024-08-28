@@ -18,12 +18,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
+import java.util.Set;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @Slf4j
@@ -65,8 +66,6 @@ public class PetControllerTest {
         customerResponse.setId("e80bac44-998c-44db-b548-2d03b12e8a25");
         customerResponse.setName("Nguyen Ngoc Quynh Nhu");
         customerResponse.setEmail("nhuquynh6453@gmail.com");
-        customerResponse.setPhoneNumber(null);
-        customerResponse.setRole("CUSTOMER");
 
         petResponse = new PetResponse();
         petResponse.setId("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9");
@@ -78,7 +77,7 @@ public class PetControllerTest {
     }
 
     @Test
-    void CreatePet() throws Exception {
+    void createPet() throws Exception {
         when(petService.addPet(any(PetCreationRequest.class))).thenReturn(petResponse);
 
         mockMvc.perform(post("/v1/pets")
@@ -137,9 +136,65 @@ public class PetControllerTest {
                 .andExpect(jsonPath("$.result.customerResponse.name").value(customerResponse.getName()));
     }
 
+    @Test
+    void deletePet() throws Exception {
+        Mockito.doNothing().when(petService).deletePet(petResponse.getId());
+
+        mockMvc.perform(delete("/v1/pets/{id}", petResponse.getId())
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Pet deleted successfully"));
+    }
+
+    @Test
+    void getPetsByCustomerId() throws Exception {
+        Set<PetResponse> petResponses = Collections.singleton(petResponse);
+        when(petService.getPetsByCustomerId(customerResponse.getId())).thenReturn(petResponses);
+
+        mockMvc.perform(get("/v1/pets/customers/{customerId}", customerResponse.getId())
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result[0].id").value(petResponse.getId()))
+                .andExpect(jsonPath("$.result[0].name").value(petResponse.getName()));
+    }
+
+    @Test
+    void getMyPetList() throws Exception {
+        Set<PetResponse> petResponses = Collections.singleton(petResponse);
+        when(petService.getMyPetList()).thenReturn(petResponses);
+
+        mockMvc.perform(get("/v1/pets/my-pet")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result[0].id").value(petResponse.getId()))
+                .andExpect(jsonPath("$.result[0].name").value(petResponse.getName()));
+    }
+
+    @Test
+    void addMyPet() throws Exception {
+        when(petService.addMyPet(any(PetCreationRequest.class))).thenReturn(petResponse);
+
+        mockMvc.perform(post("/v1/pets/my-pet")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .content(objectMapper.writeValueAsString(petCreationRequest)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.result.id").value(petResponse.getId()))
+                .andExpect(jsonPath("$.result.name").value(petResponse.getName()))
+                .andExpect(jsonPath("$.result.age").value(petResponse.getAge()))
+                .andExpect(jsonPath("$.result.speciesResponse.id").value(petResponse.getSpeciesResponse().getId()))
+                .andExpect(jsonPath("$.result.speciesResponse.name").value(petResponse.getSpeciesResponse().getName()))
+                .andExpect(jsonPath("$.result.customerResponse.id").value(customerResponse.getId()))
+                .andExpect(jsonPath("$.result.customerResponse.name").value(customerResponse.getName()));
+    }
+
     private String getAuthToken() throws Exception {
-        String username = "mtriS@gmail.com";
-        String password = "123456";
+        String username = "customer@gmail.com";
+        String password = "customerpass";
 
         String response = mockMvc.perform(post("/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -154,6 +209,4 @@ public class PetControllerTest {
         // Adjust parsing based on the actual structure
         return new ObjectMapper().readTree(response).get("result").get("token").asText();
     }
-
-
 }
