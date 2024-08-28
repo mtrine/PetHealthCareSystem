@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             const appointmentDate = new Date(booking.appointmentDate);
             const [endHours, endMinutes] = booking.sessionResponse.endTime.split(':');
             appointmentDate.setHours(endHours, endMinutes);
-
+            console.log(appointmentDate);
+            console.log(currentDateTime);
             // Kiểm tra nếu giờ hiện tại đã qua giờ kết thúc của cuộc hẹn
             if (currentDateTime > appointmentDate) {
                 return; // Bỏ qua cuộc hẹn này nếu đã qua giờ

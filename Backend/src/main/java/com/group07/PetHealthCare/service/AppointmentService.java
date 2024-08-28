@@ -58,7 +58,7 @@ public class AppointmentService {
         appointment.setStatus(request.getStatus());
         appointment.setDescription(request.getDescription());
         appointment.setAppointmentDate(request.getAppointmentDate());
-        appointment.setDeposit(request.getDeposit());
+//        appointment.setDeposit(request.getDeposit());
         appointment.setSession(sessionOpt.get());
 
         // Lưu lịch hẹn
@@ -104,7 +104,7 @@ public class AppointmentService {
         appointment.setStatus(request.getStatus());
         appointment.setDescription(request.getDescription());
         appointment.setAppointmentDate(request.getAppointmentDate());
-        appointment.setDeposit(request.getDeposit());
+//        appointment.setDeposit(request.getDeposit());
 
         // Gán bác sĩ và ca làm việc cho lịch hẹn
         appointment.setVeterinarian(veterinarianOpt.get());
@@ -157,7 +157,7 @@ public class AppointmentService {
     }
 
     @Transactional
-    @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF')")
+    @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF','CUSTOMER')")
     public AppointmentResponse changeInforAppointment(String appointmentId, AppointmentRequest request) {
         Appointment appointment = IAppointmentRepository.findById(appointmentId).orElseThrow(() -> new RuntimeException("Appointment not found"));
         if (request.getStatus() != null) {
@@ -218,5 +218,15 @@ public class AppointmentService {
     public AppointmentResponse getAppointmentDetail(String id){
         return appointmentMapper.toAppointmentResponse(IAppointmentRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND)));
     }
+    @PreAuthorize("hasRole('VETERINARIAN')")
+    public  List<AppointmentResponse> getMyAppointmentForVeterinarian(){
+        SecurityContext context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        Veterinarian veterinarian= IVeterinarianRepository.findByEmail(name).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        return getAppointmentByVeterinarianId(veterinarian.getId());
+    }
+
+
 }
 

@@ -92,7 +92,7 @@ public class AppointmentControllerTest {
                 .status("Scheduled")
                 .sessionResponse(sessionResponse)
                 .appointmentDate(LocalDate.of(2024, 8, 15))
-                .deposit(BigDecimal.valueOf(100.00))
+//                .deposit(BigDecimal.valueOf(100.00))
                 .veterinarianName("Dr. Smith")
                 .servicesResponsesList(servicesResponseSet)
                 .pet(petResponse)
@@ -104,7 +104,7 @@ public class AppointmentControllerTest {
         appointmentRequest = new AppointmentRequest();
         appointmentRequest.setStatus("Scheduled");
         appointmentRequest.setAppointmentDate(LocalDate.of(2024, 8, 15));
-        appointmentRequest.setDeposit(BigDecimal.valueOf(100.00));
+//        appointmentRequest.setDeposit(BigDecimal.valueOf(100.00));
         appointmentRequest.setVeterinarianId("2c741f51-0a22-4e2f-8022-c8093fe46964");
         appointmentRequest.setSessionId(1);
         appointmentRequest.setDescription("Thú bị đau bụng");
