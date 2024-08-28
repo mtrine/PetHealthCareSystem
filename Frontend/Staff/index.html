@@ -368,6 +368,10 @@
             position: relative;
         }
 
+        .modal-booking-section > .role-container {
+            gap: 65px;
+        }
+
         /* Checkbox modal cage */
 
         .role-container {
@@ -460,6 +464,44 @@
             font-size: 20px;
         }
 
+        .modal-booking {
+            /* display: flex; */
+            /* Ẩn modal theo mặc định */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Màu nền nửa trong suốt */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Đặt lên trên cùng */
+        }
+
+        .modal-booking .modal-booking-section {
+            width: 530px;
+            height: 250px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-booking button {
+            width: 170px;
+            height: 60px;
+            border: none;
+            border-radius: 30px;
+            font-size: 25px;
+            color: #fff;
+            background: #000;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 
@@ -514,12 +556,12 @@
                 <p>Trạng thái chuồng</p>
                 <div class="role-container">
                     <label class="checkbox">
-                        <input type="checkbox" id="full" name="role" class="role-checkbox" checked>
+                        <input type="radio" id="full" name="role" class="role-checkbox" checked>
                         <span class="checkmark"></span>
                         <label for="full">Đầy</label>
                     </label>
                     <label class="checkbox">
-                        <input type="checkbox" id="empty" name="role" class="role-checkbox">
+                        <input type="radio" id="empty" name="role" class="role-checkbox">
                         <span class="checkmark"></span>
                         <label for="empty">Trống</label>
                     </label>
@@ -567,8 +609,29 @@
             </div>
         </div>
 
+        <!-- Modal Booking -->
+        <div class="modal-booking" id="modalBooking" style="display: none;">
+            <div class="modal-booking-section">
+                <p>Chọn loại khách</p>
+                <div class="role-container">
+                    <label class="checkbox">
+                        <input type="radio" id="unre-customer" name="role" class="role-checkbox">
+                        <span class="checkmark"></span>
+                        <label for="unre-customer">Khách lẻ</label>
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" id="customer" name="role" class="role-checkbox">
+                        <span class="checkmark"></span>
+                        <label for="customer">Khách đã đăng ký</label>
+                    </label>
+                    
+                </div>
+                <button type="submit" id="confirmBookingBtn">Xác nhận</button>
+            </div>
+        </div>
+
         <div class="pet-hospitalized-section">
-            <div class="add-hospitalized-btn">
+            <div class="add-hospitalized-btn" id="addHospitalizedBtn">
                 <i class='bx bx-plus'></i>
                 <p>Thêm</p>
             </div>
@@ -688,9 +751,42 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Chuyển sang add booking
-document.getElementById('addBookingBtn').addEventListener('click', function() {
-    window.location.href = 'addBooking.html';
+// Lấy các phần tử
+const addBookingBtn = document.getElementById('addBookingBtn');
+    const modalBooking = document.getElementById('modalBooking');
+
+    // Khi nhấn vào nút "Thêm"
+    addBookingBtn.addEventListener('click', function() {
+        modalBooking.style.display = 'flex'; // Hiển thị modal
+    });
+
+    // Đóng modal khi nhấn ra ngoài modal
+    window.addEventListener('click', function(event) {
+        if (event.target === modalBooking) {
+            modalBooking.style.display = 'none'; // Ẩn modal
+        }
+    });
+
+// Chuyển sang add hospitalized
+document.getElementById('addHospitalizedBtn').addEventListener('click', function() {
+    window.location.href = 'addHospitalized.html';
 });
+
+// Lắng nghe sự kiện khi nút "Xác nhận" được nhấn
+document.getElementById('confirmBookingBtn').addEventListener('click', function() {
+        // Kiểm tra checkbox nào được chọn
+        const unreCustomerCheckbox = document.getElementById('unre-customer').checked;
+        const customerCheckbox = document.getElementById('customer').checked;
+        
+        // Điều hướng đến trang tương ứng
+        if (unreCustomerCheckbox) {
+            window.location.href = 'addBooking2.html';
+        } else if (customerCheckbox) {
+            window.location.href = 'addBooking.html';
+        } else {
+            alert('Vui lòng chọn một loại khách trước khi xác nhận.');
+        }
+    });
 
 
 
@@ -707,7 +803,7 @@ hospitalizedItems.forEach(item => {
 
 
 </script>
-<script>
+<!-- <script>
     // Lấy tất cả checkbox trong class role-checkbox
     const checkboxes = document.querySelectorAll('.role-checkbox');
 
@@ -724,5 +820,5 @@ hospitalizedItems.forEach(item => {
             }
         });
     });
-</script>
+</script> -->
 </html>
