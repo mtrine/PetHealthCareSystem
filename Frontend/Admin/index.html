@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Admin</title>
+    <link rel="stylesheet" href="../assets/font/boxicons-2.1.4/css/boxicons.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Inter:wght@100..900&display=swap');
+
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            /* Dùng phông chữ không gạch chân */
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        aside {
+            width: 250px;
+            height: 100%;
+            background-color: #fff;
+            border-right: 1px solid #ccc;
+            border-radius: 0 25px 25px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0px 4px 10px 4px #00000040;
+        }
+
+        /* Sidebar Items */
+        .sidebar-item {
+            width: 100%;
+            height: 90px;
+            text-align: center;
+            /* padding: 20px 0; */
+            border-top: 1px solid #ccc;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sidebar-item:last-child {
+            border-bottom: 1px solid #ccc;
+        }
+
+        .sidebar-item:hover {
+            background-color: #e6e6e6;
+        }
+
+        .sidebar-item img {
+            width: 50px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-item span {
+            font-size: 25px;
+            font-weight: 500;
+        }
+
+        /* Main Content Styling */
+        .content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+            font-size: 24px;
+        }
+
+        .sidebar-logo img {
+            width: 150px;
+            height: auto;
+        }
+
+        .default-section {
+            /* display: flex; */
+            display: none;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .default-section img {
+            width: 150px;
+            text-align: center;
+
+        }
+
+        .default-section p {
+            font-size: 25px;
+            font-weight: 500;
+            color: #00000054;
+        }
+
+        /* account Section */
+        .account-section {
+            padding-top: 75px;
+            display: none;
+        }
+
+        .account-section .account-container {
+            width: 1000px;
+            height: 525.6px;
+            background-color: #fff;
+            box-shadow: 0px 4px 10px 5px #00000040;
+            margin: auto;
+        }
+
+
+
+        /* Header styling */
+        .account-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 3px solid #E0E5E8;
+            border-top: 3px solid #E0E5E8;
+            list-style: none;
+            padding: 10px 0px;
+        }
+
+        .account-list-header li {
+            flex: 1;
+            text-align: center;
+            font-size: 27px;
+            font-weight: 600;
+            color: #000;
+            padding: 20px;
+        }
+
+        .account-list-header li:first-child {
+            margin-left: 30px;
+        }
+
+        .account-list-body {
+            max-height: 428px;
+            overflow-y: auto;
+        }
+
+        /* List inside each pet item */
+        .account-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 3px solid #E0E5E8;
+            list-style: none;
+        }
+
+        /* Individual item fields (li) styling */
+        .account-item li {
+            flex: 1;
+            font-size: 24px;
+            color: #000;
+            text-align: center;
+            list-style: none;
+            padding: 20px;
+        }
+
+        .account-item>.checkbox {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-left: 15px;
+            margin-bottom: 35px;
+            cursor: pointer;
+            font-size: 22px;
+            user-select: none;
+        }
+
+
+
+        /* Checkbox modal account */
+
+        .role-container {
+            display: flex;
+            gap: 100px;
+            margin-top: 40px;
+            justify-content: center;
+            margin-bottom: 40px;
+
+        }
+
+        .checkbox {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-left: 15px;
+            cursor: pointer;
+            font-size: 22px;
+            user-select: none;
+        }
+
+        .checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkbox label {
+            color: #000;
+            font-size: 25px;
+            font-weight: 600;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 34px;
+            width: 34px;
+            border: 2px solid #000;
+            border-radius: 5px;
+        }
+
+        .checkbox input:checked~.checkmark {
+            background-color: #000;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox input:checked~.checkmark:after {
+            display: block;
+        }
+
+        .checkbox .checkmark:after {
+            left: 9px;
+            top: 3px;
+            width: 8px;
+            height: 16px;
+            border: solid #fff;
+            border-width: 0 4px 4px 0;
+            transform: rotate(45deg);
+        }
+
+
+        .account-section .btn-section {
+            display: flex;
+        }
+
+        .account-section .add-acc-btn {
+            margin-left: 50px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 300px;
+            height: 58px;
+            background: #000;
+            color: #fff;
+            box-shadow: 0px 4px 10px 5px #00000040;
+            border-radius: 30px;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .account-section .add-acc-btn i {
+            font-size: 30px;
+        }
+
+        .account-section .add-acc-btn p {
+            font-size: 25px;
+            font-weight: 700;
+
+        }
+
+        .account-section .delete-acc-btn {
+            margin-left: auto;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 250px;
+            height: 58px;
+            background: #000;
+            color: #fff;
+            box-shadow: 0px 4px 10px 5px #00000040;
+            border-radius: 30px;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .account-section .delete-acc-btn i {
+            font-size: 30px;
+        }
+
+        .account-section .delete-acc-btn p {
+            font-size: 25px;
+            font-weight: 700;
+
+        }
+
+        /* account Section */
+        .add-account-section {
+            width: 1250px;
+            padding-top: 100px;
+            display: none;
+        }
+
+        .add-account-section .name-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .add-account-section .gender-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .add-account-section .email-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 0;
+        }
+
+        .add-account-section .phone-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 0;
+        }
+
+        .add-account-section .address-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 0;
+        }
+
+        .add-account-section .password-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 0;
+        }
+
+        .add-account-section .role-acc-container {
+            display: flex;
+            align-items: center;
+            margin: 40px 0 40px 0;
+        }
+
+        .add-account-section .name-container label,
+        .add-account-section .phone-container label,
+        .add-account-section .email-container label,
+        .add-account-section .address-container label,
+        .add-account-section .role-acc-container>label,
+        .add-account-section .password-container label {
+            font-size: 27px;
+            color: #000;
+            font-weight: 700;
+            margin-right: 40px;
+            margin-left: 30px;
+        }
+
+        .add-account-section .gender-container label {
+            font-size: 27px;
+            color: #000;
+            font-weight: 700;
+            margin-left: 30px;
+        }
+
+        .add-account-section .role-acc-container label {
+            font-size: 27px;
+            color: #000;
+            font-weight: 700;
+            margin-left: 30px;
+        }
+
+        .add-account-section .info-section {
+            display: flex;
+            gap: 100px;
+        }
+
+        .add-account-section .gender-options {
+            display: flex;
+        }
+
+        .add-account-section .name-container input,
+        .add-account-section .phone-container input,
+        .add-account-section .email-container input,
+        .add-account-section .address-container input,
+        .add-account-section .password-container input {
+            font-size: 25px;
+            padding: 5px 25px;
+            border: 2px solid #000;
+            border-radius: 50px;
+            outline: none;
+            height: 40px;
+            width: 400px;
+        }
+
+        .add-account-section .role-container {
+            margin-top: 0;
+            margin-bottom: 0;
+            gap: 0;
+        }
+
+        .submit {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            align-items: center;
+            gap: 100px;
+        }
+
+        .submit button {
+            width: 300px;
+            height: 60px;
+            border-radius: 50px;
+            border: none;
+            font-size: 30px;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            background-color: #000;
+            margin: 40px 0;
+            box-shadow: 0px 4px 5px 5px #00000040;
+        }
+
+
+        .submit button:hover {
+            box-shadow: 0px 4px 10px 5px #ccc;
+        }
+
+        /* Định kiểu cho bảng modal */
+        .delete-modal {
+            display: none;
+            /* Ẩn modal theo mặc định */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Màu nền nửa trong suốt */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Đặt lên trên cùng */
+        }
+
+        .delete-modal .modal-content {
+            width: 346px;
+            height: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .delete-modal .modal-content i {
+            font-size: 50px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .delete-modal .modal-content p {
+            padding: 0 10px;
+            font-size: 25px;
+            font-weight: 600;
+        }
+
+        .delete-modal .modal-content p:nth-of-type(2) {
+            font-style: italic;
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .delete-modal .modal-buttons {
+            display: flex;
+            margin-top: 30px;
+            flex-direction: row-reverse;
+        }
+
+        .delete-modal .modal-buttons button {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            font-size: 30px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+
+        .notification-message {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            width: 300px;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            text-align: center;
+            position: fixed;
+            z-index: 1000;
+        }
+
+        .notification-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .notification-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Revenue Section */
+        .revenue-section {
+            padding-top: 20px;
+            display: none;
+        }
+
+        .revenue-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .revenue-container>label[for="revenue-role"] {
+            font-size: 33px;
+            font-weight: 700;
+        }
+
+        .revenue-container label {
+            font-size: 30px;
+            color: #000;
+            font-weight: 500;
+            margin-right: 40px;
+            margin-left: 30px;
+        }
+
+        .revenue-container>.role-container {
+            gap: 0;
+        }
+
+        .day-revenue-section {
+            display: none;
+            /* padding-top: 75px; */
+        }
+
+        .day-revenue-container {
+            height: 550px;
+            background-color: #fff;
+            box-shadow: 0px 4px 10px 5px #00000040;
+        }
+
+        .day-revenue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 3px solid #E0E5E8;
+            border-top: 3px solid #E0E5E8;
+            list-style: none;
+        }
+
+        .day-revenue-header li {
+            flex: 1;
+            text-align: center;
+            font-size: 27px;
+            font-weight: 600;
+            color: #000;
+            padding: 30px 0;
+        }
+
+        .day-revenue-header li:first-child,
+        .day-revenue-body li:first-child {
+            border-right: 3px solid #E0E5E8;
+        }
+
+        .day-revenue-body {
+            max-height: 428px;
+            overflow-y: auto;
+        }
+
+        /* List inside each pet item */
+        .day-revenue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 3px solid #E0E5E8;
+            list-style: none;
+        }
+
+        /* Individual item fields (li) styling */
+        .day-revenue-item li {
+            flex: 1;
+            font-size: 24px;
+            color: #000;
+            text-align: center;
+            list-style: none;
+            padding: 30px;
+        }
+
+        /* Month revenue section */
+        .month-revenue-section {
+            display: none;
+            /* padding-top: 75px; */
+        }
+
+        .month-revenue-container {
+            height: 550px;
+            background-color: #fff;
+            box-shadow: 0px 4px 10px 5px #00000040;
+        }
+
+        .month-revenue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 3px solid #E0E5E8;
+            border-top: 3px solid #E0E5E8;
+            list-style: none;
+        }
+
+        .month-revenue-header li {
+            flex: 1;
+            text-align: center;
+            font-size: 27px;
+            font-weight: 600;
+            color: #000;
+            padding: 30px 0;
+        }
+
+        .month-revenue-header li:first-child,
+        .month-revenue-body li:first-child {
+            border-right: 3px solid #E0E5E8;
+        }
+
+        .month-revenue-body {
+            max-height: 428px;
+            overflow-y: auto;
+        }
+
+        /* List inside each pet item */
+        .month-revenue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 3px solid #E0E5E8;
+            list-style: none;
+        }
+
+        /* Individual item fields (li) styling */
+        .month-revenue-item li {
+            flex: 1;
+            font-size: 24px;
+            color: #000;
+            text-align: center;
+            list-style: none;
+            padding: 30px;
+        }
+
+        /* Year revenue section */
+        .year-revenue-section {
+            display: none;
+            /* padding-top: 75px; */
+        }
+
+        .year-revenue-container {
+            height: 550px;
+            background-color: #fff;
+            box-shadow: 0px 4px 10px 5px #00000040;
+        }
+
+        .year-revenue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 3px solid #E0E5E8;
+            border-top: 3px solid #E0E5E8;
+            list-style: none;
+        }
+
+        .year-revenue-header li {
+            flex: 1;
+            text-align: center;
+            font-size: 27px;
+            font-weight: 600;
+            color: #000;
+            padding: 30px 0;
+        }
+
+        .year-revenue-header li:first-child,
+        .year-revenue-body li:first-child {
+            border-right: 3px solid #E0E5E8;
+        }
+
+        .year-revenue-body {
+            max-height: 428px;
+            overflow-y: auto;
+        }
+
+        /* List inside each pet item */
+        .year-revenue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 3px solid #E0E5E8;
+            list-style: none;
+        }
+
+        /* Individual item fields (li) styling */
+        .year-revenue-item li {
+            flex: 1;
+            font-size: 24px;
+            color: #000;
+            text-align: center;
+            list-style: none;
+            padding: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <aside>
+        <!-- Logo Section -->
+        <div class="sidebar-logo">
+            <img src="../assets/img/logo_trang.png" alt="Logo">
+        </div>
+
+        <!-- Menu Items -->
+        <div class="sidebar-item" id="account-item">
+            <span>Tài khoản</span>
+        </div>
+        <div class="sidebar-item" id="revenue-item">
+            <span>Doanh thu</span>
+        </div>
+    </aside>
+
+    <div class="content">
+        <div class="default-section">
+            <img src="../assets/img/click.png" alt="">
+            <p>Click vào một trong các tác vụ bên trái</p>
+        </div>
+
+        <!-- Account section -->
+
+        <div class="account-section">
+            <div class="btn-section">
+                <div class="delete-acc-btn" id="deleteAccountBtn">
+                    <i class='bx bx-trash'></i>
+                    <p>Xóa tài khoản</p>
+                </div>
+                <div class="add-acc-btn" id="addAccountBtn">
+                    <i class='bx bx-plus'></i>
+                    <p>Thêm tài khoản</p>
+                </div>
+            </div>
+            <div class="account-container">
+                <ul class="account-list-header">
+                    <li>ID</li>
+                    <li>Email</li>
+                    <li>Số điện thoại</li>
+                    <li>Vai trò</li>
+                </ul>
+                <div class="account-list-body">
+                    <ul class="account-item">
+                        <label class="checkbox">
+                            <input type="checkbox" id="checkbox" name="role" class="role-checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                        <li>123-xyz</li>
+                        <li>user@gmail.com</li>
+                        <li>080808080</li>
+                        <li>CUSTOMER</li>
+                    </ul>
+                    <ul class="account-item">
+                        <label class="checkbox">
+                            <input type="checkbox" id="checkbox" name="role" class="role-checkbox">
+                            <span class="checkmark"></span>
+                        </label>
+                        <li>123-xyz</li>
+                        <li>user@gmail.com</li>
+                        <li>080808080</li>
+                        <li>STAFF</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add account -->
+
+        <div class="add-account-section">
+
+            <div class="detail-container">
+                <div class="info-section">
+                    <div class="name-container">
+                        <label for="customer-name">Tên</label>
+                        <input type="text" id="customer-name" required>
+                    </div>
+                    <div class="gender-container">
+                        <label for="customer-gender">Giới tính</label>
+                        <div class="gender-options">
+                            <label class="checkbox">
+                                <input type="radio" id="nam" name="gender" class="gender-checkbox" checked>
+                                <span class="checkmark"></span>
+                                <label for="nam">Nam</label>
+                            </label>
+                            <label class="checkbox">
+                                <input type="radio" id="nu" name="gender" class="gender-checkbox">
+                                <span class="checkmark"></span>
+                                <label for="nu">Nữ</label>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="email-container">
+                    <label for="customer-email">Email</label>
+                    <input type="text" id="customer-email" required>
+                </div>
+
+                <div class="phone-container">
+                    <label for="customer-phone">Số điện thoại</label>
+                    <input type="text" id="customer-phone" required>
+                </div>
+
+                <div class="address-container">
+                    <label for="customer-address">Địa chỉ</label>
+                    <input type="text" id="customer-address" required>
+                </div>
+
+                <div class="password-container">
+                    <label for="customer-password">Mật khẩu</label>
+                    <input type="text" id="customer-password" required>
+                </div>
+
+                <div class="role-acc-container">
+                    <label for="customer-role">Vai trò</label>
+                    <div class="role-container">
+                        <label class="checkbox">
+                            <input type="radio" id="full" name="role" class="role-acc-checkbox" checked>
+                            <span class="checkmark"></span>
+                            <label for="full">Bác sĩ</label>
+                        </label>
+                        <label class="checkbox">
+                            <input type="radio" id="empty" name="role" class="role-acc-checkbox">
+                            <span class="checkmark"></span>
+                            <label for="empty">Nhân viên</label>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit">
+                <button type="submit" id="submitButton">Thêm</button>
+            </div>
+
+        </div>
+
+        <!-- Doanh thu section -->
+        <div class="revenue-section">
+            <div class="revenue-container">
+                <label for="revenue-role">Doanh thu</label>
+                <div class="role-container">
+                    <label class="checkbox">
+                        <input type="radio" id="day-role" name="role" class="role-revenue-checkbox" onclick="toggleRevenueSection('day')">
+                        <span class="checkmark"></span>
+                        <label for="day-role">Theo ngày</label>
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" id="month-role" name="role" class="role-revenue-checkbox" onclick="toggleRevenueSection('month')">
+                        <span class="checkmark"></span>
+                        <label for="month-role">Theo tháng</label>
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" id="year-role" name="role" class="role-revenue-checkbox" onclick="toggleRevenueSection('year')">
+                        <span class="checkmark"></span>
+                        <label for="year-role">Theo năm</label>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Doanh thu theo ngày -->
+            <div class="day-revenue-section">
+                <div class="day-revenue-container">
+                    <ul class="day-revenue-header">
+                        <li>Ngày</li>
+                        <li>Tổng doanh thu</li>
+                    </ul>
+                    <div class="day-revenue-body">
+                        <ul class="day-revenue-item">
+                            <li>20/08/2024</li>
+                            <li>100000000 VND</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Doanh thu theo tháng -->
+            <div class="month-revenue-section">
+                <div class="month-revenue-container">
+                    <ul class="month-revenue-header">
+                        <li>Tháng</li>
+                        <li>Tổng doanh thu</li>
+                    </ul>
+                    <div class="month-revenue-body">
+                        <ul class="month-revenue-item">
+                            <li>08/2024</li>
+                            <li>100000000 VND</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Doanh thu theo năm -->
+            <div class="year-revenue-section">
+                <div class="year-revenue-container">
+                    <ul class="year-revenue-header">
+                        <li>Năm</li>
+                        <li>Tổng doanh thu</li>
+                    </ul>
+                    <div class="year-revenue-body">
+                        <ul class="year-revenue-item">
+                            <li>2024</li>
+                            <li>100000000 VND</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification message container -->
+        <div id="notificationMessage" class="notification-message"></div>
+
+
+        <!-- Bảng delete modal -->
+        <div id="delete-modal" class="delete-modal">
+            <div class="modal-content">
+                <i class='bx bx-error'></i>
+                <p>Xác nhận xóa?</p>
+                <p>Tài khoản đã xóa sẽ không thể phục hồi</p>
+                <div class="modal-buttons">
+                    <button id="confirm-delete">Xác nhận</button>
+                    <button id="cancel-delete">Hủy</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Lấy các phần tử cần thiết
+        const sections = {
+            defaultSection: document.querySelector('.default-section'),
+            accountSection: document.querySelector('.account-section'),
+            revenueSection: document.querySelector('.revenue-section'),
+            addAccSection: document.querySelector('.add-account-section')
+        };
+
+        const sidebarItems = {
+            accountItem: document.getElementById('account-item'),
+            revenueItem: document.getElementById('revenue-item'),
+            logo: document.querySelector('.sidebar-logo img')
+        };
+
+        const addAccountBtn = document.getElementById('addAccountBtn')
+
+        // Hàm để ẩn tất cả các phần và chỉ hiển thị phần được chọn
+        function showSection(sectionToShow) {
+            Object.values(sections).forEach(section => {
+                section.style.display = 'none'; // Ẩn tất cả các phần
+            });
+            sectionToShow.style.display = 'block'; // Hiển thị phần được chọn
+        }
+
+        // Cài đặt sự kiện click cho các mục bên thanh bên
+        sidebarItems.accountItem.addEventListener('click', () => showSection(sections.accountSection));
+
+        sidebarItems.revenueItem.addEventListener('click', () => showSection(sections.revenueSection));
+
+        // Cài đặt sự kiện click cho nút thêm tài khoản
+        addAccountBtn.addEventListener('click', () => showSection(sections.addAccSection))
+
+        // Cài đặt sự kiện click cho logo để trở về default-section
+        sidebarItems.logo.addEventListener('click', () => {
+            // Hiển thị phần default-section với display flex
+            sections.defaultSection.style.display = 'flex';
+            // Ẩn tất cả các phần khác
+            Object.values(sections).forEach(section => {
+                if (section !== sections.defaultSection) {
+                    section.style.display = 'none';
+                }
+            });
+        });
+
+        // Hiển thị phần default-section khi trang mới tải
+        document.querySelector('.default-section').style.display = 'flex';
+    });
+
+
+    document.getElementById('deleteAccountBtn').addEventListener('click', function () {
+        // Kiểm tra có checkbox nào được chọn hay không
+        const checkboxes = document.querySelectorAll('.role-checkbox');
+        const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+
+        if (isChecked) {
+            // Nếu có checkbox được chọn, hiện bảng delete modal
+            document.getElementById('delete-modal').style.display = 'flex';
+        }
+    });
+
+    // Đóng modal khi nhấn nút hủy
+    document.getElementById('cancel-delete').addEventListener('click', function () {
+        document.getElementById('delete-modal').style.display = 'none';
+    });
+
+    // Đóng modal khi xác nhận xóa
+    document.getElementById('confirm-delete').addEventListener('click', function () {
+        // Xử lý logic xóa tài khoản ở đây
+        document.getElementById('delete-modal').style.display = 'none';
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const submitButton = document.getElementById('submitButton');
+        const notificationMessage = document.getElementById('notificationMessage');
+
+        submitButton.addEventListener('click', function () {
+            // Simulate a form submission or any other logic
+            let isSuccess = true; // Set this based on your logic
+            let message = '';
+
+            if (isSuccess) {
+                message = 'Thêm thành công!';
+                notificationMessage.className = 'notification-message success';
+            } else {
+                message = 'Có lỗi xảy ra. Vui lòng thử lại!';
+                notificationMessage.className = 'notification-message error';
+            }
+
+            // Update and display the message
+            notificationMessage.textContent = message;
+            notificationMessage.style.display = 'flex';
+
+            // Optionally, hide the message after a few seconds
+            setTimeout(function () {
+                notificationMessage.style.display = 'none';
+            }, 3000); // 3 seconds
+        });
+    });
+    // Revenue section
+    function toggleRevenueSection(role) {
+        const daySection = document.querySelector('.day-revenue-section');
+        const monthSection = document.querySelector('.month-revenue-section');
+        const yearSection = document.querySelector('.year-revenue-section');
+
+        // Reset all sections to hidden
+        daySection.style.display = 'none';
+        monthSection.style.display = 'none';
+        yearSection.style.display = 'none';
+
+        // Show the selected section
+        if (role === 'day') {
+            daySection.style.display = 'block';
+        } else if (role === 'month') {
+            monthSection.style.display = 'block';
+        } else if (role === 'year') {
+            yearSection.style.display = 'block';
+        }
+    }
+
+
+</script>
+<!-- <script>
+    // Lấy tất cả checkbox trong class role-checkbox
+    const checkboxes = document.querySelectorAll('.role-acc-checkbox');
+    const checkGenders = document.querySelectorAll('.gender-checkbox');
+    const checkRevenues = document.querySelectorAll('.role-revenue-checkbox');
+
+    // Thêm sự kiện change cho từng checkbox
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            // Nếu checkbox được chọn, bỏ chọn các checkbox khác
+            if (checkbox.checked) {
+                checkboxes.forEach(cb => {
+                    if (cb !== checkbox) {
+                        cb.checked = false;
+                    }
+                });
+            }
+        });
+    });
+
+    checkGenders.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            // Nếu checkbox được chọn, bỏ chọn các checkbox khác
+            if (checkbox.checked) {
+                checkGenders.forEach(cb => {
+                    if (cb !== checkbox) {
+                        cb.checked = false;
+                    }
+                });
+            }
+        });
+    });
+
+    checkRevenues.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            // Nếu checkbox được chọn, bỏ chọn các checkbox khác
+            if (checkbox.checked) {
+                checkRevenues.forEach(cb => {
+                    if (cb !== checkbox) {
+                        cb.checked = false;
+                    }
+                });
+            }
+        });
+    });
+
+
+</script> -->
+
+</html>
