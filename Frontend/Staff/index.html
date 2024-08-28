@@ -368,6 +368,10 @@
             position: relative;
         }
 
+        .modal-booking-section > .role-container {
+            gap: 65px;
+        }
+
         /* Checkbox modal cage */
 
         .role-container {
@@ -460,6 +464,44 @@
             font-size: 20px;
         }
 
+        .modal-booking {
+            /* display: flex; */
+            /* Ẩn modal theo mặc định */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Màu nền nửa trong suốt */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Đặt lên trên cùng */
+        }
+
+        .modal-booking .modal-booking-section {
+            width: 530px;
+            height: 250px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-booking button {
+            width: 170px;
+            height: 60px;
+            border: none;
+            border-radius: 30px;
+            font-size: 25px;
+            color: #fff;
+            background: #000;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
         .no-vet-name {
             color: red;
         }
@@ -545,6 +587,27 @@
                 <div class="booking-list-body">
 
                 </div>
+            </div>
+        </div>
+
+        <!-- Modal Booking -->
+        <div class="modal-booking" id="modalBooking" style="display: none;">
+            <div class="modal-booking-section">
+                <p>Chọn loại khách</p>
+                <div class="role-container">
+                    <label class="checkbox">
+                        <input type="radio" id="unre-customer" name="role" class="role-checkbox">
+                        <span class="checkmark"></span>
+                        <label for="unre-customer">Khách lẻ</label>
+                    </label>
+                    <label class="checkbox">
+                        <input type="radio" id="customer" name="role" class="role-checkbox">
+                        <span class="checkmark"></span>
+                        <label for="customer">Khách đã đăng ký</label>
+                    </label>
+                    
+                </div>
+                <button type="submit" id="confirmBookingBtn">Xác nhận</button>
             </div>
         </div>
 
