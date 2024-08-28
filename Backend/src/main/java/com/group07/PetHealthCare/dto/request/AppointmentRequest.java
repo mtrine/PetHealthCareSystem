@@ -14,11 +14,11 @@ import java.util.Set;
 public class AppointmentRequest {
     private String status;
     private LocalDate appointmentDate;
-    private BigDecimal deposit;
+    private Double deposit;
     private String petId;
     private Set<String> serviceId;
     private String veterinarianId;
-    private String sessionId;
+    private int sessionId;
     private String description;
 
 }

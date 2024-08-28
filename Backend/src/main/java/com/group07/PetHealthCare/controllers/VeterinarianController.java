@@ -20,7 +20,7 @@ public class VeterinarianController {
     private VeterinarianService veterinarianService;
 
     @GetMapping
-    public ApiResponse<List<VeterinarianResponse>> getAllCustomers() {
+    public ApiResponse<List<VeterinarianResponse>> getAllVeterinarian() {
         ApiResponse<List<VeterinarianResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(veterinarianService.getAllVeterinarian());
         return apiResponse;
@@ -41,6 +41,15 @@ public class VeterinarianController {
         ApiResponse<List<SessionResponse>> apiResponse = new ApiResponse<>();
         List<SessionResponse> availableSessions = veterinarianService.getAvailableSessionsForVeterinarian(veterinarianID, appointmentDate);
         apiResponse.setResult(availableSessions);
+        return apiResponse;
+    }
+
+    @GetMapping("/{sessionId}/get-available-veterinarian-session")
+    public ApiResponse<List<VeterinarianResponse>> getAvailableVeterinariansForSessionAndDate(
+            @PathVariable("sessionId") int sessionId,
+            @RequestParam("date") LocalDate appointmentDate) {
+        ApiResponse<List<VeterinarianResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(veterinarianService.getAvailableVeterinariansForSessionAndDate(sessionId, appointmentDate));
         return apiResponse;
     }
 }

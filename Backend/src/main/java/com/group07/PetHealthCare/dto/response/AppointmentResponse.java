@@ -16,9 +16,9 @@ public class AppointmentResponse {
     private String status;
     private String description;
     private LocalDate appointmentDate;
-    private BigDecimal deposit;
+    private Double deposit;
     private String veterinarianName;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private Set<String> serviceName;
+    private SessionResponse sessionResponse;
+    private Set<ServicesResponse> servicesResponsesList;
+    private PetResponse pet;
 }

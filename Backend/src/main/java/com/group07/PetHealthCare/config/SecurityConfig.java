@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig{
     private final String[] PUBLIC_ENDPOINTS = {
-            "/v1/auth/**"
+            "/v1/auth/**","/v1/payments/**"
     };
 
     @Autowired
@@ -27,7 +27,9 @@ public class SecurityConfig{
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests(requests ->
-                requests.requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
+                requests
+                        .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated()
         );
         http.oauth2ResourceServer(

@@ -22,8 +22,7 @@ public class Vaccine {
     @Column(name = "name", length = 100)
     private String name;
 
-    @Column(name = "expDate")
-    private LocalDate expDate;
+
 
     @OneToMany(mappedBy = "vaccine", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

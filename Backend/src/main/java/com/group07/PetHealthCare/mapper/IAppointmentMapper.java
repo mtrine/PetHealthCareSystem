@@ -1,6 +1,7 @@
 package com.group07.PetHealthCare.mapper;
 
 import com.group07.PetHealthCare.dto.response.AppointmentResponse;
+import com.group07.PetHealthCare.dto.response.ServicesResponse;
 import com.group07.PetHealthCare.pojo.Appointment;
 import com.group07.PetHealthCare.pojo.AppointmentServices;
 import org.mapstruct.Mapper;
@@ -11,21 +12,27 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = {IPetMapper.class,IServiceMapper.class})
 public interface IAppointmentMapper {
     @Mapping(source = "veterinarian.name", target = "veterinarianName")
-    @Mapping(source = "session.startTime", target = "startTime")
-    @Mapping(source = "session.endTime", target = "endTime")
-    @Mapping(source = "appointmentServices", target = "serviceName", qualifiedByName = "mapServiceNames")
+    @Mapping(source = "session", target = "sessionResponse")
+    @Mapping(source = "pet",target="pet")
+    @Mapping(source = "appointmentServices", target = "servicesResponsesList", qualifiedByName = "mapServiceResponse")
     AppointmentResponse toAppointmentResponse(Appointment appointment);
 
     List<AppointmentResponse> toAppointmentResponses(List<Appointment> appointments);
     Appointment toAppointment(AppointmentResponse appointmentResponse);
 
-    @Named("mapServiceNames")
-    default Set<String> mapServiceNames(Set<AppointmentServices> appointmentServices) {
+    @Named("mapServiceResponse")
+    default Set<ServicesResponse> mapServiceResponse(Set<AppointmentServices> appointmentServices) {
         return appointmentServices.stream()
-                .map(appointmentService -> appointmentService.getService().getName())
+                .map(appointmentService -> {
+                    ServicesResponse servicesResponse = new ServicesResponse();
+                    servicesResponse.setId(appointmentService.getService().getId());
+                    servicesResponse.setName(appointmentService.getService().getName());
+                    servicesResponse.setUnitPrice(appointmentService.getService().getUnitPrice());
+                    return servicesResponse;
+                })
                 .collect(Collectors.toSet());
     }
  }

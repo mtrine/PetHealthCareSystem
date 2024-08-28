@@ -6,6 +6,7 @@ import com.group07.PetHealthCare.dto.request.ApiResponse;
 import com.group07.PetHealthCare.dto.request.AppointmentRequest;
 import com.group07.PetHealthCare.dto.response.AppointmentResponse;
 import com.group07.PetHealthCare.pojo.Appointment;
+import com.group07.PetHealthCare.respositytory.IAppointmentRepository;
 import com.group07.PetHealthCare.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class AppointmentController {
             return apiResponse;
     }
 
-    @GetMapping("/{veterinarianId}")
+    @GetMapping("/{veterinarianId}/veterinarians")
     public ApiResponse<List<AppointmentResponse>> getAppointmentByVeterinarianId(@PathVariable("veterinarianId") String veterinarianId) {
         ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(appointmentService.getAppointmentByVeterinarianId(veterinarianId));
@@ -50,6 +51,41 @@ public class AppointmentController {
     public ApiResponse<AppointmentResponse> changeInforAppointment(@PathVariable("appointmentId") String appointmentId,@RequestBody  AppointmentRequest request){
         ApiResponse<AppointmentResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(appointmentService.changeInforAppointment(appointmentId,request));
+        return apiResponse;
+    }
+
+    @GetMapping("/{custometId}/customer")
+    public ApiResponse<List<AppointmentResponse>> getAppointmentByCustometId(@PathVariable("custometId") String custometId) {
+        ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(appointmentService.getAppointmentByCustomerId(custometId));
+        return apiResponse;
+    }
+
+    @GetMapping("/my-appointment-for-customer")
+    public ApiResponse<List<AppointmentResponse>> getMyAppointmentForCustomer() {
+        ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(appointmentService.getMyAppointmentForCustomer());
+        return apiResponse;
+    }
+
+    @GetMapping("/{petId}/pets")
+    public  ApiResponse<List<AppointmentResponse>> getAppointmentByPetId(@PathVariable("petId") String petId) {
+        ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(appointmentService.getAppointmentByPetId(petId));
+        return apiResponse;
+    }
+
+    @GetMapping(("/{appointmentId}"))
+    public ApiResponse<AppointmentResponse> getAppointmentByAppointmentId(@PathVariable("appointmentId") String appointmentId) {
+        ApiResponse<AppointmentResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(appointmentService.getAppointmentDetail(appointmentId));
+        return apiResponse;
+    }
+
+    @GetMapping("/my-appointment-for-veterinarian")
+    public ApiResponse<List<AppointmentResponse>> getMyAppointmentForVeterinarian() {
+        ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(appointmentService.getMyAppointmentForVeterinarian());
         return apiResponse;
     }
 }

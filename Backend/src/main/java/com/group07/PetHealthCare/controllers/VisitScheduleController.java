@@ -6,10 +6,9 @@ import com.group07.PetHealthCare.dto.response.VisitScheduleResponse;
 import com.group07.PetHealthCare.pojo.VisitSchedule;
 import com.group07.PetHealthCare.service.VisitScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/visitschedules")
@@ -23,5 +22,12 @@ public class VisitScheduleController {
        ApiResponse<VisitScheduleResponse> apiResponse=new ApiResponse<>();
         apiResponse.setResult(visitScheduleService.createVisitSchedule(visitScheduleRequest));
         return apiResponse;
+    }
+
+    @GetMapping("/my-visit-schedule")
+    public ApiResponse<List<VisitScheduleResponse>> getMyVisitSchedule() {
+       ApiResponse<List<VisitScheduleResponse>> apiResponse=new ApiResponse<>();
+       apiResponse.setResult(visitScheduleService.getMyVisitSchedules());
+       return apiResponse;
     }
 }

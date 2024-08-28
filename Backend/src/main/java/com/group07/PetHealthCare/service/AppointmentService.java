@@ -3,18 +3,24 @@ package com.group07.PetHealthCare.service;
 import com.group07.PetHealthCare.dto.request.AppointmentRequest;
 import com.group07.PetHealthCare.dto.response.AppointmentResponse;
 import com.group07.PetHealthCare.enumData.Role;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.mapper.IAppointmentMapper;
 import com.group07.PetHealthCare.pojo.*;
 import com.group07.PetHealthCare.respositytory.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -31,6 +37,8 @@ public class AppointmentService {
     private ISessionsRepository ISessionsRepository;
     @Autowired
     private IAppointmentServicesRepository IAppointmentServicesRepository;
+    @Autowired
+    private ICustomerRepository customerRepository;
     @Autowired
     private IAppointmentMapper appointmentMapper;
 
@@ -50,7 +58,7 @@ public class AppointmentService {
         appointment.setStatus(request.getStatus());
         appointment.setDescription(request.getDescription());
         appointment.setAppointmentDate(request.getAppointmentDate());
-        appointment.setDeposit(request.getDeposit());
+//        appointment.setDeposit(request.getDeposit());
         appointment.setSession(sessionOpt.get());
 
         // Lưu lịch hẹn
@@ -96,7 +104,7 @@ public class AppointmentService {
         appointment.setStatus(request.getStatus());
         appointment.setDescription(request.getDescription());
         appointment.setAppointmentDate(request.getAppointmentDate());
-        appointment.setDeposit(request.getDeposit());
+//        appointment.setDeposit(request.getDeposit());
 
         // Gán bác sĩ và ca làm việc cho lịch hẹn
         appointment.setVeterinarian(veterinarianOpt.get());
@@ -107,7 +115,6 @@ public class AppointmentService {
 
         // Lưu các dịch vụ bổ sung
         for (String serviceId : request.getServiceId()) {
-            System.out.print("Service Id: " + serviceId);
             Services service = IServiceRepository.findById(serviceId).orElseThrow(() -> new RuntimeException("Service not found"));
             AppointmentServices appointmentServices = new AppointmentServices();
             appointmentServices.setAppointment(savedAppointment);
@@ -124,7 +131,6 @@ public class AppointmentService {
     @Transactional
     @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF')")
     public List<AppointmentResponse> getAllAppointments() {
-
         return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findAll());
     }
     @Transactional
@@ -133,8 +139,25 @@ public class AppointmentService {
         return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findByVeterinarianId(veterinarianId));
     }
 
+    public List<AppointmentResponse> getAppointmentByCustomerId(String customerId){
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+
+        // Lấy danh sách thú cưng của khách hàng
+        Set<Pet> pets = customer.getPets();
+
+        // Lấy danh sách lịch hẹn của tất cả thú cưng
+        List<Appointment> appointments = pets.stream()
+                .flatMap(pet -> IAppointmentRepository.findByPetId(pet.getId()).stream())
+                .collect(Collectors.toList());
+
+        // Chuyển đổi danh sách lịch hẹn thành AppointmentResponse và trả về
+        return appointmentMapper.toAppointmentResponses(appointments);
+
+    }
+
     @Transactional
-    @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF')")
+    @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF','CUSTOMER')")
     public AppointmentResponse changeInforAppointment(String appointmentId, AppointmentRequest request) {
         Appointment appointment = IAppointmentRepository.findById(appointmentId).orElseThrow(() -> new RuntimeException("Appointment not found"));
         if (request.getStatus() != null) {
@@ -172,8 +195,36 @@ public class AppointmentService {
                 IAppointmentServicesRepository.save(appointmentServices);
             }
         }
+        if(request.getVeterinarianId()!=null){
+            Veterinarian veterinarian= IVeterinarianRepository.findById(request.getVeterinarianId()).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+            appointment.setVeterinarian(veterinarian);
+        }
 
         return appointmentMapper.toAppointmentResponse(IAppointmentRepository.save(appointment));
+    }
+
+    public List<AppointmentResponse> getMyAppointmentForCustomer(){
+        SecurityContext context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        Customer customer = customerRepository.findByEmail(name).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        return getAppointmentByCustomerId(customer.getId());
+    }
+
+    public List<AppointmentResponse> getAppointmentByPetId(String petId){
+        return appointmentMapper.toAppointmentResponses(IAppointmentRepository.findByPetId(petId));
+    }
+
+    @PreAuthorize("hasAnyRole('VETERINARIAN', 'STAFF','CUSTOMER')")
+    public AppointmentResponse getAppointmentDetail(String id){
+        return appointmentMapper.toAppointmentResponse(IAppointmentRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND)));
+    }
+    @PreAuthorize("hasRole('VETERINARIAN')")
+    public  List<AppointmentResponse> getMyAppointmentForVeterinarian(){
+        SecurityContext context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        Veterinarian veterinarian= IVeterinarianRepository.findByEmail(name).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        return getAppointmentByVeterinarianId(veterinarian.getId());
     }
 
 

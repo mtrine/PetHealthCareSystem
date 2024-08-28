@@ -60,4 +60,11 @@ public class HospitalizationController {
         apiResponse.setResult(hospitalizationService.getHospitalizationByPetId(petId));
         return apiResponse;
     }
+
+    @GetMapping("/my-hospitalization")
+    public ApiResponse<List<HospitalizationResponse>> getMyHospitalization() {
+        ApiResponse<List<HospitalizationResponse>> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(hospitalizationService.getMyHospitalization());
+        return apiResponse;
+    }
 }

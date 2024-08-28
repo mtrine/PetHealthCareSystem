@@ -308,77 +308,7 @@
                 <li>Thao tác</li>
             </ul>
             <div class="pet-items-container">
-                <ul class="pet-item">
-                    <li>abc-xyz-123</li>
-                    <li>Tên thú cưng 1</li>
-                    <li>2</li>
-                    <li>Mèo/Đực</li>
-                    <li>
-                        <button onclick="showModal()" class="delete-btn">
-                            <i class='bx bx-trash' style='color:#5E5E5E'></i>
-                        </button>
-                        <button class="edit-btn">
-                            <i class='bx bx-pencil' style='color:#5E5E5E'></i>
-                        </button>
-                    </li>
-                </ul>
-                <ul class="pet-item">
-                    <li>abc-xyz-123</li>
-                    <li>Tên thú cưng 1</li>
-                    <li>2</li>
-                    <li>Mèo/Đực</li>
-                    <li>
-                        <button class="delete-btn" onclick="showModal()">
-                            <i class='bx bx-trash' style='color:#5E5E5E'></i>
-                        </button>
-                        <button class="edit-btn">
-                            <i class='bx bx-pencil' style='color:#5E5E5E'></i>
-                        </button>
-                    </li>
-                </ul>
-                <ul class="pet-item">
-                    <li>abc-xyz-123</li>
-                    <li>Tên thú cưng 1</li>
-                    <li>2</li>
-                    <li>Mèo/Đực</li>
-                    <li>
-                        <button class="delete-btn" onclick="showModal()">
-                            <i class='bx bx-trash' style='color:#5E5E5E'></i>
-                        </button>
-                        <button class="edit-btn">
-                            <i class='bx bx-pencil' style='color:#5E5E5E'></i>
-                        </button>
-                    </li>
-                </ul>
-                <ul class="pet-item">
-                    <li>abc-xyz-123</li>
-                    <li>Tên thú cưng 1</li>
-                    <li>2</li>
-                    <li>Mèo/Đực</li>
-                    <li>
-                        <button class="delete-btn" onclick="showModal()">
-                            <i class='bx bx-trash' style='color:#5E5E5E'></i>
-                        </button>
-                        <button class="edit-btn">
-                            <i class='bx bx-pencil' style='color:#5E5E5E'></i>
-                        </button>
-                    </li>
-                </ul>
-                <ul class="pet-item">
-                    <li>abc-xyz-123</li>
-                    <li>Tên thú cưng 1</li>
-                    <li>2</li>
-                    <li>Mèo/Đực</li>
-                    <li>
-                        <button class="delete-btn" onclick="showModal()">
-                            <i class='bx bx-trash' style='color:#5E5E5E'></i>
-                        </button>
-                        <button class="edit-btn">
-                            <i class='bx bx-pencil' style='color:#5E5E5E'></i>
-                        </button>
-                    </li>
-                </ul>
-                <!-- Thêm các pet-item khác tương tự -->
+
             </div>
         </div>
     </div>
@@ -403,73 +333,18 @@
         <div class="modal-content">
             <i class='bx bx-error'></i>
             <p>Xác nhận muốn xóa thú cưng</p>
-            <p>"abc-xyz-123"?</p>
+            <p>Bạn có muốn xóa không ?</p>
             <div class="modal-buttons">
                 <button onclick="hideModal()">Hủy</button>
-                <button onclick="hideModal()">Xóa</button>
+                <button id="delete-btn">Xóa</button>
             </div>
         </div>
     </div>
 
 </body>
-<script>
-    // Bật subnav của customer
-    document.addEventListener('DOMContentLoaded', function () {
-        const headerBtn = document.querySelector('.header-btn');
-        const subNavLoggedIn = document.querySelector('.sub-nav.logged-in');
+<script src="./config/config.js"></script>
+<script src="./js/petList.js">
 
-        headerBtn.addEventListener('click', function () {
-            // Toggle hiển thị sub-nav
-            subNavLoggedIn.style.display = (subNavLoggedIn.style.display === 'block' ? 'none' : 'block');
-        });
-
-        // Đóng sub-nav khi nhấp ra ngoài
-        document.addEventListener('click', function (event) {
-            if (!headerBtn.contains(event.target)) {
-                subNavLoggedIn.style.display = 'none';
-            }
-        });
-    });
-
-    // Thao tác ấn vào pet-item
-    document.addEventListener("DOMContentLoaded", function () {
-        // Handle pet-item clicks
-        document.querySelectorAll('.pet-item').forEach(function (item) {
-            item.addEventListener('click', function (event) {
-                // Prevent navigation when clicking on buttons inside pet-item
-                if (event.target.closest('.delete-btn') || event.target.closest('.edit-btn')) {
-                    return;
-                }
-                window.location.href = 'PetInfo.html';
-            });
-        });
-
-        // Handle edit-btn clicks
-        document.querySelectorAll('.edit-btn').forEach(function (button) {
-            button.addEventListener('click', function (event) {
-                event.stopPropagation(); // Prevent triggering the pet-item click event
-                window.location.href = 'EditPet.html';
-            });
-        });
-
-        // Handle PetInfo-btn clicks
-        document.querySelectorAll('.add-pet').forEach(function (button) {
-            button.addEventListener('click', function (event) {
-                event.stopPropagation(); // Prevent triggering the pet-item click event
-                window.location.href = 'AddPet.html';
-            });
-        });
-    });
-
-    // Hiển thị modal
-    function showModal() {
-        document.getElementById('delete-modal').style.display = 'flex';
-    }
-
-    // Ẩn modal
-    function hideModal() {
-        document.getElementById('delete-modal').style.display = 'none';
-    }
 
 </script>
 

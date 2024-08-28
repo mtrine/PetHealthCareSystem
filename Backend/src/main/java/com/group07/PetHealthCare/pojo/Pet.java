@@ -41,7 +41,7 @@ public class Pet {
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<VaccinePet> petVaccines = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "pet")
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private Set<Appointment> appointments= new LinkedHashSet<>();
 }

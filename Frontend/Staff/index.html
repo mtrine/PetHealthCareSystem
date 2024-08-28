@@ -502,6 +502,9 @@
             cursor: pointer;
         }
 
+        .no-vet-name {
+            color: red;
+        }
     </style>
 </head>
 
@@ -530,21 +533,14 @@
             <p>Click vào một trong các tác vụ bên trái</p>
         </div>
 
-        <div class="cage-section" >
+        <div class="cage-section">
             <div class="cage-container">
                 <ul class="cage-list-header">
                     <li>ID</li>
-                    <li>Chuồng</li>
                     <li>Tình trạng</li>
-                    <li>ID thú</li>
                 </ul>
                 <div class="cage-list-body">
-                    <ul class="cage-item">
-                        <li>123-xyz</li>
-                        <li>1</li>
-                        <li>Đầy</li>
-                        <li>abc-xyz</li>
-                    </ul>
+
                 </div>
             </div>
         </div>
@@ -556,16 +552,16 @@
                 <p>Trạng thái chuồng</p>
                 <div class="role-container">
                     <label class="checkbox">
-                        <input type="radio" id="full" name="role" class="role-checkbox" checked>
+                        <input type="checkbox" id="full" name="role" class="role-checkbox" checked>
                         <span class="checkmark"></span>
                         <label for="full">Đầy</label>
                     </label>
                     <label class="checkbox">
-                        <input type="radio" id="empty" name="role" class="role-checkbox">
+                        <input type="checkbox" id="empty" name="role" class="role-checkbox">
                         <span class="checkmark"></span>
                         <label for="empty">Trống</label>
                     </label>
-                    
+
                 </div>
                 <div class="input-id-pet" style="display: none;">
                     <label for="">ID thú</label>
@@ -589,22 +585,7 @@
                     <li></li>
                 </ul>
                 <div class="booking-list-body">
-                    <ul class="booking-item">
-                        <li>123-xyz</li>
-                        <li>Nguyễn Văn A</li>
-                        <li>345-abc</li>
-                        <li>10/8/2024</li>
-                        <li>2</li>
-                        <li><a href="detailBooking.html">Xem chi tiết</a></li>
-                    </ul>
-                    <ul class="booking-item">
-                        <li>123-xyz</li>
-                        <li style="color:#FF0F0F;">Chưa được xếp</li>
-                        <li>345-abc</li>
-                        <li>10/8/2024</li>
-                        <li>2</li>
-                        <li><a href="detailBooking2.html">Xem chi tiết</a></li>
-                    </ul>
+
                 </div>
             </div>
         </div>
@@ -631,7 +612,7 @@
         </div>
 
         <div class="pet-hospitalized-section">
-            <div class="add-hospitalized-btn" id="addHospitalizedBtn">
+            <div class="add-hospitalized-btn">
                 <i class='bx bx-plus'></i>
                 <p>Thêm</p>
             </div>
@@ -643,182 +624,15 @@
                     <li>Tình trạng sức khỏe hiện tại</li>
                 </ul>
                 <div class="hospitalized-list-body">
-                    <ul class="hospitalized-item">
-                        <li>123-xyz</li>
-                        <li>02/08/2024</li>
-                        <li>2</li>
-                        <li>Dần hồi phục, ở thêm 2 ngày để theo dõi</li>
-                    </ul>
-                    
+
                 </div>
             </div>
         </div>
     </div>
 </body>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-    // Lấy các phần tử cần thiết
-    const sections = {
-        defaultSection: document.querySelector('.default-section'),
-        cageSection: document.querySelector('.cage-section'),
-        bookingSection: document.querySelector('.booking-section'),
-        petHospitalizedSection: document.querySelector('.pet-hospitalized-section')
-    };
-
-    const sidebarItems = {
-        cageItem: document.getElementById('cage-item'),
-        bookingItem: document.getElementById('booking-item'),
-        hospitalizedItem: document.getElementById('hospitalized-item'),
-        logo: document.querySelector('.sidebar-logo img')
-    };
-
-    // Hàm để ẩn tất cả các phần và chỉ hiển thị phần được chọn
-    function showSection(sectionToShow) {
-        Object.values(sections).forEach(section => {
-            section.style.display = 'none'; // Ẩn tất cả các phần
-        });
-        sectionToShow.style.display = 'block'; // Hiển thị phần được chọn
-    }
-
-    // Cài đặt sự kiện click cho các mục bên thanh bên
-    sidebarItems.cageItem.addEventListener('click', () => showSection(sections.cageSection));
-    sidebarItems.bookingItem.addEventListener('click', () => showSection(sections.bookingSection));
-    sidebarItems.hospitalizedItem.addEventListener('click', () => showSection(sections.petHospitalizedSection));
-    // Cài đặt sự kiện click cho logo để trở về default-section
-    sidebarItems.logo.addEventListener('click', () => {
-        // Hiển thị phần default-section với display flex
-        sections.defaultSection.style.display = 'flex';
-        // Ẩn tất cả các phần khác
-        Object.values(sections).forEach(section => {
-            if (section !== sections.defaultSection) {
-                section.style.display = 'none';
-            }
-        });
-    });
-
-    // Hiển thị phần default-section khi trang mới tải
-    document.querySelector('.default-section').style.display = 'flex';
-});
-
-
-// Hiên cage modal
-document.addEventListener('DOMContentLoaded', function() {
-    var cageItem = document.querySelector('.cage-item');
-    var modal = document.querySelector('.modal-cage');
-    var modalSection = document.querySelector('.modal-cage-section');
-    var petIdInput = document.querySelector('#pet-id');
-    var inputIdPetContainer = document.querySelector('.input-id-pet');
-    var fullCheckbox = document.querySelector('#full');
-    var emptyCheckbox = document.querySelector('#empty');
-
-    // Theo dõi thay đổi của checkbox 'Trống'
-    emptyCheckbox.addEventListener('change', function() {
-        if (this.checked) {
-            inputIdPetContainer.style.display = 'flex';
-        } else {
-            inputIdPetContainer.style.display = 'none';
-        }
-    });
-
-    // Theo dõi thay đổi của checkbox 'Đầy' và tự động kiểm tra checkbox 'Trống'
-    fullCheckbox.addEventListener('change', function() {
-        if (this.checked) {
-            emptyCheckbox.checked = false;
-            inputIdPetContainer.style.display = 'none';
-        }
-    });
-
-    // Hiển thị modal khi nhấn vào mục
-    cageItem.addEventListener('click', function() {
-        // Mở modal và cập nhật giá trị của ô nhập ID thú
-        // petIdInput.value = '123-xyz';
-        modal.style.display = 'flex';
-    });
-
-    // Đóng modal khi nhấn vào khu vực ngoài modal
-    window.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
-
-    // Ngăn chặn sự kiện click trên modal-cage-section
-    modalSection.addEventListener('click', function(event) {
-        event.stopPropagation();
-    });
-
-    
-});
-
-// Chuyển sang add booking
-// Lấy các phần tử
-const addBookingBtn = document.getElementById('addBookingBtn');
-    const modalBooking = document.getElementById('modalBooking');
-
-    // Khi nhấn vào nút "Thêm"
-    addBookingBtn.addEventListener('click', function() {
-        modalBooking.style.display = 'flex'; // Hiển thị modal
-    });
-
-    // Đóng modal khi nhấn ra ngoài modal
-    window.addEventListener('click', function(event) {
-        if (event.target === modalBooking) {
-            modalBooking.style.display = 'none'; // Ẩn modal
-        }
-    });
-
-// Chuyển sang add hospitalized
-document.getElementById('addHospitalizedBtn').addEventListener('click', function() {
-    window.location.href = 'addHospitalized.html';
-});
-
-// Lắng nghe sự kiện khi nút "Xác nhận" được nhấn
-document.getElementById('confirmBookingBtn').addEventListener('click', function() {
-        // Kiểm tra checkbox nào được chọn
-        const unreCustomerCheckbox = document.getElementById('unre-customer').checked;
-        const customerCheckbox = document.getElementById('customer').checked;
-        
-        // Điều hướng đến trang tương ứng
-        if (unreCustomerCheckbox) {
-            window.location.href = 'addBooking2.html';
-        } else if (customerCheckbox) {
-            window.location.href = 'addBooking.html';
-        } else {
-            alert('Vui lòng chọn một loại khách trước khi xác nhận.');
-        }
-    });
-
-
-
-// Lấy tất cả các mục hospitalized-item
-const hospitalizedItems = document.querySelectorAll('.hospitalized-item');
-
-// Thêm sự kiện click cho từng mục
-hospitalizedItems.forEach(item => {
-    item.addEventListener('click', function() {
-        window.location.href = 'detailHospitalized.html';
-    });
-});
-
-
-
-</script>
-<!-- <script>
-    // Lấy tất cả checkbox trong class role-checkbox
-    const checkboxes = document.querySelectorAll('.role-checkbox');
-
-    // Thêm sự kiện change cho từng checkbox
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            // Nếu checkbox được chọn, bỏ chọn các checkbox khác
-            if (checkbox.checked) {
-                checkboxes.forEach(cb => {
-                    if (cb !== checkbox) {
-                        cb.checked = false;
-                    }
-                });
-            }
-        });
-    });
-</script> -->
+<script src="../config/config.js"></script>
+<script src="../js/homeStaff.js"></script>
+<script src="../js/cage.js"></script>
+<script src="../js/booking.js"></script>
+<script src="../js/hospitalization.js"></script>
 </html>

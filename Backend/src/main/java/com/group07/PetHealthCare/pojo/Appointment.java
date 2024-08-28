@@ -31,8 +31,8 @@ public class Appointment {
     @Column(name = "appointmentDate")
     private LocalDate appointmentDate;
 
-    @Column(name = "deposit", precision = 10, scale = 2)
-    private BigDecimal deposit;
+    @Column(name = "deposit")
+    private Double deposit;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "petID")

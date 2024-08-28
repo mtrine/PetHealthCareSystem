@@ -18,6 +18,7 @@ public class UserRequest {
     private Boolean sex;
     @Size(min = 6, message = "PASS_INVALID")
     private String password;
+    private String oldPassword;
     private String role;
     // Fields specific to Veterinarian
     private Boolean isFulltime;

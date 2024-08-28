@@ -110,20 +110,16 @@
         </ul>
         <div class="header-btn">
             <i class='bx bx-user-circle'></i>
-            <ul class="sub-nav">
-                <li><a href="login.html">Đăng nhập</a></li>
-                <li><a href="register.html">Đăng ký</a></li>
-            </ul>
+           
             <ul class="sub-nav logged-in">
                 <li><a href="PetList.html">Danh sách thú cưng</a></li>
                 <li><a href="AppointmentList.html">Đánh giá lượt thăm khám</a></li>
                 <li><a href="AppointmentTracking.html">Theo dõi lịch hẹn</a></li>
                 <li><a href="PetTracking.html">Theo dõi nhập viện</a></li>
                 <li><a href="CustomerInfo.html">Thông tin cá nhân</a></li>
-                <li><a href="register.html">Đăng xuất</a></li>
+                <li><a href="register.html" id="logout">Đăng xuất</a></li>
             </ul>
         </div>
-
     </header>
     <div id="payment-methods">
         <div class="header-container">
@@ -132,33 +128,17 @@
         </div>
         <div class="radio-container">
             <div class="radio-item">
-                <img src="./assets/img/logo_momo.jpg" alt="MoMo">
-                <div>
-                    <label for="momo">MoMo</label>
-                    <p>xxx-xxx-xxx</p>
-                </div>
-                <input type="radio" id="momo" name="payment-method" value="momo">
-            </div>
-            <div class="radio-item">
                 <img src="./assets/img/logo_vnpay.jpg" alt="VNPay">
                 <div>
                     <label for="vnpay">VNPay</label>
-                    <p>xxx-xxx-xxx</p>
                 </div>
                 <input type="radio" id="vnpay" name="payment-method" value="vnpay">
             </div>
-            <div class="radio-item">
-                <img src="./assets/img/logo_zalopay.jpg" alt="ZaloPay">
-                <div>
-                    <label for="zalopay">ZaloPay</label>
-                    <p>xxx-xxx-xxx</p>
-                </div>
-                <input type="radio" id="zalopay" name="payment-method" value="zalopay">
-            </div>
+         
 
         </div>
         <div id="payment-button">
-            <button type="submit" onclick="window.location.href='bookingSuccess.html'">THANH TOÁN</button>
+            <button type="submit" id="pay">THANH TOÁN</button>
         </div>
     </div>
     <footer id="footer">
@@ -176,5 +156,7 @@
     </footer>
 
 </body>
+<script src="./config/config.js"></script>
+<script src="./js/paymentMethods.js"></script>
 
 </html>

@@ -15,7 +15,6 @@ public class UserController {
     private UserService userService;
 
 
-
     @PatchMapping("/{userId}")
     public ApiResponse<UserResponse>  updateUser(@PathVariable("userId") String userId, @RequestBody @Valid UserRequest request) {
        ApiResponse<UserResponse> apiResponse= new ApiResponse<>();
@@ -28,6 +27,20 @@ public class UserController {
         ApiResponse<String> apiResponse= new ApiResponse<>();
         userService.deleteUser(userId);
         apiResponse.setResult("Deleted");
+        return apiResponse;
+    }
+
+    @GetMapping("/my-info")
+    public ApiResponse<UserResponse> getUserInfo() {
+        ApiResponse<UserResponse> apiResponse= new ApiResponse<>();
+        apiResponse.setResult(userService.getMyInfo());
+        return apiResponse;
+    }
+
+    @PatchMapping("/update-my-info")
+    public ApiResponse<UserResponse> updateUserInfo(@RequestBody @Valid UserRequest request) {
+        ApiResponse<UserResponse> apiResponse= new ApiResponse<>();
+        apiResponse.setResult(userService.updateMyInfo(request));
         return apiResponse;
     }
 }

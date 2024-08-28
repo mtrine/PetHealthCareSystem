@@ -19,7 +19,7 @@ public class VaccinePet {
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("vaccineId")
     @JoinColumn(name = "vaccineID", nullable = false)
-    private Vaccine vaccine;
+        private Vaccine vaccine;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("petId")

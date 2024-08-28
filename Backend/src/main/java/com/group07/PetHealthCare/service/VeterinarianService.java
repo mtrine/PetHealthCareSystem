@@ -10,9 +10,11 @@ import com.group07.PetHealthCare.mapper.IVeterinarianMapper;
 import com.group07.PetHealthCare.pojo.Appointment;
 import com.group07.PetHealthCare.pojo.Session;
 import com.group07.PetHealthCare.pojo.Veterinarian;
+import com.group07.PetHealthCare.pojo.VisitSchedule;
 import com.group07.PetHealthCare.respositytory.IAppointmentRepository;
 import com.group07.PetHealthCare.respositytory.ISessionsRepository;
 import com.group07.PetHealthCare.respositytory.IVeterinarianRepository;
+import com.group07.PetHealthCare.respositytory.IVisitScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +38,9 @@ public class VeterinarianService {
     private IVeterinarianMapper veterinarianMapper;
     @Autowired
     private ISessionsMapper sessionsMapper;
-    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
+    @Autowired
+    private IVisitScheduleRepository visitScheduleRepository;
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF','CUSTOMER')")
     public List<VeterinarianResponse> getAllVeterinarian() {
         return veterinarianMapper.toResponseList(IVeterinarianRepository.findAll());
     }
@@ -52,17 +57,48 @@ public class VeterinarianService {
 
 
     public List<SessionResponse> getAvailableSessionsForVeterinarian(String veterinarianId, LocalDate appointmentDate) {
-        // Lấy tất cả các ca làm việc
+        // Lấy tất cả các session của bác sĩ trong ngày đó
         List<Session> allSessions = ISessionsRepository.findAll();
 
         // Lấy tất cả các lịch hẹn của bác sĩ trong ngày đó
         List<Appointment> appointments = IAppointmentRepository.findByVeterinarianIdAndAppointmentDate(veterinarianId, appointmentDate);
 
-        // Loại bỏ các ca đã có lịch hẹn
-        for (Appointment appointment : appointments) {
-            allSessions.removeIf(session -> session.getId().equals(appointment.getSession().getId()));
-        }
+        // Loại bỏ các session đã có lịch hẹn hoặc đã được lên lịch trong VisitSchedule
+        allSessions.removeIf(session ->
+                appointments.stream().anyMatch(appointment -> appointment.getSession().getId() == session.getId()) ||
+                        visitScheduleRepository.findByVeterinarianIdAndVisitDateAndSessionId(veterinarianId, appointmentDate, session.getId()).isPresent()
+        );
 
         return sessionsMapper.toSessionResponseList(allSessions);
     }
+
+    public List<VeterinarianResponse> getAvailableVeterinariansForSessionAndDate(int sessionId, LocalDate appointmentDate) {
+        // Lấy tất cả các bác sĩ
+        List<Veterinarian> allVeterinarians = IVeterinarianRepository.findAll();
+
+        // Lọc những bác sĩ không có lịch hẹn trong ca làm việc đó và ngày đó
+        List<Veterinarian> availableVeterinarians = new ArrayList<>();
+
+        for (Veterinarian veterinarian : allVeterinarians) {
+            // Lấy danh sách các cuộc hẹn của bác sĩ trong ngày đó và ca đó
+            List<Appointment> appointments = IAppointmentRepository.findByVeterinarianIdAndAppointmentDate(veterinarian.getId(), appointmentDate);
+
+            // Kiểm tra xem bác sĩ có rảnh trong ca làm việc đó không
+            boolean isAvailable = appointments.stream().noneMatch(appointment ->
+                    appointment.getSession().getId()==sessionId
+            );
+
+            if (isAvailable) {
+                // Kiểm tra nếu không có VisitSchedule trùng với ca làm việc và ngày đó
+                Optional<VisitSchedule> visitSchedule = visitScheduleRepository.findByVeterinarianIdAndVisitDateAndSessionId(veterinarian.getId(), appointmentDate, sessionId);
+                if (visitSchedule.isEmpty()) {
+                    availableVeterinarians.add(veterinarian);
+                }
+            }
+        }
+
+        // Chuyển đổi danh sách bác sĩ rảnh sang dạng response và trả về
+        return veterinarianMapper.toResponseList(availableVeterinarians);
+    }
+
 }

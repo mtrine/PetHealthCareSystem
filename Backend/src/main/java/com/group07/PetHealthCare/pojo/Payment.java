@@ -1,5 +1,6 @@
 package com.group07.PetHealthCare.pojo;
 
+import com.group07.PetHealthCare.enumData.TYPEPAYMENT;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED) // Sử dụng InheritanceType.JOINED để lưu các bảng con vào các bảng riêng biệt
 @Table(name = "payment")
+
 public abstract class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,6 +28,9 @@ public abstract class Payment {
     @Column(name = "paymentMethod", length = 50)
     private String paymentMethod;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="type_payment")
+    private TYPEPAYMENT typePayment;
 
     @Column(name = "totalAmount")
     private Double totalAmount;

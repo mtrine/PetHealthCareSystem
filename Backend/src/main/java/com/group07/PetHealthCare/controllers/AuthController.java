@@ -48,12 +48,12 @@ public class AuthController {
         return apiResponse;
     }
 
-//    @PostMapping("/logout")
-//    public ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
-//        ApiResponse<Void> apiResponse= new ApiResponse<>();
-//        apiResponse.setResult(authService.logout(request));
-//        return apiResponse;
-//    }
+    @PostMapping("/logout")
+    public ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+        ApiResponse<Void> apiResponse= new ApiResponse<>();
+        authService.logout(request);
+        return apiResponse;
+    }
 
     @PostMapping("/refresh")
     public ApiResponse<AuthResponse> refreshToken(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
@@ -61,4 +61,5 @@ public class AuthController {
         apiResponse.setResult(authService.refreshToken(request));
         return apiResponse;
     }
+
 }
