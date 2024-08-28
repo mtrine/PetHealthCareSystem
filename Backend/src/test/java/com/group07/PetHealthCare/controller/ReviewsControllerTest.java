@@ -61,6 +61,8 @@ public class ReviewsControllerTest {
                 .email("nhuquynh6453@gmail.com")
                 .phoneNumber(null)
                 .role("CUSTOMER")
+                .sex(true)
+                .phoneNumber("0969036238")
                 .build();
 
         sessionResponse = SessionResponse.builder()
@@ -111,6 +113,7 @@ public class ReviewsControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result[0].customerresponse.name").value("Nguyen Ngoc Quynh Nhu"))
+                .andExpect(jsonPath("$.result[0].customerresponse.id").value("e80bac44-998c-44db-b548-2d03b12e8a25"))
                 .andExpect(jsonPath("$.result[0].grades").value(5))
                 .andExpect(jsonPath("$.result[0].comment").value("Excellent service!"))
                 .andExpect(jsonPath("$.result[0].reviewDate").value(LocalDate.now().toString()));
@@ -133,9 +136,26 @@ public class ReviewsControllerTest {
                 .andExpect(jsonPath("$.result.reviewDate").value(LocalDate.now().toString()));
     }
 
+    @Test
+    void createMyReview() throws Exception {
+        Mockito.when(reviewsService.createMyReview(any(ReviewsRequest.class))).thenReturn(reviewsResponse);
+
+        mockMvc.perform(post("/v1/reviews/my-reviews")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(reviewsRequest)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.result.customerresponse.name").value("Nguyen Ngoc Quynh Nhu"))
+                .andExpect(jsonPath("$.result.appointmentresponse.id").value("00c66505-9386-460f-b999-1e7b1e32c0a7"))
+                .andExpect(jsonPath("$.result.grades").value(5))
+                .andExpect(jsonPath("$.result.comment").value("Excellent service!"))
+                .andExpect(jsonPath("$.result.reviewDate").value(LocalDate.now().toString()));
+    }
+
     private String getAuthToken() throws Exception {
-        String username = "mtriS@gmail.com";
-        String password = "123456";
+        String username = "customer@gmail.com";
+        String password = "customerpass";
 
         String response = mockMvc.perform(post("/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

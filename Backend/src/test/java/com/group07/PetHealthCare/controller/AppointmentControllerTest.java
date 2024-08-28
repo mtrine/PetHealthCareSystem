@@ -18,16 +18,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,12 +42,14 @@ public class AppointmentControllerTest {
     private AppointmentResponse appointmentResponse;
     private List<AppointmentResponse> appointmentResponseList;
     private AppointmentRequest appointmentRequest;
+    private Set<ServicesResponse> servicesResponseSet;
+    private ServicesResponse servicesResponse;
+    private PetResponse petResponse;
 
     @BeforeEach
     void initData() {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-
 
         SessionResponse sessionResponse = SessionResponse.builder()
                 .id("1")
@@ -72,7 +70,7 @@ public class AppointmentControllerTest {
                 .role("CUSTOMER")
                 .build();
 
-        PetResponse petResponse = PetResponse.builder()
+        petResponse = PetResponse.builder()
                 .id("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9")
                 .name("Bông")
                 .age(3)
@@ -81,6 +79,14 @@ public class AppointmentControllerTest {
                 .customerResponse(customerResponse)
                 .build();
 
+        servicesResponse = ServicesResponse.builder()
+                .id("123")
+                .name("Tỉa lông")
+                .unitPrice(BigDecimal.valueOf(500))
+                .build();
+
+        servicesResponseSet = Set.of(servicesResponse);
+
         appointmentResponse = AppointmentResponse.builder()
                 .id("1")
                 .status("Scheduled")
@@ -88,7 +94,9 @@ public class AppointmentControllerTest {
                 .appointmentDate(LocalDate.of(2024, 8, 15))
 //                .deposit(BigDecimal.valueOf(100.00))
                 .veterinarianName("Dr. Smith")
-//                .servicesResponsesList()
+                .servicesResponsesList(servicesResponseSet)
+                .pet(petResponse)
+                .description("Thú bị đau bụng")
                 .build();
 
         appointmentResponseList = Collections.singletonList(appointmentResponse);
@@ -100,12 +108,10 @@ public class AppointmentControllerTest {
         appointmentRequest.setVeterinarianId("2c741f51-0a22-4e2f-8022-c8093fe46964");
         appointmentRequest.setSessionId(1);
         appointmentRequest.setDescription("Thú bị đau bụng");
-
     }
 
     @Test
     void testAddAppointmentBySession() throws Exception {
-
         Mockito.when(appointmentService.addAppointmentBySession(any(AppointmentRequest.class)))
                 .thenReturn(appointmentResponse);
 
@@ -115,9 +121,28 @@ public class AppointmentControllerTest {
                         .content(objectMapper.writeValueAsString(appointmentRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result.id").value(1))
+
+                .andExpect(jsonPath("$.result.id").value("1"))
                 .andExpect(jsonPath("$.result.status").value("Scheduled"))
-                .andExpect(jsonPath("$.result.veterinarianName").value("Dr. Smith"));
+                .andExpect(jsonPath("$.result.description").value("Thú bị đau bụng"))
+                .andExpect(jsonPath("$.result.appointmentDate").value("2024-08-15"))
+                .andExpect(jsonPath("$.result.deposit").value(100.00))
+                .andExpect(jsonPath("$.result.veterinarianName").value("Dr. Smith"))
+
+                .andExpect(jsonPath("$.result.sessionResponse.id").value("1"))
+                .andExpect(jsonPath("$.result.sessionResponse.startTime").value("08:00:00"))
+                .andExpect(jsonPath("$.result.sessionResponse.endTime").value("10:00:00"))
+
+                .andExpect(jsonPath("$.result.servicesResponsesList[0].id").value("123"))
+                .andExpect(jsonPath("$.result.servicesResponsesList[0].name").value("Tỉa lông"))
+                .andExpect(jsonPath("$.result.servicesResponsesList[0].unitPrice").value(500))
+
+                .andExpect(jsonPath("$.result.pet.id").value("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9"))
+                .andExpect(jsonPath("$.result.pet.name").value("Bông"))
+                .andExpect(jsonPath("$.result.pet.age").value(3))
+                .andExpect(jsonPath("$.result.pet.gender").value(true))
+                .andExpect(jsonPath("$.result.pet.speciesResponse.id").value("971c1a50-e074-43d3-a8db-6e7f5bd1a9c2"))
+                .andExpect(jsonPath("$.result.pet.speciesResponse.name").value("Dog"));
     }
 
     @Test
@@ -125,14 +150,32 @@ public class AppointmentControllerTest {
         Mockito.when(appointmentService.getAppointmentByVeterinarianId(anyString()))
                 .thenReturn(appointmentResponseList);
 
-        mockMvc.perform(get("/v1/appointments/{veterinarianId}/veterinarians", "veterinarianId")
+        mockMvc.perform(get("/v1/appointments/{veterinarianId}/veterinarians", "2c741f51-0a22-4e2f-8022-c8093fe46964")
                         .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result[0].id").value(1))
+                .andExpect(jsonPath("$.result[0].id").value("1"))
                 .andExpect(jsonPath("$.result[0].status").value("Scheduled"))
-                .andExpect(jsonPath("$.result[0].veterinarianName").value("Dr. Smith"));
+                .andExpect(jsonPath("$.result[0].description").value("Thú bị đau bụng"))
+                .andExpect(jsonPath("$.result[0].appointmentDate").value("2024-08-15"))
+                .andExpect(jsonPath("$.result[0].deposit").value(100.00))
+                .andExpect(jsonPath("$.result[0].veterinarianName").value("Dr. Smith"))
+
+                .andExpect(jsonPath("$.result[0].sessionResponse.id").value("1"))
+                .andExpect(jsonPath("$.result[0].sessionResponse.startTime").value("08:00:00"))
+                .andExpect(jsonPath("$.result[0].sessionResponse.endTime").value("10:00:00"))
+
+                .andExpect(jsonPath("$.result[0].servicesResponsesList[0].id").value("123"))
+                .andExpect(jsonPath("$.result[0].servicesResponsesList[0].name").value("Tỉa lông"))
+                .andExpect(jsonPath("$.result[0].servicesResponsesList[0].unitPrice").value(500))
+
+                .andExpect(jsonPath("$.result[0].pet.id").value("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9"))
+                .andExpect(jsonPath("$.result[0].pet.name").value("Bông"))
+                .andExpect(jsonPath("$.result[0].pet.age").value(3))
+                .andExpect(jsonPath("$.result[0].pet.gender").value(true))
+                .andExpect(jsonPath("$.result[0].pet.speciesResponse.id").value("971c1a50-e074-43d3-a8db-6e7f5bd1a9c2"))
+                .andExpect(jsonPath("$.result[0].pet.speciesResponse.name").value("Dog"));
     }
 
     @Test
@@ -144,9 +187,29 @@ public class AppointmentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result[0].id").value(1))
+
+                .andExpect(jsonPath("$.result[0].id").value("1"))
                 .andExpect(jsonPath("$.result[0].status").value("Scheduled"))
-                .andExpect(jsonPath("$.result[0].veterinarianName").value("Dr. Smith"));
+                .andExpect(jsonPath("$.result[0].description").value("Thú bị đau bụng"))
+                .andExpect(jsonPath("$.result[0].appointmentDate").value("2024-08-15"))
+                .andExpect(jsonPath("$.result[0].deposit").value(100.00))
+                .andExpect(jsonPath("$.result[0].veterinarianName").value("Dr. Smith"))
+
+                .andExpect(jsonPath("$.result[0].sessionResponse.id").value("1"))
+                .andExpect(jsonPath("$.result[0].sessionResponse.startTime").value("08:00:00"))
+                .andExpect(jsonPath("$.result[0].sessionResponse.endTime").value("10:00:00"))
+
+                .andExpect(jsonPath("$.result[0].servicesResponsesList[0].id").value("123"))
+                .andExpect(jsonPath("$.result[0].servicesResponsesList[0].name").value("Tỉa lông"))
+                .andExpect(jsonPath("$.result[0].servicesResponsesList[0].unitPrice").value(500))
+
+                // Kiểm tra petResponse như một nhóm biến
+                .andExpect(jsonPath("$.result[0].pet.id").value("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9"))
+                .andExpect(jsonPath("$.result[0].pet.name").value("Bông"))
+                .andExpect(jsonPath("$.result[0].pet.age").value(3))
+                .andExpect(jsonPath("$.result[0].pet.gender").value(true))
+                .andExpect(jsonPath("$.result[0].pet.speciesResponse.id").value("971c1a50-e074-43d3-a8db-6e7f5bd1a9c2"))
+                .andExpect(jsonPath("$.result[0].pet.speciesResponse.name").value("Dog"));
     }
 
 
@@ -163,8 +226,4 @@ public class AppointmentControllerTest {
 
         return new ObjectMapper().readTree(response).get("result").get("token").asText();
     }
-
-
-
-
 }

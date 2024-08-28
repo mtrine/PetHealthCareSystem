@@ -91,11 +91,38 @@ public class CageControllerTest {
                 .andExpect(jsonPath("$.result.unitPrice").value(200000));
     }
 
+    @Test
+    void getCageById() throws Exception {
+        CageRequest cageRequest = new CageRequest();
+        cageRequest.setStatus(true);
+        cageRequest.setUnitPrice(BigDecimal.valueOf(200000));
+
+        CageResponse cageResponse = CageResponse.builder()
+                .cageNumber(1)
+                .status(true)
+                .unitPrice(BigDecimal.valueOf(200000))
+                .build();
+
+
+        Mockito.when(cagesService.changeStatusCage(anyInt())).thenReturn(cageResponse);
+
+        mockMvc.perform(get("/v1/cages/{id}", cageResponse.getCageNumber())
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cageRequest)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.result.cageNumber").value(1))
+                .andExpect(jsonPath("$.result.status").value(true))
+                .andExpect(jsonPath("$.result.unitPrice").value(200000));
+
+    }
+
 
 
     private String getAuthToken() throws Exception {
-        String username = "mtriS2@gmail.com";
-        String password = "123456";
+        String username = "customer@gmail.com";
+        String password = "customerpass";
 
         String response = mockMvc.perform(post("/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

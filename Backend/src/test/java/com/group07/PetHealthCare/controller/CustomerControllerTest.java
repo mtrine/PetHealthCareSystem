@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group07.PetHealthCare.controllers.CustomerController;
 import com.group07.PetHealthCare.dto.request.ApiResponse;
 import com.group07.PetHealthCare.dto.response.CustomerResponse;
-import com.group07.PetHealthCare.exception.ErrorCode;
-import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,15 +17,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -51,25 +47,27 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void GetAllCustomers() throws Exception {
+    public void testGetAllCustomers() throws Exception {
         CustomerResponse customerResponse1 = CustomerResponse.builder()
-                .id("10a6a291-5bd4-4fea-ab04-ef4ecaa83086")
-                .name("John Doe")
-                .address("123 Main St")
-                .email("user@example.com")
-                .password("securepassword")
+                .id("fe541397-4612-42c6-86eb-1da57cd1716c")
+                .name("Customer")
+                .address("Binh Chanh")
+                .email("customer@gmail.com")
+                .password("customerpass")
                 .role("CUSTOMER")
+                .phoneNumber("0969036238")
                 .sex(true)
                 .build();
 
         CustomerResponse customerResponse2 = CustomerResponse.builder()
-                .id("e80bac44-998c-44db-b548-2d03b12e8a25")
+                .id("a912fcf6-f7e0-4a63-b5f8-56098d08c72c")
                 .name("Nguyen Ngoc Quynh Nhu")
                 .address("Binh Chanh")
                 .email("nhuquynh6453@gmail.com")
                 .password("quynhnhu")
                 .role("CUSTOMER")
-                .sex(false)
+                .phoneNumber("0969036238")
+                .sex(true)
                 .build();
 
         ApiResponse<List<CustomerResponse>> apiResponse = new ApiResponse<>();
@@ -85,16 +83,17 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void getCustomerById() throws Exception {
-        String userId = "dcad4277-0d82-4a5e-a3fe-8dee26dc3462";
+    public void testGetCustomerById() throws Exception {
+        String userId = "fe541397-4612-42c6-86eb-1da57cd1716c";
 
         CustomerResponse customerResponse = CustomerResponse.builder()
                 .id(userId)
-                .name("John Doe")
-                .address("123 Main St")
-                .email("user@example.com")
-                .password("securepassword")
+                .name("Customer")
+                .address("Binh Chanh")
+                .email("customer@gmail.com")
+                .password("customerpass")
                 .role("CUSTOMER")
+                .phoneNumber("0969036238")
                 .sex(true)
                 .build();
 
@@ -109,7 +108,6 @@ public class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(apiResponse)));
     }
-
 
     private String getAuthToken() throws Exception {
         String username = "admin@group07.com";
@@ -128,5 +126,4 @@ public class CustomerControllerTest {
         // Adjust parsing based on the actual structure
         return new ObjectMapper().readTree(response).get("result").get("token").asText();
     }
-
 }
