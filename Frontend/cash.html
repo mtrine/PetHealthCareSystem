@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 50px;
+            padding:50px
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .invoice-infor {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 420px;
+            text-align: center;
+        }
+
+        .invoice-infor img {
+            margin-bottom: 25px;
+        }
+
+        .invoice-infor h1 {
+            font-size: 26px;
+            color: #0277bd;
+            margin-bottom: 25px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .row .tag {
+            font-weight: bold;
+            color: #01579b;
+        }
+
+        .total {
+            margin-top: 25px;
+            font-size: 20px;
+            padding-top: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .total .tag-total {
+            color: #0277bd;
+            font-size: 22px;
+        }
+
+        .total .content-total {
+            color: #333;
+            font-size: 22px;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #0277bd;
+            margin: 20px 0;
+        }
+
+        .payment {
+            font-size: 15px;
+            color: #5E5E5E;
+        }
+
+        .confirm-button {
+            background-color: #0277bd;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            margin-top: 30px;
+            font-weight: bold;
+            width: 300px;
+        }
+
+        .confirm-button:hover {
+            background-color: #01579b;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="invoice-infor">
+        <img src="assets/img/invoice.jpg" width="250px">
+        <h1>ĐẶT LỊCH THÀNH CÔNG</h1>
+        <div class="row">
+            <span class="tag">Mã khách hàng:</span>
+            <span>123-xyz</span>
+        </div>
+
+        <div class="row">
+            <span class="tag">Tên khách hàng:</span>
+            <span>Nguyễn Văn A</span>
+        </div>
+
+        <div class="row">
+            <span class="tag">Mã thú:</span>
+            <span>abc-345</span>
+        </div>
+
+        <div class="row">
+            <span class="tag">Dịch vụ sử dụng:</span>
+            <span>Khám và điều trị</span>
+        </div>
+
+        <div class="row">
+            <span class="tag">Bác sĩ:</span>
+            <span>Nguyễn Văn A</span>
+        </div>
+
+        <div class="row">
+            <span class="tag">Lịch hẹn bác sĩ:</span>
+            <span>2024-08-30 Ca 2</span>
+        </div>
+
+        <hr>
+
+        <div class="total">
+            <span class="tag-total">Tổng tiền:</span>
+            <span class="content-total">100000 VND</span>
+        </div>
+
+        <span class="payment">*Thanh toán trực tiếp bằng tiền mặt*</span>
+    </div>
+    <div>
+        <button class="confirm-button">XÁC NHẬN</button>
+    </div>
+</div>
+
+</body>
+</html>
