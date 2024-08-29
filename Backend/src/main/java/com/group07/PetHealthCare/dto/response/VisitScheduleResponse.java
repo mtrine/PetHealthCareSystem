@@ -8,5 +8,9 @@ import lombok.Data;
 @Data
 public class VisitScheduleResponse{
     private String visitScheduleId;
+    private VeterinarianResponse veterinarianResponse;
+    private HospitalizationResponse hospitalizationResponse;
+    private SessionResponse sessionResponse;
+    private boolean status;
     private LocalDate visitDate;
 }

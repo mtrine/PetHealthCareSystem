@@ -2,12 +2,18 @@ package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.request.VisitScheduleRequest;
 import com.group07.PetHealthCare.dto.response.VisitScheduleResponse;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.mapper.IVisitScheduleMapper;
 import com.group07.PetHealthCare.pojo.*;
 import com.group07.PetHealthCare.respositytory.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class VisitScheduleService {
@@ -69,6 +75,14 @@ public class VisitScheduleService {
         visitSchedule.setSession(session);
         // Save and return the visit schedule
         return visitScheduleMapper.toVisitScheduleResponse(visitScheduleRepository.save(visitSchedule)) ;
+    }
+
+    @PreAuthorize("hasAnyRole('VETERINARIAN')")
+    public List<VisitScheduleResponse> getMyVisitSchedules() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        String email = context.getAuthentication().getName();
+        Veterinarian veterinarian=veterinarianRepository.findByEmail(email).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND));
+        return visitScheduleMapper.toVisitScheduleResponses(visitScheduleRepository.findByVeterinarian(veterinarian));
     }
 }
 

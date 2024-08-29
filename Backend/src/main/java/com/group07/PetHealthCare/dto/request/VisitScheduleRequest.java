@@ -12,5 +12,6 @@ public class VisitScheduleRequest {
     private String veterinarianId;
     private String hospitalizationId;
     private LocalDate visitDate;
+    private boolean status;
     private int sessionId;
 }

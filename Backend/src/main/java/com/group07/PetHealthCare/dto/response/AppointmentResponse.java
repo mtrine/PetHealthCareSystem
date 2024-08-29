@@ -16,7 +16,7 @@ public class AppointmentResponse {
     private String status;
     private String description;
     private LocalDate appointmentDate;
-    private BigDecimal deposit;
+    private Double deposit;
     private String veterinarianName;
     private SessionResponse sessionResponse;
     private Set<ServicesResponse> servicesResponsesList;

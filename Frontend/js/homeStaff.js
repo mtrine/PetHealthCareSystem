@@ -86,10 +86,40 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Chuyển sang add booking
-document.getElementById('addBookingBtn').addEventListener('click', function () {
-    window.location.href = 'addBooking.html';
+// document.getElementById('addBookingBtn').addEventListener('click', function () {
+//     window.location.href = 'addBooking.html';
+// });
+
+const addBookingBtn = document.getElementById('addBookingBtn');
+const modalBooking = document.getElementById('modalBooking');
+
+// Khi nhấn vào nút "Thêm"
+addBookingBtn.addEventListener('click', function () {
+    modalBooking.style.display = 'flex'; // Hiển thị modal
 });
 
+// Đóng modal khi nhấn ra ngoài modal
+window.addEventListener('click', function (event) {
+    if (event.target === modalBooking) {
+        modalBooking.style.display = 'none'; // Ẩn modal
+    }
+});
+
+// Lắng nghe sự kiện khi nút "Xác nhận" được nhấn
+document.getElementById('confirmBookingBtn').addEventListener('click', function() {
+    // Kiểm tra checkbox nào được chọn
+    const unreCustomerCheckbox = document.getElementById('unre-customer').checked;
+    const customerCheckbox = document.getElementById('customer').checked;
+    
+    // Điều hướng đến trang tương ứng
+    if (unreCustomerCheckbox) {
+        window.location.href = 'addBooking2.html';
+    } else if (customerCheckbox) {
+        window.location.href = 'addBooking.html';
+    } else {
+        alert('Vui lòng chọn một loại khách trước khi xác nhận.');
+    }
+});
 
 
 // Lấy tất cả các mục hospitalized-item

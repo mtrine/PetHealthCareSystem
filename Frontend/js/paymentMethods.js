@@ -61,6 +61,7 @@ document.querySelector('#pay').addEventListener('click', async function () {
     const isChecked = document.getElementById('vnpay').checked;
     const urlParams = new URLSearchParams(window.location.search);
     const appointmentId = urlParams.get('id');
+    const port = window.location.port;
     if (!isChecked) {
         alert('Vui lòng chọn phương thức thanh toán');
         return;
@@ -80,12 +81,18 @@ document.querySelector('#pay').addEventListener('click', async function () {
             amount += service.unitPrice;
            
         });
-       ;
-        const dataVNPay =  await fetchWithToken(`${API_BASE_URL}/v1/payments/vn-pay?amount=${amount}`, {
-            method: 'GET',
+        const dataForVNPay = {
+            appointmentId: appointmentId,
+            typePayment: "APPOINTMENT",
+            
+        }
+
+        const dataVNPay =  await fetchWithToken(`${API_BASE_URL}/v1/payments/vn-pay?amount=${amount}&port=${port}`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
+            body: JSON.stringify(dataForVNPay)
         });
         if (dataVNPay.code == 1000) {
             const url = dataVNPay.result;
@@ -99,3 +106,4 @@ document.querySelector('#pay').addEventListener('click', async function () {
     }
    
 });
+

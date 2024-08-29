@@ -219,3 +219,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     });
 });
+
+document.getElementById('payment').addEventListener('click', async function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const appointmentId = urlParams.get('id');
+    window.location.href = 'paymentMethodsForStaff.html?id=' + appointmentId;
+})
