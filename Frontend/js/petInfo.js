@@ -181,3 +181,12 @@ async function fetchVaccinePet(petId){
         alert('Không tìm thấy thông tin lịch sử phòng khám!');
     }
 }
+function navigate(url) {
+        
+
+    if (authToken) {
+        window.location.href = url;
+    } else {
+        showModal();
+    }
+}

@@ -73,3 +73,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('Đã xảy ra lỗi: ' + data.message);
     }
 })
+
+function navigate(url) {
+        
+
+    if (authToken) {
+        window.location.href = url;
+    } else {
+        showModal();
+    }
+}

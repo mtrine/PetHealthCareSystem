@@ -90,3 +90,13 @@ document.querySelector("#submitButton").addEventListener("click", async function
             }
         }
 })
+
+function navigate(url) {
+        
+
+    if (authToken) {
+        window.location.href = url;
+    } else {
+        showModal();
+    }
+}

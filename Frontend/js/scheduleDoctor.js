@@ -261,16 +261,27 @@ async function fetchSessionAvailable() {
         const response = await fetchWithToken(`${API_BASE_URL}/v1/veterinarians/${doctorId}/available-sessions?date=${date}`);
         
         if (response.code === 1000 && Array.isArray(response.result)) {
-            if(response.result.length === 0) {
-                sessionContainer.innerHTML = 'Không có ca trống';
+            const arraySession = response.result.filter((session) => {
+                const sessionDateTime = new Date(`${date}T${session.endTime}`);
+                const currentDateTime = new Date(); // Ngày và giờ hiện tại
+
+                // Trả về true nếu session này còn trong tương lai
+                return sessionDateTime > currentDateTime;
+            });
+
+            if (arraySession.length === 0) {
+                // Hiển thị thông báo nếu không có ca trống
+                sessionContainer.insertAdjacentHTML('beforeend', '<p>Không có ca trống</p>');
                 return;
             }
-            response.result.forEach((session, index) => {
-                // Tạo id và checked status cho các session
+
+            // Duyệt qua các session có sẵn để hiển thị
+            arraySession.forEach((session, index) => {
                 const sessionId = `radio-${index + 1}`;
                 const isChecked = index === 0 ? 'checked' : ''; // Checked session đầu tiên
                 const startTime = session.startTime.slice(0, 5); // Lấy từ 0 đến 5 để giữ lại HH:MM
                 const endTime = session.endTime.slice(0, 5);
+
                 // Thêm radio button và label tương ứng
                 const radioInput = `
                     <input type="radio" id="${sessionId}" name="time" data-value="${session.id}" ${isChecked}>
@@ -279,9 +290,8 @@ async function fetchSessionAvailable() {
                 sessionContainer.insertAdjacentHTML('beforeend', radioInput);
             });
 
-            // Add the glider span at the end
-            const glider = `<span class="glider"></span>`;
-            sessionContainer.insertAdjacentHTML('beforeend', glider);
+            // Thêm glider vào cuối cùng
+            sessionContainer.insertAdjacentHTML('beforeend', '<span class="glider"></span>');
         } else {
             console.error('Failed to fetch available sessions:', response.message);
         }
@@ -407,3 +417,13 @@ document.querySelector("#submitSchedule").addEventListener('click', async functi
         alert('Đặt lịch không thành công');
     }
 });
+
+function navigate(url) {
+        
+
+    if (authToken) {
+        window.location.href = url;
+    } else {
+        showModal();
+    }
+}

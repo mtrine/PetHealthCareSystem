@@ -147,3 +147,13 @@ document.getElementById('update').addEventListener('click', async function (even
         alert('Cập nhật thất bại')
     }
 })
+
+function navigate(url) {
+        
+
+    if (authToken) {
+        window.location.href = url;
+    } else {
+        showModal();
+    }
+}

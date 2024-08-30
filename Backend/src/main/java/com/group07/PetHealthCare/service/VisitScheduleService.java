@@ -84,5 +84,14 @@ public class VisitScheduleService {
         Veterinarian veterinarian=veterinarianRepository.findByEmail(email).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND));
         return visitScheduleMapper.toVisitScheduleResponses(visitScheduleRepository.findByVeterinarian(veterinarian));
     }
+
+    @PreAuthorize("hasAnyRole('VETERINARIAN')")
+    public VisitScheduleResponse updateVisitSchedule(String visitScheduleId,VisitScheduleRequest request) {
+        VisitSchedule visitSchedule=visitScheduleRepository.findById(visitScheduleId).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND));
+        if(request.getStatus()!=null){
+            visitSchedule.setStatus(request.getStatus());
+        }
+        return visitScheduleMapper.toVisitScheduleResponse(visitScheduleRepository.save(visitSchedule));
+    }
 }
 

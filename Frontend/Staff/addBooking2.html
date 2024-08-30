@@ -514,6 +514,33 @@
         .submit button:hover {
             box-shadow: 0px 4px 10px 5px #ccc;
         }
+
+        #add-booking-container .service-container label {
+            font-size: 30px;
+            color: #000;
+            font-weight: 500;
+            margin-right: 50px;
+        }
+
+        #add-booking-container .service-container {
+            display: flex;
+            align-items: center;
+            margin-top: 40px;
+            margin-left: 163px;
+            gap: 7px;
+        }
+
+        .service-container .custom-select {
+            width: 320px;
+            height: 60px;
+            position: relative;
+            border: 2px solid #000;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        .service-container .custom-select .options div:hover {
+            color: #000;
+        }
     </style>
 </head>
 
@@ -570,7 +597,7 @@
                 </div>
             </div>
 
-            <!-- <div class="doctor-container">
+            <div class="doctor-container">
                 <label for="doctor-name">Bác sĩ</label>
                 <div id="doctor-select" class="custom-select">
                     <div class="selected-option">Chọn bác sĩ<i class='bx bx-chevron-down'></i></div>
@@ -581,95 +608,39 @@
                         <div data-value="d4">Bác sĩ 4</div>
                     </div>
                 </div>
-            </div> -->
+            </div>
+            
+            <div class="service-container">
+                <label for="service">Dịch vụ</label>
+                <div id="service-select" class="custom-select">
+                    <div class="selected-option">Chọn dịch vụ<i class='bx bx-chevron-down'></i></div>
+                    <div class="options">
+                        <div data-value="d1">Bác sĩ 1</div>
+                        <div data-value="d2">Bác sĩ 2</div>
+                        <div data-value="d3">Bác sĩ 3</div>
+                        <div data-value="d4">Bác sĩ 4</div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Chọn ca -->
             <div class="time-slot-selector">
                 <label for="shift">Ca</label>
                 <div class="time-slot-container">
                     <div class="tabs">
-                        <input type="radio" id="radio-1" name="time" data-available="true" checked>
-                        <label class="tab" for="radio-1">8h - 10h</label>
-                        <input type="radio" id="radio-2" name="time" data-available="true">
-                        <label class="tab" for="radio-2">10h - 12h</label>
-                        <input type="radio" id="radio-3" name="time" data-available="true">
-                        <label class="tab" for="radio-3">14h - 16h</label>
-                        <input type="radio" id="radio-4" name="time" data-available="true">
-                        <label class="tab" for="radio-4">16h - 18h</label>
-                        <span class="glider"></span>
+                        
                     </div>
                 </div>
             </div>
 
             <div class="submit">
-                <button type="submit" id="show-modal">Tạo</button>
+                <button type="submit" id="add">Tạo</button>
             </div>
         </div>
 
     </div>
 </body>
-<script>
-    // Kiểm tra trạng thái của ca
-    document.addEventListener("DOMContentLoaded", function () {
-        const timeSlots = document.querySelectorAll('.time-slot-container input[type="radio"]');
-
-        timeSlots.forEach(slot => {
-            // Check if the slot is available
-            if (slot.dataset.available === "false") {
-                // Find the corresponding label and mark it as unavailable
-                const label = document.querySelector(`label[for="${slot.id}"]`);
-                label.classList.add('unavailable');
-                slot.disabled = true; // Disable the radio button
-            }
-        });
-
-    });
-
-    // Pet select
-    document.querySelector('#pet-select').addEventListener('click', function (event) {
-        const icon = this.querySelector('.selected-option i');
-        this.classList.toggle('open');
-        icon.classList.toggle('bx-rotate-180');
-    });
-
-    document.querySelectorAll('#pet-select .options div').forEach(function (option) {
-        option.addEventListener('click', function (event) {
-            event.stopPropagation(); // Prevent the dropdown from immediately re-opening
-            const select = option.closest('.custom-select');
-            select.querySelector('.selected-option').innerHTML = option.innerText + " <i class='bx bx-chevron-down'></i>";
-            select.classList.remove('open');
-        });
-    });
-
-    // Close the dropdown if clicking outside of it
-    document.addEventListener('click', function (event) {
-        if (!event.target.closest('#pet-select')) {
-            document.querySelector('#pet-select').classList.remove('open');
-        }
-    });
-
-    // doctor select
-    document.querySelector('#doctor-select').addEventListener('click', function (event) {
-        const icon = this.querySelector('.selected-option i');
-        this.classList.toggle('open');
-        icon.classList.toggle('bx-rotate-180');
-    });
-
-    document.querySelectorAll('#doctor-select .options div').forEach(function (option) {
-        option.addEventListener('click', function (event) {
-            event.stopPropagation(); // Prevent the dropdown from immediately re-opening
-            const select = option.closest('.custom-select');
-            select.querySelector('.selected-option').innerHTML = option.innerText + " <i class='bx bx-chevron-down'></i>";
-            select.classList.remove('open');
-        });
-    });
-
-    // Close the dropdown if clicking outside of it
-    document.addEventListener('click', function (event) {
-        if (!event.target.closest('#doctor-select')) {
-            document.querySelector('#doctor-select').classList.remove('open');
-        }
-    });
-</script>
+<script src="../config/config.js"></script>
+<script src="../js/addbooking2.js"></script>
 
 </html>

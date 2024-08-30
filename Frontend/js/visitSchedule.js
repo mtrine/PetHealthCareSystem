@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const visitSchedules = data.result;
         console.log(visitSchedules);
         visitSchedules.forEach(visitSchedule => {
+            if(visitSchedule.status == true)return;
             const visitScheduleItem = document.createElement('ul');
             visitScheduleItem.classList.add('hospitalized-item');
             visitScheduleItem.innerHTML = `
@@ -18,8 +19,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                         <li>${visitSchedule.sessionResponse.startTime}-${visitSchedule.sessionResponse.endTime}</li>
                         <li>${visitSchedule.hospitalizationResponse.petResponse.id}</li>
                         <li>${visitSchedule.hospitalizationResponse.cageResponse.cageNumber}</li>
-                        `
+                        `;
+            
+            // Thêm sự kiện click vào mỗi <ul>
+            visitScheduleItem.addEventListener('click', function () {
+                window.location.href = 'detailHospitalizedForVeterinarian.html?hospitalizationId=' + visitSchedule.hospitalizationResponse.id+`&visitScheduleId=${visitSchedule.visitScheduleId}`; 
+            });
+
             visitScheduleContainer.appendChild(visitScheduleItem);
-        })
+        })  
     }
-})
+});

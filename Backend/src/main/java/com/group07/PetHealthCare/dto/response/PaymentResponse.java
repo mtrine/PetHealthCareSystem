@@ -16,4 +16,5 @@ public class PaymentResponse {
     private String status;
     private String paymentMethod;
     private Double totalAmount;
+    private String typePayment;
 }

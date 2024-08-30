@@ -122,27 +122,29 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    document.querySelector('#choose-veterinarian').addEventListener('click', async function () {
-        const selectedOption = document.querySelector('#doctor-select .selected-option');
-        const veterinarianId = selectedOption.getAttribute('data-value');
-        console.log(veterinarianId);
-        const dataAppointment = await fetchWithToken(`${API_BASE_URL}/v1/appointments/${appointmentId}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                veterinarianId: veterinarianId
-            })
-        });
-
-        if (dataAppointment.code == 1000) {
-            alert("Chọn bác sĩ thành công");
-            location.reload();
-        } else {
-            alert("Đã có lỗi xảy ra: ", data.message);
-        }
-    })
+    if( document.querySelector('#choose-veterinarian')!=null){
+        document.querySelector('#choose-veterinarian').addEventListener('click', async function () {
+            const selectedOption = document.querySelector('#doctor-select .selected-option');
+            const veterinarianId = selectedOption.getAttribute('data-value');
+            console.log(veterinarianId);
+            const dataAppointment = await fetchWithToken(`${API_BASE_URL}/v1/appointments/${appointmentId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    veterinarianId: veterinarianId
+                })
+            });
+    
+            if (dataAppointment.code == 1000) {
+                alert("Chọn bác sĩ thành công");
+                location.reload();
+            } else {
+                alert("Đã có lỗi xảy ra: ", data.message);
+            }
+        })
+    }
 
     const dataServices = await fetchWithToken(`${API_BASE_URL}/v1/services`, {
         method: 'GET',

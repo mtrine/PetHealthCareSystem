@@ -49,7 +49,7 @@
             color: #333;
         }
 
-        .row .tag {
+         .tag {
             font-weight: bold;
             color: #01579b;
         }
@@ -101,48 +101,63 @@
             background-color: #01579b;
         }
 
+        .deposit {
+            margin-top: 25px;
+            font-size: 20px;
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="invoice-infor">
-        <img src="assets/img/invoice.jpg" width="250px">
+        <img src="../assets/img/invoice.jpg" width="250px">
         <h1>ĐẶT LỊCH THÀNH CÔNG</h1>
         <div class="row">
             <span class="tag">Mã khách hàng:</span>
-            <span>123-xyz</span>
+            <span id="user-id">123-xyz</span>
         </div>
 
         <div class="row">
             <span class="tag">Tên khách hàng:</span>
-            <span>Nguyễn Văn A</span>
+            <span id="user-name">Nguyễn Văn A</span>
         </div>
 
         <div class="row">
             <span class="tag">Mã thú:</span>
-            <span>abc-345</span>
+            <span id="pet-id">abc-345</span>
         </div>
 
         <div class="row">
             <span class="tag">Dịch vụ sử dụng:</span>
-            <span>Khám và điều trị</span>
+            <span id="service"></span>
         </div>
 
         <div class="row">
             <span class="tag">Bác sĩ:</span>
-            <span>Nguyễn Văn A</span>
+            <span id="veterinarian-name">Nguyễn Văn A</span>
         </div>
 
         <div class="row">
             <span class="tag">Lịch hẹn bác sĩ:</span>
-            <span>2024-08-30 Ca 2</span>
+            <span id="time">2024-08-30 Ca 2</span>
         </div>
 
         <hr>
-
+        <div class="deposit">
+            <span class="tag">Tiền cọc:</span>
+            <span id="deposit-amount">100000 VND</span>
+        </div>
+        <div class="deposit">
+            <span class="tag">Tổng tiền :</span>
+            <span id="total-all-amount">100000 VND</span>
+        </div>
         <div class="total">
-            <span class="tag-total">Tổng tiền:</span>
-            <span class="content-total">100000 VND</span>
+            <span class="tag-total">Số tiền cần phải trả:</span>
+            <span id="total-amount">100000 VND</span>
         </div>
 
         <span class="payment">*Thanh toán trực tiếp bằng tiền mặt*</span>
@@ -153,4 +168,6 @@
 </div>
 
 </body>
+<script src="../config/config.js"></script>
+<script src="../js/cash.js"></script>
 </html>
