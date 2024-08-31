@@ -50,3 +50,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         })
     }
 })
+function navigate(url) {
+        
+
+    if (authToken) {
+        window.location.href = url;
+    } else {
+        showModal();
+    }
+}

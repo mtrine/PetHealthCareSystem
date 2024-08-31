@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="./assets/font/boxicons-2.1.4/css/boxicons.min.css">
     <style>
-    
         #price-list-container {
             display: flex;
             margin: 50px 0;
@@ -61,9 +60,9 @@
             <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
         </div>
         <ul class="nav">
-            <li><a href="index.html" onclick="showModal()">TRANG CHỦ</a></li>
-            <li><a href="booking.html" onclick="showModal()">DỊCH VỤ</a></li>
-            <li><a href="priceList.html" onclick="showModal()">BẢNG GIÁ</a></li>
+            <li><a href="index.html">TRANG CHỦ</a></li>
+            <li><a onclick="navigate('booking.html')">DỊCH VỤ</a></li>
+            <li><a href="priceList.html">BẢNG GIÁ</a></li>
         </ul>
         <div class="header-btn">
             <i class='bx bx-user-circle'></i>
@@ -99,31 +98,41 @@
             <tbody>
                 <tr>
                     <td>Tẩy giun</td>
-                    <td>300.000 VNĐ</td>
+                    <td>150.000 VNĐ</td>
                 </tr>
                 <tr>
                     <td>Triệt sản</td>
-                    <td>150.000 VNĐ</td>
+                    <td>1.200.000 VNĐ</td>
                 </tr>
                 <tr>
                     <td>Tỉa lông Cắt móng</td>
                     <td>200.000 VNĐ</td>
                 </tr>
+                <!-- Phần 3 cột cho Tiêm phòng -->
                 <tr>
-                    <td>Tiêm phòng</td>
-                    <td>250.000 VNĐ</td>
-                </tr>
+                    <td rowspan="2" style="text-align: center; vertical-align: middle;">Tiêm phòng</td>
+                    <td>
+                      <div>Vacxin phòng 5 bệnh (Care virus, Parvo virus, Viêm gan truyền nhiễm, Ho cũi chó, Phó cúm)</div>
+                      <div style="text-align: center; margin-top:20px;">150.000/ lần</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div>Vacxin phòng 7 bệnh (Care virus, Parvo virus, Viêm gan truyền nhiễm, Ho cũi chó, Phó cúm, Leptospira, CoronaVirus)</div>
+                      <div style="text-align: center;margin-top:20px;">170.000/ lần</div>
+                    </td>
+                  </tr>
                 <tr>
                     <td>Khám điều trị</td>
-                    <td>1.000.000 VNĐ</td>
-                </tr>
-                <tr>
-                    <td>Siêu âm</td>
                     <td>500.000 VNĐ</td>
                 </tr>
                 <tr>
+                    <td>Siêu âm</td>
+                    <td>600.000 VNĐ</td>
+                </tr>
+                <tr>
                     <td>Chẩn đoán xét nghiệm</td>
-                    <td>350.000 VNĐ</td>
+                    <td>700.000 VNĐ</td>
                 </tr>
             </tbody>
         </table>
@@ -160,6 +169,14 @@
             }
         });
     });
+
+    function navigate(url) {
+        if (authToken) {
+            window.location.href = url;
+        } else {
+            showModal();
+        }
+    }
 </script>
 
 </html>

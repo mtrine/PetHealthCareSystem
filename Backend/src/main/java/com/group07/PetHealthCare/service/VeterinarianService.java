@@ -63,14 +63,21 @@ public class VeterinarianService {
         // Lấy tất cả các lịch hẹn của bác sĩ trong ngày đó
         List<Appointment> appointments = IAppointmentRepository.findByVeterinarianIdAndAppointmentDate(veterinarianId, appointmentDate);
 
-        // Loại bỏ các session đã có lịch hẹn hoặc đã được lên lịch trong VisitSchedule
+        // Loại bỏ các session đã có lịch hẹn với status = Paid hoặc đã được lên lịch trong VisitSchedule với isPublished = false
         allSessions.removeIf(session ->
-                appointments.stream().anyMatch(appointment -> appointment.getSession().getId() == session.getId()) ||
-                        visitScheduleRepository.findByVeterinarianIdAndVisitDateAndSessionId(veterinarianId, appointmentDate, session.getId()).isPresent()
+                // Kiểm tra nếu có Appointment với status = "Paid"
+                appointments.stream().anyMatch(appointment ->
+                        appointment.getSession().getId() == session.getId() && "Paid".equals(appointment.getStatus())) ||
+                        // Kiểm tra nếu có VisitSchedule với isPublished = false
+                        visitScheduleRepository.findByVeterinarianIdAndVisitDateAndSessionId(veterinarianId, appointmentDate, session.getId())
+                                .map(visitSchedule -> !visitSchedule.isStatus())
+                                .orElse(false) // Nếu không có VisitSchedule thì session vẫn rảnh
         );
 
         return sessionsMapper.toSessionResponseList(allSessions);
     }
+
+
 
     public List<VeterinarianResponse> getAvailableVeterinariansForSessionAndDate(int sessionId, LocalDate appointmentDate) {
         // Lấy tất cả các bác sĩ
@@ -85,13 +92,14 @@ public class VeterinarianService {
 
             // Kiểm tra xem bác sĩ có rảnh trong ca làm việc đó không
             boolean isAvailable = appointments.stream().noneMatch(appointment ->
-                    appointment.getSession().getId()==sessionId
+                    appointment.getSession().getId() == sessionId && "Paid".equals(appointment.getStatus())  // Chỉ loại bỏ nếu status là "Paid"
             );
 
             if (isAvailable) {
-                // Kiểm tra nếu không có VisitSchedule trùng với ca làm việc và ngày đó
+                // Kiểm tra nếu không có VisitSchedule trùng với ca làm việc và ngày đó hoặc VisitSchedule đã được published
                 Optional<VisitSchedule> visitSchedule = visitScheduleRepository.findByVeterinarianIdAndVisitDateAndSessionId(veterinarian.getId(), appointmentDate, sessionId);
-                if (visitSchedule.isEmpty()) {
+
+                if (visitSchedule.isEmpty() || visitSchedule.get().isStatus()) {  // Nếu không có hoặc isPublished = true thì bác sĩ vẫn rảnh
                     availableVeterinarians.add(veterinarian);
                 }
             }
@@ -100,5 +108,6 @@ public class VeterinarianService {
         // Chuyển đổi danh sách bác sĩ rảnh sang dạng response và trả về
         return veterinarianMapper.toResponseList(availableVeterinarians);
     }
+
 
 }

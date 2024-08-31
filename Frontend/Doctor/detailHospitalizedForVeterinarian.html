@@ -555,43 +555,11 @@
             <div class="status-container">
                 <label for="status">Tình trạng sức khỏe</label>
                 <input type="text" id="status" value="Dần hồi phục, ở thêm 2 ngày để theo dõi">
-            </div>
-
-            <div class="visit-section">
-                <div class="choose-date">
-                    <label for="date">Ngày thăm khám</label>
-                    <div class="date-container">
-                        <input type="date" class="date" name="date" value="">
-                        <!-- <i class='bx bx-calendar-alt'></i> -->
-                    </div>
-                </div>
-
-                <div class="doctor-container">
-                    <label for="doctor-name">Bác sĩ</label>
-                    <div id="doctor-select" class="custom-select">
-                        <div class="selected-option">Chọn bác sĩ<i class='bx bx-chevron-down'></i></div>
-                        <div class="options">
-                           
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chọn ca -->
-            <div class="time-slot-selector">
-                <label for="shift">Ca</label>
-                <div class="time-slot-container">
-                    <div class="tabs">
-                        
-                    </div>
-                </div>
-            </div>
+            </div>            
         </div>
 
         <div class="submit">
             <button type="submit" id="update">Cập nhật</button>
-            <button type="submit" id="set-visit-btn">Đặt lịch thăm</button>
-            <button type="submit" id="discharged-btn">Xác nhận đã xuất viện</button>
         </div>
     </div>
 
@@ -608,21 +576,9 @@
         </div>
     </div>
 
-    <!-- Bảng cập nhật modal -->
-    <div id="discharged-modal" class="discharged-modal">
-        <div class="modal-content">
-            <i class='bx bx-error'></i>
-            <p>Xác nhận xuất viện?</p>
-            <p>Thú cưng đã xác nhận xuất viện sẽ không còn trong danh sách đang nhập viện</p>
-            <div class="modal-buttons">
-                <button id="confirm-discharged">Xác nhận</button>
-                <button id="cancel-discharged">Hủy</button>
-            </div>
-        </div>
-    </div>
 </body>
 <script src="../config/config.js"></script>
-<script src="../js/detailHospitalization.js">
+<script src="../js/detailHospitalizedForVeterinarian.js">
     
 </script>
 

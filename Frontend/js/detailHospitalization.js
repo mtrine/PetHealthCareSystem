@@ -55,14 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         dischargedModal.style.display = 'none';
     }
 
-    // Đóng modal khi nhấn vào bên ngoài modal-content
-    // window.onclick = function (event) {
-    //     if (event.target === deleteModal) {
-    //         deleteModal.style.display = 'none';
-    //     } else if (event.target === dischargedModal) {
-    //         dischargedModal.style.display = 'none';
-    //     }
-    // }
+    
 
     // doctor select
     document.querySelector('#doctor-select').addEventListener('click', function (event) {
@@ -88,7 +81,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 })
-document.addEventListener('DOMContentLoaded', async function () {
+document.querySelector('.date').addEventListener('change', fetchSession);
+ async function fetchSession () {
     const sessionContainer = document.querySelector('.tabs');
     const dateInput = document.querySelector('.date');
     
@@ -99,12 +93,27 @@ document.addEventListener('DOMContentLoaded', async function () {
         const response = await fetchWithToken(`${API_BASE_URL}/v1/sessions`);
 
         if (response.code === 1000 && Array.isArray(response.result)) {
-            response.result.forEach((session, index) => {
-                // Tạo id và checked status cho các session
+            const arraySession = response.result.filter((session) => {
+                const sessionDateTime = new Date(`${dateInput.value}T${session.endTime}`);
+                const currentDateTime = new Date(); // Ngày và giờ hiện tại
+
+                // Trả về true nếu session này còn trong tương lai
+                return sessionDateTime > currentDateTime;
+            });
+
+            if (arraySession.length === 0) {
+                // Hiển thị thông báo nếu không có ca trống
+                sessionContainer.insertAdjacentHTML('beforeend', '<p>Không có ca trống</p>');
+                return;
+            }
+
+            // Duyệt qua các session có sẵn để hiển thị
+            arraySession.forEach((session, index) => {
                 const sessionId = `radio-${index + 1}`;
                 const isChecked = index === 0 ? 'checked' : ''; // Checked session đầu tiên
                 const startTime = session.startTime.slice(0, 5); // Lấy từ 0 đến 5 để giữ lại HH:MM
                 const endTime = session.endTime.slice(0, 5);
+
                 // Thêm radio button và label tương ứng
                 const radioInput = `
                     <input type="radio" id="${sessionId}" name="time" data-value="${session.id}" ${isChecked}>
@@ -113,9 +122,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 sessionContainer.insertAdjacentHTML('beforeend', radioInput);
             });
 
-            // Add the glider span at the end
-            const glider = `<span class="glider"></span>`;
-            sessionContainer.insertAdjacentHTML('beforeend', glider);
+            // Thêm glider vào cuối cùng
+            sessionContainer.insertAdjacentHTML('beforeend', '<span class="glider"></span>');
         } else {
             console.error('Failed to fetch available sessions:', response.message);
         }
@@ -173,7 +181,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             alert("Đã có lỗi xảy ra: " + dataVeterinarian.message);
         }
     };
-});
+};
 
 document.querySelector('#set-visit-btn').addEventListener('click', async function () {
     const urlParams = new URLSearchParams(window.location.search);
@@ -239,21 +247,7 @@ document.getElementById('confirm-update').addEventListener('click', async functi
 document.getElementById('confirm-discharged').addEventListener('click', async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const hospitalizationId = urlParams.get('id');
-    data = {
-        endDate: new Date().toISOString().slice(0, 10),
-    }
-    const response = await fetchWithToken(`${API_BASE_URL}/v1/hospitalizations/${hospitalizationId}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
+    window.location.href = 'paymentMethodsHospitalization.html?id=' + hospitalizationId;
 
-    if(response.code === 1000) {
-        alert("Xuất viện thành công");
-        window.location.href = 'index.html';
-    } else {
-        alert("Đã có lỗi xảy ra: " + response.message);
-    }
+    
 })

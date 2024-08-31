@@ -219,9 +219,9 @@
             <img src="./assets/img/logo_trang.png" alt="Veterinary Clinic Logo" class="logo">
         </div>
         <ul class="nav">
-            <li><a href="#" onclick="">TRANG CHỦ</a></li>
-            <li><a href="#" onclick="">DỊCH VỤ</a></li>
-            <li><a href="#" onclick="">BẢNG GIÁ</a></li>
+            <li><a href="index.html">TRANG CHỦ</a></li>
+            <li><a  onclick="navigate('booking.html')">DỊCH VỤ</a></li>
+            <li><a  href="priceList.html">BẢNG GIÁ</a></li>
         </ul>
         <div class="header-btn">
             <i class='bx bx-user-circle'></i>
@@ -253,7 +253,7 @@
                 <li>Thú cưng</li>
                 <li>Dịch vụ</li>
                 <li>Ca</li>
-                <li>Thanh toán</li>
+                <li>Trạng thái</li>
             </ul>
             <div class="appointment-list-section">
                 
@@ -279,16 +279,17 @@
     <!-- Bảng modal -->
     <div id="cancel-modal" class="cancel-modal">
         <div class="modal-content">
+            <input type="hidden" id="modal-appointment-id">
+            <input type="hidden" id="modal-appointment-price">
+
             <h3>Hủy lịch?</h3>
             <p>Bạn được hoàn 75% phí thanh toán</p>
             <div class="modal-buttons">
-                <button onclick="hideModal()">OK</button>
+                <button id="confirm-cancel">OK</button>
                 <button onclick="hideModal()">Hủy</button>
             </div>
         </div>
     </div>
-
-
 </body>
 <script src="./config/config.js"></script>
 <script src="./js/appointmentTracking.js"></script>

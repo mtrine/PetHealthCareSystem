@@ -1,17 +1,19 @@
 package com.group07.PetHealthCare.dto.request;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class VisitScheduleRequest {
     private String veterinarianId;
     private String hospitalizationId;
     private LocalDate visitDate;
-    private boolean status;
+    private Boolean status;
     private int sessionId;
+
+
 }

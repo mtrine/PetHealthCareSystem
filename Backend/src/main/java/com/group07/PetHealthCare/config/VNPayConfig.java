@@ -28,6 +28,9 @@ public class VNPayConfig {
     private String vnp_Command;
     @Value("${payment.vnPay.orderType}")
     private String orderType;
+    @Getter
+    @Value("${payment.vnPay.refundUrl}")
+    private String vnp_RefundUrl;
     public Map<String, String> getVNPayConfig() {
         Map<String, String> vnpParamsMap = new HashMap<>();
         vnpParamsMap.put("vnp_Version", this.vnp_Version);

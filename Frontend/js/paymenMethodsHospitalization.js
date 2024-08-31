@@ -1,36 +1,33 @@
 document.getElementById("pay").addEventListener("click", async function () {
     const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
     const urlParams = new URLSearchParams(window.location.search);
-    const appointmentId = urlParams.get('id');
+    const hospitalizationId = urlParams.get('id');
+    
     if (selectedPaymentMethod == "cash") {
-        
-        window.location.href = "cash.html?id=" + appointmentId;
+        window.location.href = "cashForHospitalization.html?id=" + hospitalizationId ;
     } else if (selectedPaymentMethod == "vnpay") {
-
         const port = window.location.port;
-        const data = await fetchWithToken(`${API_BASE_URL}/v1/appointments/${appointmentId}`, {
-            method: 'GET',
+        const data = {
+            endDate: new Date().toISOString().slice(0, 10),
+        }
+        const response = await fetchWithToken(`${API_BASE_URL}/v1/hospitalizations/${hospitalizationId}`, {
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
-        });
-
-        if (data.code == 1000) {
-            const appointment = data.result;
+            body: JSON.stringify(data)
+        })
+    
+        if(response.code === 1000) {
+            const hosptalization= response.result;
             var amount = 0;
-            appointment.servicesResponsesList.forEach(service => {
-                amount += service.unitPrice;
-
-            });
-            amount =amount- appointment.deposit;
-            if (amount <= 0) {
-                window.location.href = "bookingSuccessForStaff.html";
-            }
-            else {
+            const numberDay= new Date(hosptalization.endDate).getDate()-new Date(hosptalization.startDate).getDate();
+            if(numberDay==0) {amount= hosptalization.cageResponse.unitPrice}
+            else {amount= numberDay*hosptalization.cageResponse.unitPrice;}
+            
                 const dataForVNPay = {
-                    appointmentId: appointmentId,
-                    typePayment: "APPOINTMENT",
-
+                    hospitalizationId: hospitalizationId,
+                    typePayment: "HOSPITALIZATION",
                 }
 
                 const dataVNPay = await fetchWithToken(`${API_BASE_URL}/v1/payments/vn-pay?amount=${amount}&port=${port}`, {
@@ -46,10 +43,9 @@ document.getElementById("pay").addEventListener("click", async function () {
                 } else {
                     alert(dataVNPay.message);
                 }
-            }
-        }
-        else {
-            alert(dataVNPay.message);
+           
+        } else {
+            alert("Đã có lỗi xảy ra: " + response.message);
         }
     } else {
         alert("Please select a payment method.");

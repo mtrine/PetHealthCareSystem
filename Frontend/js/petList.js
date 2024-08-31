@@ -129,3 +129,13 @@ document.querySelector("#delete-btn").addEventListener("click", async function (
         alert('Đã xảy ra lỗi: ' + response.message);
     }
 })
+
+function navigate(url) {
+        
+
+    if (authToken) {
+        window.location.href = url;
+    } else {
+        showModal();
+    }
+}
