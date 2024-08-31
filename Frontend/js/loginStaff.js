@@ -31,7 +31,8 @@ document.querySelector(".login-btn").addEventListener("click", async function ()
                 window.location.href = "index.html";
             }
             else if (data.result.userResponse.role === "ADMIN") {
-                window.location.href = "indexAdmin.html";
+                localStorage.setItem('authToken', data.result.token);
+                window.location.href = "/Admin/index.html";
             }
             else {
                 localStorage.setItem('authToken', data.result.token);

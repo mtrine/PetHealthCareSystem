@@ -25,9 +25,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -170,6 +173,7 @@ public class PaymentService {
             payment.setPaymentMethod("Cash");
             payment.setPaymentDate(LocalDate.now());
             payment.setTotalAmount(paymentRequest.getTotalAmount());
+            payment.setStatus("SUCCESS");
             payment.setTypePayment(TYPEPAYMENT.valueOf(paymentRequest.getTypePayment()));
             if (payment instanceof PaymentForHospitalization) {
                 Hospitalization hospitalization = hospitalizationRepository.findById(paymentRequest.getHospitalizationId()).
@@ -191,6 +195,7 @@ public class PaymentService {
             existPayment.setTotalAmount(existPayment.getTotalAmount()+paymentRequest.getTotalAmount());
             Appointment appointment= appointmentRepository.findById(paymentRequest.getAppointmentId()).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
             appointment.setStatus("Success");
+            existPayment.setStatus("SUCCESS");
             appointmentRepository.save(appointment);
             return paymentMapper.mapResponse(paymentRepository.save(existPayment));
         }
@@ -204,7 +209,7 @@ public class PaymentService {
         long numberOfDays = ChronoUnit.DAYS.between(paymentDate, today);
         if(Objects.equals(appointment.getStatus(), "Paid")) {
             if(numberOfDays<=6&&numberOfDays>=3){
-                existPayment.setTotalAmount(existPayment.getTotalAmount()*0.75);
+                existPayment.setTotalAmount(existPayment.getTotalAmount()*0.25);
             } else if (numberOfDays<=2) {
                 existPayment.setTotalAmount(0.0);
             }
@@ -216,6 +221,42 @@ public class PaymentService {
             throw new RuntimeException("This status invalid");
         }
         return paymentMapper.mapResponse(paymentRepository.save(existPayment));
+    }
+
+
+    public Map<LocalDate, Double> getRevenueByDay(LocalDate startDate, LocalDate endDate) {
+        List<Payment> payments = paymentRepository.findAllByPaymentDateBetween(startDate, endDate);
+        return payments.stream()
+                .filter(payment -> "SUCCESS".equals(payment.getStatus())) // Lọc thanh toán có trạng thái SUCCESS
+                .collect(Collectors.groupingBy(
+                        Payment::getPaymentDate,
+                        Collectors.summingDouble(Payment::getTotalAmount)
+                ));
+    }
+
+
+    public Map<Integer, Double> getRevenueByMonth(int year) {
+        List<Payment> payments = paymentRepository.findAllByPaymentDateYear(year);
+
+        return payments.stream()
+                .filter(payment -> "SUCCESS".equals(payment.getStatus())) // Lọc thanh toán có trạng thái SUCCESS
+                .collect(Collectors.groupingBy(
+                        payment -> payment.getPaymentDate().getMonthValue(), // Chuyển tháng thành số (1-12)
+                        Collectors.summingDouble(Payment::getTotalAmount)
+                ));
+    }
+
+
+
+    public Map<Integer, Double> getRevenueByYear(int endYear) {
+        int startYear = 2000;
+        List<Payment> payments = paymentRepository.findAllByPaymentDateYearBetween(startYear, endYear);
+        return payments.stream()
+                .filter(payment -> "SUCCESS".equals(payment.getStatus())) // Lọc thanh toán có trạng thái SUCCESS
+                .collect(Collectors.groupingBy(
+                        payment -> payment.getPaymentDate().getYear(),
+                        Collectors.summingDouble(Payment::getTotalAmount)
+                ));
     }
 
 }

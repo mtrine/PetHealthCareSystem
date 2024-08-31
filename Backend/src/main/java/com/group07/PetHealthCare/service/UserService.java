@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -82,5 +83,10 @@ public class UserService {
         String name = context.getAuthentication().getName();
         User user = IUserRepository.findByEmail(name).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         return updateInforUser(user.getId(), request);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserResponse> getAllUser(){
+        return userMapper.toUserResponses(IUserRepository.findAll());
     }
 }

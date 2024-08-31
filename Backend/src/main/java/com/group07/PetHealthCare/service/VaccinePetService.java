@@ -30,15 +30,33 @@ public class VaccinePetService {
 
     @PreAuthorize("hasAnyRole('STAFF','ADMIN','VETERINARIAN')")
     public VaccinePetResponse addVaccineToPet(VaccinePetRequest request) {
-        VaccinePet vaccinePet = new VaccinePet();
-        Pet pet = petRepository.findById(request.getPetId()).orElseThrow(()->new RuntimeException("Pet not found"));
-        vaccinePet.setPet(pet);
-        Vaccine vaccine= vaccineRepository.findById(request.getVaccineId()).orElseThrow(()->new RuntimeException("Vaccine not found"));
-        vaccinePet.setVaccine(vaccine);
-        vaccinePet.setStingDate(request.getStingDate());
-        vaccinePet.setReStingDate(request.getReStingDate());
-        return vaccinePetMapper.toVaccinePetResponse(vaccinePetRepository.save(vaccinePet)) ;
+        // Tìm Pet từ request
+        Pet pet = petRepository.findById(request.getPetId())
+                .orElseThrow(() -> new RuntimeException("Pet not found"));
+
+        // Tìm Vaccine từ request
+        Vaccine vaccine = vaccineRepository.findById(request.getVaccineId())
+                .orElseThrow(() -> new RuntimeException("Vaccine not found"));
+
+        // Tìm VaccinePet với Pet và Vaccine đã cho
+        VaccinePet existingVaccinePet = vaccinePetRepository.findByPetAndVaccine(pet, vaccine);
+
+        if (existingVaccinePet != null) {
+            // Nếu VaccinePet đã tồn tại, cập nhật ngày chích và ngày chích lại
+            existingVaccinePet.setStingDate(request.getStingDate());
+            existingVaccinePet.setReStingDate(request.getReStingDate());
+            return vaccinePetMapper.toVaccinePetResponse(vaccinePetRepository.save(existingVaccinePet));
+        } else {
+            // Nếu VaccinePet chưa tồn tại, tạo mới
+            VaccinePet vaccinePet = new VaccinePet();
+            vaccinePet.setPet(pet);
+            vaccinePet.setVaccine(vaccine);
+            vaccinePet.setStingDate(request.getStingDate());
+            vaccinePet.setReStingDate(request.getReStingDate());
+            return vaccinePetMapper.toVaccinePetResponse(vaccinePetRepository.save(vaccinePet));
+        }
     }
+
 
     public List<VaccinePetResponse> getVaccinePetByPetId(String petId) {
         Pet pet=petRepository.findById(petId).orElseThrow(()->new RuntimeException("Pet not found"));

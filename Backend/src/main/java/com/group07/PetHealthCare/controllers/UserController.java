@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/users")
 public class UserController {
@@ -41,6 +43,12 @@ public class UserController {
     public ApiResponse<UserResponse> updateUserInfo(@RequestBody @Valid UserRequest request) {
         ApiResponse<UserResponse> apiResponse= new ApiResponse<>();
         apiResponse.setResult(userService.updateMyInfo(request));
+        return apiResponse;
+    }
+    @GetMapping
+    public ApiResponse<List<UserResponse>> getAllUsers() {
+        ApiResponse<List<UserResponse>> apiResponse= new ApiResponse<>();
+        apiResponse.setResult(userService.getAllUser());
         return apiResponse;
     }
 }
