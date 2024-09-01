@@ -4,13 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
         defaultSection: document.querySelector('.default-section'),
         cageSection: document.querySelector('.cage-section'),
         bookingSection: document.querySelector('.booking-section'),
-        petHospitalizedSection: document.querySelector('.pet-hospitalized-section')
+        petHospitalizedSection: document.querySelector('.pet-hospitalized-section'),
+        staffSection: document.querySelector('#staff-info-section')
     };
 
     const sidebarItems = {
         cageItem: document.getElementById('cage-item'),
         bookingItem: document.getElementById('booking-item'),
         hospitalizedItem: document.getElementById('hospitalized-item'),
+        staffItem: document.getElementById('staff-info-item'),
         logo: document.querySelector('.sidebar-logo img')
     };
 
@@ -26,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sidebarItems.cageItem.addEventListener('click', () => showSection(sections.cageSection));
     sidebarItems.bookingItem.addEventListener('click', () => showSection(sections.bookingSection));
     sidebarItems.hospitalizedItem.addEventListener('click', () => showSection(sections.petHospitalizedSection));
+    sidebarItems.staffItem.addEventListener('click', () => showSection(sections.staffSection));
     // Cài đặt sự kiện click cho logo để trở về default-section
     sidebarItems.logo.addEventListener('click', () => {
         // Hiển thị phần default-section với display flex
@@ -144,3 +147,8 @@ checkboxes.forEach(checkbox => {
 document.querySelector('.add-hospitalized-btn').addEventListener('click', function () {
     window.location.href = 'addHospitalized.html';
 })
+
+// Chuyển sang EditStaff
+function showEditInfo() {
+    window.location.href = 'EditStaff.html';
+}
