@@ -37,7 +37,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.querySelector('#date').innerText = appointment.appointmentDate;
         document.querySelector('#doctor-name').innerText = appointment.veterinarianName;
         document.querySelector('.pet-name').innerText = appointment.pet.name;
-        document.querySelector('.service-name').innerText = appointment.serviceName[0];
+        document.querySelector('.service-name').innerText = "";
+        appointment.servicesResponsesList.forEach(service => {
+            if(document.querySelector('.service-name').innerText == ""){
+                document.querySelector('.service-name').innerText = service.name;
+            }
+            else{
+                document.querySelector('.service-name').innerText += ", " + service.name;
+            }
+        });
     }
     else{
         alert(data.message);
