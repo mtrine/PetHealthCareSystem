@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // Event listener for Add Booking button
     addBookingBtn.addEventListener('click', openModal);
-    addhospitalizedbtn.addEventListener('click', openModal);
+    // addhospitalizedbtn.addEventListener('click', openModal);
 
     // Event listener for Cancel button in modal
     cancelBtn.addEventListener('click', closeModal);

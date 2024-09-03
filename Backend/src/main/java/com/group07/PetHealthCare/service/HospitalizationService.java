@@ -92,7 +92,8 @@ public class HospitalizationService {
         }
         if (request.getEndDate() != null) {
             Cage cage=hospitalization.getCage();
-            cage.setStatus(!cage.getStatus());
+            cage.setStatus(false);
+            cageRepository.save(cage);
             hospitalization.setEndDate(request.getEndDate());
         }
         if (request.getHealthCondition() != null) {

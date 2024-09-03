@@ -29,11 +29,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         appointments.forEach(appointment => {
             const appointmentItem = document.createElement('ul');
             appointmentItem.classList.add('history-item');
+            if(appointment.status == 'REVIEWED'||appointment.status!="Success") return;
             appointmentItem.innerHTML = `
                <li>${appointment.appointmentDate}</li>
                 <li>${appointment.veterinarianName}</li>
                     <li>${appointment.pet.name}</li>
-                    <li>${appointment.serviceName[0]}</li>
+                    <li>${appointment.servicesResponsesList[0].name}</li>
                     <li>${appointment.sessionResponse.startTime}-${appointment.sessionResponse.endTime}</li>
             `;
             appointmentContainer.appendChild(appointmentItem);
@@ -45,3 +46,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         })
     }
 });
+
+function navigate(url) {
+        
+
+    if (authToken) {
+        window.location.href = url;
+    } else {
+        showModal();
+    }
+}

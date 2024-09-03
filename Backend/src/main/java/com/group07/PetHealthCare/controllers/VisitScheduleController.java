@@ -30,4 +30,11 @@ public class VisitScheduleController {
        apiResponse.setResult(visitScheduleService.getMyVisitSchedules());
        return apiResponse;
     }
+
+    @PatchMapping("/{visitScheduleId}")
+    public ApiResponse<VisitScheduleResponse> updateVisitSchedule(@PathVariable("visitScheduleId") String visitScheduleId, @RequestBody VisitScheduleRequest visitScheduleRequest) {
+       ApiResponse<VisitScheduleResponse> apiResponse=new ApiResponse<>();
+       apiResponse.setResult(visitScheduleService.updateVisitSchedule(visitScheduleId, visitScheduleRequest));
+       return apiResponse;
+    }
 }

@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig{
     private final String[] PUBLIC_ENDPOINTS = {
-            "/v1/auth/**","/v1/payments/**"
+            "/v1/auth/**","/v1/payments/vn-pay-callback"
     };
 
     @Autowired
@@ -29,7 +29,6 @@ public class SecurityConfig{
         http.authorizeRequests(requests ->
                 requests
                         .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated()
         );
         http.oauth2ResourceServer(

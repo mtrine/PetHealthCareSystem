@@ -1,5 +1,5 @@
- // Bật subnav của customer
- document.addEventListener('DOMContentLoaded', function () {
+// Bật subnav của customer
+document.addEventListener('DOMContentLoaded', function () {
     const headerBtn = document.querySelector('.header-btn');
     const subNavLoggedIn = document.querySelector('.sub-nav.logged-in');
 
@@ -26,15 +26,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Hiển thị modal
-function showModal() {
+// Hiển thị modal và gán appointmentId vào modal
+function showModal(appointmentId,textModel,price) {
     document.getElementById('cancel-modal').style.display = 'flex';
+    document.querySelector('.modal-content').querySelector('p').innerHTML=textModel;
+    // Gán appointmentId vào một phần tử ẩn trong modal
+    document.getElementById('modal-appointment-id').value = appointmentId;
+    document.getElementById('modal-appointment-price').value =price;
 }
 
 // Ẩn modal
 function hideModal() {
     document.getElementById('cancel-modal').style.display = 'none';
 }
+
 document.addEventListener('DOMContentLoaded', async function () {
     const appointmentContainer = document.querySelector('.appointment-list-section');
     const data = await fetchWithToken(`${API_BASE_URL}/v1/appointments/my-appointment-for-customer`, {
@@ -43,35 +48,98 @@ document.addEventListener('DOMContentLoaded', async function () {
             'Content-Type': 'application/json'
         },
     });
+    
     if (data && data.code === 1000) {
-        const appointments= data.result;
+        const appointments = data.result;
         console.log(appointments);
         appointments.forEach(appointment => {
             const appointmentItem = document.createElement('ul');
             appointmentItem.classList.add('appointment-item');
             var vetName = appointment.veterinarianName;
-            var status = "Đã chuyển khoảng";
-            if(!appointment.deposit){
-                status = "Chưa chuyển khoảng";
+            var status = "";
+            let cancelHtml = ""; // Biến lưu trữ HTML cho phần hủy lịch hẹn
+            var textModel=""
+            var today=new Date();
+            var appointmentDate=new Date(appointment.appointmentDate);
+            var numberDay=today.getDate()-appointmentDate.getDate();
+            if (appointment.status === 'processing') {
+                status = "Đang xử lý";
+            } else if (appointment.status === 'Paid') {
+                status = "Đã thanh toán";
+                if(numberDay<=2){
+                    textModel="Bạn sẽ được hoàn 100% tiền cọc"
+                }
+                else if(numberDay>2 && numberDay<=6){
+                    textModel="Bạn sẽ được hoàn 75% tiền cọc"
+                }
+                else{
+                    textModel="Bạn sẽ không được hoàn"
+                }
+                if(numberDay<7){
+                    cancelHtml = `<div class="cancel" onclick="showModal('${appointment.id}','${textModel}','${appointment.deposit}')"><i class='bx bx-x-circle'></i></div>
+                        <div class="cancel-hover">Hủy lịch hẹn</div>`;
+                }
+            } else if (appointment.status === 'Cancelled') {
+                status = "Đã hủy";
+            } else if (appointment.status === 'Success') {
+                status = "Thành công";
+            } else if (appointment.status === 'REVIEWED') {
+                status = "Đã đánh giá";
+            } 
+            else if (appointment.status === 'Examined') {
+                status = "Đã khám";
             }
-            if(!vetName){
+            else {
+                status = "Thất bại";
+            }
+
+            if (!vetName) {
                 vetName = 'Chưa có';
             }
+
             appointmentItem.innerHTML = `
                 <li>${appointment.appointmentDate}</li>
-                    <li>${vetName}</li>
-                    <li>${appointment.pet.name}</li>
-                    <li>${appointment.servicesResponsesList[0].name}</li>
-                    <li>${appointment.sessionResponse.startTime}-${appointment.sessionResponse.endTime}</li>
-                    <li>${status} <div class="cancel" onclick="showModal()"><i class='bx bx-x-circle'></i></div>
-                        <div class="cancel-hover">Hủy lịch hẹn</div>
-                    </li>
+                <li>${vetName}</li>
+                <li>${appointment.pet.name}</li>
+                <li>${appointment.servicesResponsesList[0].name}</li>
+                <li>${appointment.sessionResponse.startTime}-${appointment.sessionResponse.endTime}</li>
+                <li>${status} ${cancelHtml}</li>
             `;
 
             appointmentContainer.appendChild(appointmentItem);
         });
-        
     } else {
         alert('Đã xảy ra lỗi: ' + data.message);
     }
-})
+});
+
+document.getElementById("confirm-cancel").addEventListener('click', async function () {
+    const appointmentId = document.getElementById('modal-appointment-id').value;
+    const price = document.getElementById('modal-appointment-price').value;
+    const data = await fetchWithToken(`${API_BASE_URL}/v1/payments/refund`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            appointmentId: appointmentId,
+            amount: price
+        })
+    })
+
+    if (data && data.code === 1000) {
+        alert('Hủy lịch hẹn thành công');
+        window.location.reload();
+    } else {
+        alert('Đã xảy ra lỗi: ' + data.message);
+    }
+});
+function navigate(url) {
+        
+
+    if (authToken) {
+        window.location.href = url;
+    } else {
+        showModal();
+    }
+}

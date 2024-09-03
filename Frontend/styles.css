@@ -414,7 +414,7 @@ html {
 
 /* Định kiểu cho bảng modal */
 .modal {
-    display: flex; /* Ẩn modal theo mặc định */
+    display: none; /* Ẩn modal theo mặc định */
     position: fixed;
     left: 0;
     top: 0;

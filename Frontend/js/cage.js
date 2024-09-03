@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         },
     });
 
-    if (data.code == 1000) {
+    if (data.code === 1000) {
         const cages = data.result;
         cages.forEach(cage => {
             const cageItem = document.createElement('ul');
