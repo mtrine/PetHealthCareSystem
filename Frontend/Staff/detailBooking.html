@@ -336,13 +336,14 @@
             position: relative;
         }
 
-        .add-service-modal .modal-content i {
+        .add-service-modal .modal-content > i {
             font-size: 50px;
             margin-top: 10px;
             margin-bottom: 20px;
         }
 
         .add-service-modal .modal-content p {
+            margin-bottom: 10px;
             padding: 0 10px;
             font-size: 25px;
             font-weight: 600;
@@ -372,6 +373,60 @@
 
         .add-service-modal .modal-buttons button:hover {
             background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .add-service-modal .custom-select {
+            width: auto;
+            height: 56px;
+            position: relative;
+            border: 2px solid #000;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .add-service-modal .custom-select .selected-option {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-size: 25px;
+            color: #000;
+            background-color: #fff;
+            border-radius: 30px;
+        }
+
+        .add-service-modal .custom-select .options {
+            display: none;
+            position: absolute;
+            text-align: center;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 30px;
+            box-shadow: 0px 4px 10px 5px #ccc;
+            z-index: 10;
+        }
+
+        .add-service-modal .custom-select .options div {
+            padding: 15px 20px;
+            font-size: 25px;
+            cursor: pointer;
+            color: #5E5E5E;
+            border-bottom: 2px solid #ccc;
+        }
+
+        .add-service-modal .custom-select .options div:last-child {
+            border-bottom: none;
+        }
+
+        .add-service-modal .custom-select .options div:hover {
+            color: #000;
+        }
+
+        .add-service-modal .custom-select.open .options {
+            display: block;
         }
 
     </style>
@@ -445,6 +500,7 @@
             </div>
         </div>
     </div>
+
     <div id="add-service-modal" class="add-service-modal">
         <div class="modal-content">
             <i class='bx bx-error'></i>
@@ -452,10 +508,10 @@
             <div id="service-select" class="custom-select">
                 <div class="selected-option">Chọn dịch vụ<i class='bx bx-chevron-down'></i></div>
                 <div class="options">
-                    <div>Triệt sản</div>
-                    <div>Chữa bệnh</div>
-                    <div>Khám sức khỏe</div>
-                    <div>Phẫu thuật</div>
+                    <div data-value="service1">Triệt sản</div>
+                    <div data-value="service2">Chữa bệnh</div>
+                    <div data-value="service3">Khám sức khỏe</div>
+                    <div data-value="service4" style="border-bottom: none;">Phẫu thuật</div>
                 </div>
             </div>
             <div class="modal-buttons">
@@ -469,9 +525,5 @@
         <p>Xóa thành công!</p>
 </body>
 <script src="../config/config.js"></script>
-<script src="../js//detailBooking.js">
-    
-
-</script>
-
+<script src="../js//detailBooking.js"></script>
 </html>

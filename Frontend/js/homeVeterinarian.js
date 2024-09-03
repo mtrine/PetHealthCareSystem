@@ -1,9 +1,11 @@
 // Get elements
 const bookingItem = document.getElementById('booking-item');
 const hospitalizedItem = document.getElementById('hospitalized-item');
+const doctorItem = document.getElementById('doctor-info-item');
 const defaultSection = document.querySelector('.default-section');
 const bookingSection = document.querySelector('.booking-section');
 const petHospitalizedSection = document.querySelector('.pet-hospitalized-section');
+const doctorSection = document.querySelector('#doctor-info-section');
 
 // Event listeners for sidebar items
 bookingItem.addEventListener('click', () => {
@@ -11,6 +13,7 @@ bookingItem.addEventListener('click', () => {
     defaultSection.style.display = 'none';
     bookingSection.style.display = 'block';
     petHospitalizedSection.style.display = 'none';
+    doctorSection.style.display = 'none';
 });
 
 hospitalizedItem.addEventListener('click', () => {
@@ -18,7 +21,22 @@ hospitalizedItem.addEventListener('click', () => {
     defaultSection.style.display = 'none';
     bookingSection.style.display = 'none';
     petHospitalizedSection.style.display = 'block';
+    doctorSection.style.display = 'none';
 });
+
+doctorItem.addEventListener('click', () => {
+    // Hide all sections first
+    defaultSection.style.display = 'none';
+    bookingSection.style.display = 'none';
+    petHospitalizedSection.style.display = 'none';
+    doctorSection.style.display = 'block';
+});
+
+// Chuyển sang EditDoctor
+function showEditInfo() {
+    window.location.href = 'EditDoctor.html';
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const addBookingBtn = document.getElementById('addBookingBtn');
