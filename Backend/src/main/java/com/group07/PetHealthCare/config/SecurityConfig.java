@@ -29,6 +29,8 @@ public class SecurityConfig{
         http.authorizeRequests(requests ->
                 requests
                         .requestMatchers(HttpMethod.POST,PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(HttpMethod.GET,PUBLIC_ENDPOINTS).permitAll()
+
                         .anyRequest().authenticated()
         );
         http.oauth2ResourceServer(

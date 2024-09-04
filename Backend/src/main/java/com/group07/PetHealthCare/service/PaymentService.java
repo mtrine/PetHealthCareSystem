@@ -143,7 +143,7 @@ public class PaymentService {
                 response.sendRedirect(baseUrl+ "/bookingSuccess.html");
             }
             else{
-                response.sendRedirect(baseUrl + "/bookingSuccessForStaff.html");
+                response.sendRedirect(baseUrl + "/Staff/bookingSuccessForStaff.html");
             }
         } else { // Nếu thanh toán thất bại
             if (paymentForAppointment != null) {
@@ -157,7 +157,7 @@ public class PaymentService {
                 response.sendRedirect( baseUrl + "/bookingFailed.html");
             }
             else{
-                response.sendRedirect( baseUrl + "/bookingFailedForStaff.html");
+                response.sendRedirect( baseUrl + "/Staff/bookingFailedForStaff.html");
             }
         }
     }
