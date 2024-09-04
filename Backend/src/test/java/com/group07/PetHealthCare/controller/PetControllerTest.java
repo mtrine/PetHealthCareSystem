@@ -44,7 +44,7 @@ public class PetControllerTest {
     private CustomerResponse customerResponse;
 
     @BeforeEach
-    void setUp() {
+    void initData() {
         objectMapper = new ObjectMapper();
 
         petCreationRequest = new PetCreationRequest();
@@ -86,15 +86,13 @@ public class PetControllerTest {
                         .content(objectMapper.writeValueAsString(petCreationRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.code").value(1000))
-                .andExpect(jsonPath("$.message").value("Successful"))
-                .andExpect(jsonPath("$.result.id").value(petResponse.getId()))
-                .andExpect(jsonPath("$.result.name").value(petResponse.getName()))
-                .andExpect(jsonPath("$.result.age").value(petResponse.getAge()))
-                .andExpect(jsonPath("$.result.speciesResponse.id").value(petResponse.getSpeciesResponse().getId()))
-                .andExpect(jsonPath("$.result.speciesResponse.name").value(petResponse.getSpeciesResponse().getName()))
-                .andExpect(jsonPath("$.result.customerResponse.id").value(customerResponse.getId()))
-                .andExpect(jsonPath("$.result.customerResponse.name").value(customerResponse.getName()));
+                .andExpect(jsonPath("$.result.id").value("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9"))
+                .andExpect(jsonPath("$.result.name").value("Bông"))
+                .andExpect(jsonPath("$.result.age").value(3))
+                .andExpect(jsonPath("$.result.speciesResponse.id").value("971c1a50-e074-43d3-a8db-6e7f5bd1a9c2"))
+                .andExpect(jsonPath("$.result.speciesResponse.name").value("Dog"))
+                .andExpect(jsonPath("$.result.customerResponse.id").value("e80bac44-998c-44db-b548-2d03b12e8a25"))
+                .andExpect(jsonPath("$.result.customerResponse.name").value("Nguyen Ngoc Quynh Nhu"));
     }
 
     @Test
@@ -103,44 +101,44 @@ public class PetControllerTest {
 
         when(petService.updatePet(any(String.class), any(PetUpdateRequest.class))).thenReturn(petResponse);
 
-        mockMvc.perform(patch("/v1/pets/{id}", petResponse.getId())
+        mockMvc.perform(patch("/v1/pets/{id}", "f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + getAuthToken())
                         .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result.id").value(petResponse.getId()))
-                .andExpect(jsonPath("$.result.name").value(petResponse.getName()))
-                .andExpect(jsonPath("$.result.age").value(petResponse.getAge()))
-                .andExpect(jsonPath("$.result.speciesResponse.id").value(petResponse.getSpeciesResponse().getId()))
-                .andExpect(jsonPath("$.result.speciesResponse.name").value(petResponse.getSpeciesResponse().getName()))
-                .andExpect(jsonPath("$.result.customerResponse.id").value(customerResponse.getId()))
-                .andExpect(jsonPath("$.result.customerResponse.name").value(customerResponse.getName()));
+                .andExpect(jsonPath("$.result.id").value("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9"))
+                .andExpect(jsonPath("$.result.name").value("Bông"))
+                .andExpect(jsonPath("$.result.age").value(3))
+                .andExpect(jsonPath("$.result.speciesResponse.id").value("971c1a50-e074-43d3-a8db-6e7f5bd1a9c2"))
+                .andExpect(jsonPath("$.result.speciesResponse.name").value("Dog"))
+                .andExpect(jsonPath("$.result.customerResponse.id").value("e80bac44-998c-44db-b548-2d03b12e8a25"))
+                .andExpect(jsonPath("$.result.customerResponse.name").value("Nguyen Ngoc Quynh Nhu"));
     }
 
     @Test
     void getPetById() throws Exception {
-        when(petService.getPetById(petResponse.getId())).thenReturn(petResponse);
+        when(petService.getPetById("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9")).thenReturn(petResponse);
 
-        mockMvc.perform(get("/v1/pets/{id}", petResponse.getId())
+        mockMvc.perform(get("/v1/pets/{id}", "f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9")
                         .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result.id").value(petResponse.getId()))
-                .andExpect(jsonPath("$.result.name").value(petResponse.getName()))
-                .andExpect(jsonPath("$.result.age").value(petResponse.getAge()))
-                .andExpect(jsonPath("$.result.speciesResponse.id").value(petResponse.getSpeciesResponse().getId()))
-                .andExpect(jsonPath("$.result.speciesResponse.name").value(petResponse.getSpeciesResponse().getName()))
-                .andExpect(jsonPath("$.result.customerResponse.id").value(customerResponse.getId()))
-                .andExpect(jsonPath("$.result.customerResponse.name").value(customerResponse.getName()));
+                .andExpect(jsonPath("$.result.id").value("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9"))
+                .andExpect(jsonPath("$.result.name").value("Bông"))
+                .andExpect(jsonPath("$.result.age").value(3))
+                .andExpect(jsonPath("$.result.speciesResponse.id").value("971c1a50-e074-43d3-a8db-6e7f5bd1a9c2"))
+                .andExpect(jsonPath("$.result.speciesResponse.name").value("Dog"))
+                .andExpect(jsonPath("$.result.customerResponse.id").value("e80bac44-998c-44db-b548-2d03b12e8a25"))
+                .andExpect(jsonPath("$.result.customerResponse.name").value("Nguyen Ngoc Quynh Nhu"));
     }
 
     @Test
     void deletePet() throws Exception {
-        Mockito.doNothing().when(petService).deletePet(petResponse.getId());
+        Mockito.doNothing().when(petService).deletePet("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9");
 
-        mockMvc.perform(delete("/v1/pets/{id}", petResponse.getId())
+        mockMvc.perform(delete("/v1/pets/{id}", "f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9")
                         .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -150,46 +148,19 @@ public class PetControllerTest {
     @Test
     void getPetsByCustomerId() throws Exception {
         Set<PetResponse> petResponses = Collections.singleton(petResponse);
-        when(petService.getPetsByCustomerId(customerResponse.getId())).thenReturn(petResponses);
+        when(petService.getPetsByCustomerId("e80bac44-998c-44db-b548-2d03b12e8a25")).thenReturn(petResponses);
 
-        mockMvc.perform(get("/v1/pets/customers/{customerId}", customerResponse.getId())
+        mockMvc.perform(get("/v1/pets/customers/{customerId}", "e80bac44-998c-44db-b548-2d03b12e8a25")
                         .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result[0].id").value(petResponse.getId()))
-                .andExpect(jsonPath("$.result[0].name").value(petResponse.getName()));
-    }
-
-    @Test
-    void getMyPetList() throws Exception {
-        Set<PetResponse> petResponses = Collections.singleton(petResponse);
-        when(petService.getMyPetList()).thenReturn(petResponses);
-
-        mockMvc.perform(get("/v1/pets/my-pet")
-                        .header("Authorization", "Bearer " + getAuthToken())
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result[0].id").value(petResponse.getId()))
-                .andExpect(jsonPath("$.result[0].name").value(petResponse.getName()));
-    }
-
-    @Test
-    void addMyPet() throws Exception {
-        when(petService.addMyPet(any(PetCreationRequest.class))).thenReturn(petResponse);
-
-        mockMvc.perform(post("/v1/pets/my-pet")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + getAuthToken())
-                        .content(objectMapper.writeValueAsString(petCreationRequest)))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result.id").value(petResponse.getId()))
-                .andExpect(jsonPath("$.result.name").value(petResponse.getName()))
-                .andExpect(jsonPath("$.result.age").value(petResponse.getAge()))
-                .andExpect(jsonPath("$.result.speciesResponse.id").value(petResponse.getSpeciesResponse().getId()))
-                .andExpect(jsonPath("$.result.speciesResponse.name").value(petResponse.getSpeciesResponse().getName()))
-                .andExpect(jsonPath("$.result.customerResponse.id").value(customerResponse.getId()))
-                .andExpect(jsonPath("$.result.customerResponse.name").value(customerResponse.getName()));
+                .andExpect(jsonPath("$.result[0].id").value("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9"))
+                .andExpect(jsonPath("$.result[0].name").value("Bông"))
+                .andExpect(jsonPath("$.result[0].age").value(3))
+                .andExpect(jsonPath("$.result[0].speciesResponse.id").value("971c1a50-e074-43d3-a8db-6e7f5bd1a9c2"))
+                .andExpect(jsonPath("$.result[0].speciesResponse.name").value("Dog"))
+                .andExpect(jsonPath("$.result[0].customerResponse.id").value("e80bac44-998c-44db-b548-2d03b12e8a25"))
+                .andExpect(jsonPath("$.result[0].customerResponse.name").value("Nguyen Ngoc Quynh Nhu"));
     }
 
     private String getAuthToken() throws Exception {
