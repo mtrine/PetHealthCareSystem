@@ -209,7 +209,7 @@ public class UserControllerTest {
 
         String requestJson = new ObjectMapper().writeValueAsString(userRequest);
 
-        mockMVC.perform(MockMvcRequestBuilders.patch("/v1/users/update-my-info", userId)
+        mockMVC.perform(MockMvcRequestBuilders.patch("/v1/users/my-info", userId)
                         .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))

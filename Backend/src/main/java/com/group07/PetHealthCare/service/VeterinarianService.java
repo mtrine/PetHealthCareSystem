@@ -18,6 +18,8 @@ import com.group07.PetHealthCare.respositytory.IVisitScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -109,5 +111,12 @@ public class VeterinarianService {
         return veterinarianMapper.toResponseList(availableVeterinarians);
     }
 
+@PreAuthorize("hasRole('VETERINARIAN')")
+    public VeterinarianResponse getMyInfo(){
+        SecurityContext context = SecurityContextHolder.getContext();
+        String email = context.getAuthentication().getName();
+        Veterinarian veterinarian=IVeterinarianRepository.findByEmail(email).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND));
+        return veterinarianMapper.toResponse(veterinarian);
+    }
 
 }

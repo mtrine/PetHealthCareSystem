@@ -68,11 +68,11 @@
             </ul>
             <ul class="sub-nav logged-in">
                 <li><a href="PetList.html">Danh sách thú cưng</a></li>
-                <li><a href="AppointmentList.html">Đánh giá lượt thăm khám</a></li>
-                <li><a href="AppointmentTracking.html">Theo dõi lịch hẹn</a></li>
-                <li><a href="PetTracking.html">Theo dõi nhập viện</a></li>
-                <li><a href="CustomerInfo.html">Thông tin cá nhân</a></li>
-                <li><a href="register.html">Đăng xuất</a></li>
+                    <li><a href="AppointmentList.html">Đánh giá lượt thăm khám</a></li>
+                    <li><a href="AppointmentTracking.html">Theo dõi lịch hẹn</a></li>
+                    <li><a href="PetTracking.html">Theo dõi nhập viện</a></li>
+                    <li><a href="CustomerInfo.html">Thông tin cá nhân</a></li>
+                    <li><a  id="logout">Đăng xuất</a></li>
             </ul>
         </div>
     </header>
@@ -108,6 +108,42 @@
             showModal();
         }
     }
+
+    document.querySelector("#logout").addEventListener("click", async function () {
+    try {
+        const response = await fetch(`${API_BASE_URL}/v1/auth/logout`, { // Thay thế URL bằng API của bạn
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+               token:authToken
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Đăng xuất thất bại');
+        }
+
+        const data = await response.json();
+
+        // Kiểm tra mã phản hồi
+        if (data.code === 1000) {
+            // Xử lý dữ liệu nhận được từ API
+            console.log('Đăng xuất thành công');
+
+            // Lưu token vào localStorage và chuyển hướng người dùng
+           localStorage.removeItem('authToken');
+            window.location.href = 'index.html'; // Chuyển hướng đến trang sau khi đăng nhập thành công
+        } else {
+            throw new Error(data.message || 'Đăng xuất thất bại');
+        }
+
+    } catch (error) {
+        console.error('Lỗi:', error);
+        alert('Đăng xuất thất bại');
+    }
+})
 </script>
 
 </html>

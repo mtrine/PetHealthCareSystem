@@ -52,5 +52,12 @@ public class VeterinarianController {
         apiResponse.setResult(veterinarianService.getAvailableVeterinariansForSessionAndDate(sessionId, appointmentDate));
         return apiResponse;
     }
+
+    @GetMapping("/my-info")
+    public ApiResponse<VeterinarianResponse> getMyVeterinarianInfo() {
+        ApiResponse<VeterinarianResponse> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(veterinarianService.getMyInfo());
+        return apiResponse;
+    }
 }
 

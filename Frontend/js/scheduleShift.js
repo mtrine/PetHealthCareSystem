@@ -149,20 +149,20 @@ document.addEventListener('DOMContentLoaded', async function () {
     try {
         // Fetch data from the API
         const response = await fetchWithToken(`${API_BASE_URL}/v1/services`); // Thay thế URL nếu cần
-   
+
 
         if (response.code === 1000 && Array.isArray(response.result)) {
             // Clear existing options
             optionsContainer.innerHTML = '';
-            
+
             // Populate options from API data
             response.result.forEach(service => {
-                
-                    const option = document.createElement('div');
-                    option.setAttribute('data-value', service.id);
-                    option.textContent = service.name;
-                    optionsContainer.appendChild(option);
-                
+
+                const option = document.createElement('div');
+                option.setAttribute('data-value', service.id);
+                option.textContent = service.name;
+                optionsContainer.appendChild(option);
+
             });
 
             // Add event listeners for options
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     const value = option.getAttribute('data-value');
                     selectedOption.textContent = option.textContent;
                     selectedOption.dataset.value = value;
-                     selectedOption.innerHTML = `${option.textContent} <i class='bx bx-chevron-down'></i>`
+                    selectedOption.innerHTML = `${option.textContent} <i class='bx bx-chevron-down'></i>`
                 });
             });
         } else {
@@ -188,19 +188,19 @@ document.addEventListener('DOMContentLoaded', async function () {
     try {
         // Fetch data from the API
         const response = await fetchWithToken(`${API_BASE_URL}/v1/pets/my-pet`); // Thay thế URL nếu cần
-   
+
 
         if (response.code === 1000 && Array.isArray(response.result)) {
             // Clear existing options
             optionsContainer.innerHTML = '';
-            
+
             // Populate options from API data
             response.result.forEach(pet => {
-                
-                    const option = document.createElement('div');
-                    option.setAttribute('data-value', pet.id);
-                    option.textContent = pet.name;
-                    optionsContainer.appendChild(option);
+
+                const option = document.createElement('div');
+                option.setAttribute('data-value', pet.id);
+                option.textContent = pet.name;
+                optionsContainer.appendChild(option);
             });
 
             // Add event listeners for options
@@ -209,8 +209,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                     const value = option.getAttribute('data-value');
                     selectedOption.textContent = option.textContent;
                     selectedOption.dataset.value = value;
-                     selectedOption.innerHTML = `${option.textContent} <i class='bx bx-chevron-down'></i>`
-                
+                    selectedOption.innerHTML = `${option.textContent} <i class='bx bx-chevron-down'></i>`
+
                 });
             });
         } else {
@@ -226,7 +226,7 @@ document.querySelector("#submitSchedule").addEventListener('click', async functi
     const petId = document.querySelector('#pet-select .selected-option').dataset.value;
     const date = document.querySelector('#date').value;
     const selectedRadio = document.querySelector('input[name="time"]:checked');
-    var selectedValue=""; 
+    var selectedValue = "";
     if (selectedRadio) {
         selectedValue = selectedRadio.getAttribute('data-value');
     }
@@ -239,7 +239,7 @@ document.querySelector("#submitSchedule").addEventListener('click', async functi
         appointmentDate: date,
         petId: petId,
         serviceId: [serviceId],
-        sessionId:  selectedValue,
+        sessionId: selectedValue,
     }
     const data = await fetchWithToken(`${API_BASE_URL}/v1/appointments/addBySession`, {
         method: 'POST',
@@ -258,7 +258,7 @@ document.querySelector("#submitSchedule").addEventListener('click', async functi
 });
 
 function navigate(url) {
-        
+
 
     if (authToken) {
         window.location.href = url;
@@ -266,3 +266,39 @@ function navigate(url) {
         showModal();
     }
 }
+
+document.querySelector("#logout").addEventListener("click", async function () {
+    try {
+        const response = await fetch(`${API_BASE_URL}/v1/auth/logout`, { // Thay thế URL bằng API của bạn
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: authToken
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Đăng xuất thất bại');
+        }
+
+        const data = await response.json();
+
+        // Kiểm tra mã phản hồi
+        if (data.code === 1000) {
+            // Xử lý dữ liệu nhận được từ API
+            console.log('Đăng xuất thành công');
+
+            // Lưu token vào localStorage và chuyển hướng người dùng
+            localStorage.removeItem('authToken');
+            window.location.href = 'index.html'; // Chuyển hướng đến trang sau khi đăng nhập thành công
+        } else {
+            throw new Error(data.message || 'Đăng xuất thất bại');
+        }
+
+    } catch (error) {
+        console.error('Lỗi:', error);
+        alert('Đăng xuất thất bại');
+    }
+})
