@@ -15,13 +15,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @Slf4j
 @SpringBootTest
@@ -68,8 +72,46 @@ public class VisitScheduleControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.result.visitScheduleId").value("vsc-123456"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.result.visitDate").value("2024-08-24"));
+                .andExpect(jsonPath("$.result.visitScheduleId").value("vsc-123456"))
+                .andExpect(jsonPath("$.result.visitDate").value("2024-08-24"));
+    }
+
+    @Test
+    void getMyVisitSchedule() throws Exception {
+        VisitScheduleResponse response = VisitScheduleResponse.builder()
+                .visitScheduleId("vsc-123456")
+                .visitDate(LocalDate.of(2024, 8, 24))
+                .build();
+
+        List<VisitScheduleResponse> visitSchedules = Collections.singletonList(response);
+
+        Mockito.when(visitScheduleService.getMyVisitSchedules())
+                .thenReturn(visitSchedules);
+
+        mockMvc.perform(get("/v1/visitschedules/my-visit-schedule")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result[0].visitScheduleId").value("vsc-123456"))
+                .andExpect(jsonPath("$.result[0].visitDate").value("2024-08-24"));
+    }
+
+    @Test
+    void updateVisitSchedule() throws Exception {
+        String visitScheduleId = "vsc-123456";
+        visitScheduleRequest.setVisitDate(LocalDate.of(2024, 8, 25)); // Change visit date for update
+        Mockito.when(visitScheduleService.updateVisitSchedule(Mockito.eq(visitScheduleId), any(VisitScheduleRequest.class)))
+                .thenReturn(visitScheduleResponse);
+
+        String requestJson = objectMapper.writeValueAsString(visitScheduleRequest);
+
+        mockMvc.perform(patch("/v1/visitschedules/" + visitScheduleId)
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.visitScheduleId").value("vsc-123456"))
+                .andExpect(jsonPath("$.result.visitDate").value("2024-08-24"));
     }
 
     private String getAuthToken() throws Exception {

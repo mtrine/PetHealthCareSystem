@@ -76,9 +76,8 @@ public class ReviewsControllerTest {
                 .status("Scheduled")
                 .sessionResponse(sessionResponse)
                 .appointmentDate(LocalDate.of(2024, 8, 15))
-//                .deposit(BigDecimal.valueOf(100.00))
+                .deposit(100.0)
                 .veterinarianName("Dr. Smith")
-//                .serviceName(Collections.singleton("Vaccination"))
                 .build();
 
         reviewsResponse = ReviewsResponse.builder()
@@ -104,10 +103,8 @@ public class ReviewsControllerTest {
 
         List<ReviewsResponse> reviewsResponseList = Collections.singletonList(reviewsResponse);
 
-        // Giả lập hành vi của service
         Mockito.when(reviewsService.getAllReviews()).thenReturn(reviewsResponseList);
 
-        // Gọi API và kiểm tra kết quả
         mockMvc.perform(get("/v1/reviews")
                         .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))

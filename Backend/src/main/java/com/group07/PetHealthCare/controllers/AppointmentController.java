@@ -55,7 +55,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/{custometId}/customer")
-    public ApiResponse<List<AppointmentResponse>> getAppointmentByCustometId(@PathVariable("custometId") String custometId) {
+    public ApiResponse<List<AppointmentResponse>> getAppointmentByCustomerId(@PathVariable("custometId") String custometId) {
         ApiResponse<List<AppointmentResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setResult(appointmentService.getAppointmentByCustomerId(custometId));
         return apiResponse;
