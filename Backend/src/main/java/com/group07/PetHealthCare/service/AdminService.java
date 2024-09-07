@@ -1,6 +1,8 @@
 package com.group07.PetHealthCare.service;
 
 import com.group07.PetHealthCare.dto.response.AdminResponse;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.mapper.IAdminMapper;
 import com.group07.PetHealthCare.pojo.Admin;
 import com.group07.PetHealthCare.respositytory.IAdminRepository;
@@ -23,7 +25,7 @@ public class AdminService {
     }
 
     public AdminResponse getAdminById(String id) {
-        Admin admin = adminRepository.findById(id).get();
+        Admin admin = adminRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND));
         return adminMapper.toAdminResponse(admin);
     }
 

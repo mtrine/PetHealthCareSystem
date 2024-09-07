@@ -158,3 +158,66 @@ document.querySelector("#logout").addEventListener("click", async function () {
         alert('Đăng xuất thất bại');
     }
 })
+
+async function navigateRole() {
+    if (authToken) {
+        const userRole = await getUserRole(); // Fetch or decode the user role
+        if (userRole) {
+            switch (userRole) {
+                case 'ADMIN':
+                    window.location.href = '/Admin/index.html'; // Admin page
+                    break;
+                case 'STAFF':
+                    window.location.href = '/Staff/index.html'; // Customer page
+                    break;
+                case 'VERTERINAIAN':
+                    window.location.href = '/Doctor/index.html'; // Customer page
+                    break;
+                default:
+                    window.location.href = 'index.html'; // Default page if role is not identified
+            }
+        }
+    } else {
+        showModal();
+    }
+}
+
+// Function to decode the token and get the role
+function decodeToken(token) {
+    const payloadBase64 = token.split('.')[1];
+    const payload = atob(payloadBase64);
+    const parsedPayload = JSON.parse(payload);
+    return parsedPayload.role; // Adjust this based on how your token is structured
+}
+
+// Fetch user role from API (if necessary)
+async function getUserRole() {
+    try {
+        // Option 1: Decode the token to get the role (if role is embedded)
+        const role = decodeToken(authToken);
+        if (role) return role;
+
+        // Option 2: Fetch user details from an API
+        const response = await fetchWithToken(`${API_BASE_URL}/v1/users/my-info`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.code===1000) {
+            const data = response.result;
+            console.log('User details:', data);
+            return data.role;
+        } else {
+            throw new Error('Failed to fetch user details');
+        }
+    } catch (error) {
+        console.error('Error fetching user role:', error);
+        return null;
+    }
+}
+
+
+
+navigateRole()

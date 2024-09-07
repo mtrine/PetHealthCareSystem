@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.group07.PetHealthCare.dto.request.AppointmentRequest;
 import com.group07.PetHealthCare.dto.response.*;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.service.AppointmentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -360,5 +362,16 @@ public class AppointmentControllerTest {
                 .getContentAsString();
 
         return new ObjectMapper().readTree(response).get("result").get("token").asText();
+    }
+    @Test
+    void getAppointmentByAppointmentIdNotFound() throws Exception {
+        Mockito.when(appointmentService.getAppointmentDetail(anyString()))
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+        mockMvc.perform(get("/v1/appointments/{appointmentId}", "non-existent-id")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Not found"));
     }
 }
