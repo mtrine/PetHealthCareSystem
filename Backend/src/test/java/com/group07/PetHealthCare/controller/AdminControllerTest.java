@@ -2,7 +2,10 @@ package com.group07.PetHealthCare.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group07.PetHealthCare.dto.response.AdminResponse;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.service.AdminService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -108,5 +111,14 @@ public class AdminControllerTest {
         return new ObjectMapper().readTree(response).get("result").get("token").asText();
     }
 
+    @Test
+    void getAdminNotFound() throws Exception {
+        Mockito.when(adminService.getAdminById(anyString())).thenThrow(new AppException(ErrorCode.NOT_FOUND));
 
+        mockMvc.perform(get("/v1/admins/{userId}", "non-existent-id")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Not found"));
+    }
 }
