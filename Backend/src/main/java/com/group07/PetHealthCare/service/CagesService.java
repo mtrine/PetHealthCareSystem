@@ -25,12 +25,14 @@ public class CagesService {
         cage.setUnitPrice(request.getUnitPrice());
         return cageMapper.toResponse(cagesRepository.save(cage)) ;
     }
+
     @PreAuthorize("hasRole('STAFF')")
     public List<CageResponse> getAllCages() {
 
         return cageMapper.toResponseList(cagesRepository.findAll());
     }
 
+    @PreAuthorize("hasRole('STAFF')")
     public CageResponse changeStatusCage(Integer id){
         return cageMapper.toResponse(cagesRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.NOT_FOUND)));
     }

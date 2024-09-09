@@ -121,8 +121,8 @@ public class CageControllerTest {
 
 
     private String getAuthToken() throws Exception {
-        String username = "customer@gmail.com";
-        String password = "customerpass";
+        String username = "mtriS@gmail.com";
+        String password = "123456";
 
         String response = mockMvc.perform(post("/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
