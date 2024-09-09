@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.group07.PetHealthCare.dto.request.VisitScheduleRequest;
 import com.group07.PetHealthCare.dto.response.VisitScheduleResponse;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.service.VisitScheduleService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -113,6 +115,80 @@ public class VisitScheduleControllerTest {
                 .andExpect(jsonPath("$.result.visitScheduleId").value("vsc-123456"))
                 .andExpect(jsonPath("$.result.visitDate").value("2024-08-24"));
     }
+
+    @Test
+    void createVisitSchedule_HospitalizationNotFound() throws Exception {
+        Mockito.when(visitScheduleService.createVisitSchedule(any(VisitScheduleRequest.class)))
+                .thenThrow(new RuntimeException("Hospitalization not found"));
+
+        String requestJson = objectMapper.writeValueAsString(visitScheduleRequest);
+
+        mockMvc.perform(post("/v1/visitschedules")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Hospitalization not found"));
+    }
+
+    @Test
+    void createVisitSchedule_VeterinarianNotFound() throws Exception {
+        Mockito.when(visitScheduleService.createVisitSchedule(any(VisitScheduleRequest.class)))
+                .thenThrow(new RuntimeException("Veterinarian not found"));
+
+        String requestJson = objectMapper.writeValueAsString(visitScheduleRequest);
+
+        mockMvc.perform(post("/v1/visitschedules")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Veterinarian not found"));
+    }
+
+    @Test
+    void createVisitSchedule_SessionNotFound() throws Exception {
+        Mockito.when(visitScheduleService.createVisitSchedule(any(VisitScheduleRequest.class)))
+                .thenThrow(new RuntimeException("Session not found"));
+
+        String requestJson = objectMapper.writeValueAsString(visitScheduleRequest);
+
+        mockMvc.perform(post("/v1/visitschedules")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Session not found"));
+    }
+
+    @Test
+    void getMyVisitSchedule_VeterinarianNotFound() throws Exception {
+        Mockito.when(visitScheduleService.getMyVisitSchedules())
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+        mockMvc.perform(get("/v1/visitschedules/my-visit-schedule")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Not found"));
+    }
+
+
+    @Test
+    void updateVisitSchedule_NotFound() throws Exception {
+        Mockito.when(visitScheduleService.updateVisitSchedule(Mockito.anyString(), any(VisitScheduleRequest.class)))
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+        String requestJson = objectMapper.writeValueAsString(visitScheduleRequest);
+
+        mockMvc.perform(patch("/v1/visitschedules/vsc-123456")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Not found"));
+    }
+
 
     private String getAuthToken() throws Exception {
         String username = "staff@gmail.com";

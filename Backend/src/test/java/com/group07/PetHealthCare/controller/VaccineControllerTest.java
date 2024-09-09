@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.group07.PetHealthCare.dto.request.VaccineRequest;
 import com.group07.PetHealthCare.dto.response.VaccineResponse;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.service.VaccineService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,7 +97,7 @@ public class VaccineControllerTest {
     }
 
     @Test
-    void testDeleteVaccine() throws Exception {
+    void deleteVaccine() throws Exception {
         Mockito.doNothing().when(vaccineService).deleteVaccine(anyString());
         mockMvc.perform(delete("/v1/vaccines/{id}", vaccineResponse.getId())
                         .header("Authorization", "Bearer " + getAuthToken())
@@ -104,17 +106,69 @@ public class VaccineControllerTest {
     }
 
     @Test
-    void testGetAllVaccines() throws Exception {
+    void getAllVaccines() throws Exception {
         Mockito.when(vaccineService.getVaccines()).thenReturn(vaccineResponseList);
+
+        String requestJson = objectMapper.writeValueAsString(vaccineRequest);
 
         mockMvc.perform(get("/v1/vaccines")
                         .header("Authorization", "Bearer " + getAuthToken())
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.result[0].id").value("df797e5a-1707-41da-946f-201becfd1552"))
                 .andExpect(jsonPath("$.result[0].name").value("Covid"));
     }
+
+    @Test
+    void updateVaccine_VaccineNotFound() throws Exception {
+        Mockito.when(vaccineService.updateVaccine(anyString(), any(VaccineRequest.class)))
+                .thenThrow(new RuntimeException("Vaccine not found"));
+
+
+        String requestJson = objectMapper.writeValueAsString(vaccineRequest);
+
+        mockMvc.perform(patch("/v1/vaccines/{Vaccineid}","invalid-id")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Vaccine not found"));
+    }
+
+    @Test
+    void deleteVaccine_VaccineNotFound() throws Exception {
+        // Dùng doThrow để mô phỏng hành vi ném ngoại lệ khi gọi phương thức deleteVaccine
+        Mockito.doThrow(new RuntimeException("Vaccine not found"))
+                .when(vaccineService).deleteVaccine(anyString());
+
+        mockMvc.perform(delete("/v1/vaccines/{vaccineid}", "invalid-id")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Vaccine not found"));
+    }
+
+    @Test
+    void getVaccine_VaccineNotFound() throws Exception {
+        Mockito.when(vaccineService.getVaccine(anyString()))
+                .thenThrow(new RuntimeException("Vaccine not found"));
+
+
+        String requestJson = objectMapper.writeValueAsString(vaccineRequest);
+
+        mockMvc.perform(get("/v1/vaccines/{vaccine-id}","invalid-id")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Vaccine not found"));
+    }
+
+
+
+
 
     private String getAuthToken() throws Exception {
         String username = "admin@group07.com";
