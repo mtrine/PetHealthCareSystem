@@ -88,24 +88,21 @@ public class AuthControllerTest {
     }
 
     @Test
-    void register() throws Exception {
-        //GIVEN
-        String requestJson = objectMapper.writeValueAsString(userRequest);
-
-        //WHEN, THEN
+    void registerUser_shouldReturnUserResponse() throws Exception {
+        // Arrange
         when(authService.register(any(UserRequest.class))).thenReturn(userResponse);
 
+        // Act & Assert
         mockMvc.perform(post("/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson))
+                        .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.result.name").value("John Doe"))
-                .andExpect(jsonPath("$.result.email").value("user@example.com"))
-                .andExpect(jsonPath("$.result.phoneNumber").value("1234567890"))
-                .andExpect(jsonPath("$.result.address").value("123 Main St"))
-                .andExpect(jsonPath("$.result.sex").value(true))
-                .andExpect(jsonPath("$.result.role").value("CUSTOMER"));
+                .andExpect(jsonPath("$.result.id").value(userResponse.getId()))
+                .andExpect(jsonPath("$.result.name").value(userResponse.getName()))
+                .andExpect(jsonPath("$.result.email").value(userResponse.getEmail()))
+                .andExpect(jsonPath("$.result.role").value(userResponse.getRole()))
+                .andExpect(jsonPath("$.result.phoneNumber").value(userResponse.getPhoneNumber()))
+                .andExpect(jsonPath("$.result.address").value(userResponse.getAddress()));
     }
 
     @Test
@@ -163,4 +160,79 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.result.token").value("new-jwt-token"));
     }
 
+
+    @Test
+    void registerUser_whenEmail_invalid() throws Exception {
+        // Arrange
+        UserRequest userRequest = new UserRequest();
+        userRequest.setEmail("invalid-email"); // Đặt email không hợp lệ
+        userRequest.setPassword("ValidPassword123");
+
+        // Act & Assert
+        mockMvc.perform(post("/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userRequest)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Email should be valid")); // Kiểm tra thông báo lỗi
+    }
+
+    @Test
+    void registerUser_whenPass_invalid() throws Exception {
+        // Arrange
+        UserRequest userRequest = new UserRequest();
+        userRequest.setEmail("email@gmail.com"); // Đặt email không hợp lệ
+        userRequest.setPassword("123");
+
+        // Act & Assert
+        mockMvc.perform(post("/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userRequest)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Password should be valid")); // Kiểm tra thông báo lỗi
+    }
+
+    @Test
+    void registerUser_whenName_invalid() throws Exception {
+        // Arrange
+        UserRequest userRequest = new UserRequest();
+        userRequest.setEmail("email@gmail.com"); // Đặt email không hợp lệ
+        userRequest.setPassword("123456");
+        userRequest.setName("T");
+        // Act & Assert
+        mockMvc.perform(post("/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userRequest)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Name must be more than 2 character")); // Kiểm tra thông báo lỗi
+    }
+
+    @Test
+    void loginUser_whenEmail_invalid() throws Exception {
+        // Arrange
+        UserRequest userRequest = new UserRequest();
+        userRequest.setEmail("invalid-email"); // Đặt email không hợp lệ
+        userRequest.setPassword("ValidPassword123");
+
+        // Act & Assert
+        mockMvc.perform(post("/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userRequest)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Email should be valid")); // Kiểm tra thông báo lỗi
+    }
+
+    @Test
+    void loginUser_whenPass_invalid() throws Exception {
+        // Arrange
+        UserRequest userRequest = new UserRequest();
+        userRequest.setEmail("email@gmail.com"); // Đặt email không hợp lệ
+        userRequest.setPassword("123");
+
+        // Act & Assert
+        mockMvc.perform(post("/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userRequest)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Password should be valid")); // Kiểm tra thông báo lỗi
+    }
 }

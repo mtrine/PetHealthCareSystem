@@ -363,6 +363,8 @@ public class AppointmentControllerTest {
 
         return new ObjectMapper().readTree(response).get("result").get("token").asText();
     }
+
+
     @Test
     void getAppointmentByAppointmentIdNotFound() throws Exception {
         Mockito.when(appointmentService.getAppointmentDetail(anyString()))
