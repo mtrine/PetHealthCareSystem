@@ -4,9 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group07.PetHealthCare.dto.request.ApiResponse;
 import com.group07.PetHealthCare.dto.request.SessionsRequest;
 import com.group07.PetHealthCare.dto.request.VeterinarianRequest;
+import com.group07.PetHealthCare.dto.request.VisitScheduleRequest;
 import com.group07.PetHealthCare.dto.response.SessionResponse;
 import com.group07.PetHealthCare.dto.response.VaccineResponse;
 import com.group07.PetHealthCare.dto.response.VeterinarianResponse;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.pojo.Session;
 import com.group07.PetHealthCare.service.VeterinarianService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +29,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -162,8 +164,43 @@ public class VeterinarianControllerTest {
                 .andExpect(jsonPath("$.result[0].email").value("veterinarian@gmail.com")); // Validate email
     }
 
+    @Test
+    void GetVeterinarianById_NotFound() throws Exception {
+        when(veterinarianService.getVeterinarianById(anyString())).thenThrow(new AppException(ErrorCode.NOT_FOUND));
 
+        mockMvc.perform(get("/v1/veterinarians/{id}", "invalid-id")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Not found"));
+    }
 
+    @Test
+    void GetAvailableSessionsForVeterinarian_NotFound() throws Exception {
+        when(veterinarianService.getAvailableSessionsForVeterinarian(anyString(), any(LocalDate.class)))
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+        mockMvc.perform(get("/v1/veterinarians/{veterinarianID}/available-sessions", "a63c23e3-751c-49d2-974e-f21fa19aad22")
+                        .param("date", "2024-08-24")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound()) // Expect HTTP 404 NOT FOUND
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Not found"));
+    }
+
+    @Test
+    void GetMyInfo_NotFound() throws Exception {
+        when(veterinarianService.getMyInfo())
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+        mockMvc.perform(get("/v1/veterinarians/my-info")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Not found"));
+    }
 
 
 

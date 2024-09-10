@@ -3,7 +3,10 @@ package com.group07.PetHealthCare.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.group07.PetHealthCare.dto.request.VaccinePetRequest;
+import com.group07.PetHealthCare.dto.request.VisitScheduleRequest;
 import com.group07.PetHealthCare.dto.response.*;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.service.VaccinePetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -87,7 +90,7 @@ public class VaccinePetControllerTest {
     }
 
     @Test
-    void testGetVaccinePetByPetId() throws Exception {
+    void getVaccinePetByPetId() throws Exception {
         Mockito.when(vaccinePetService.getVaccinePetByPetId(anyString()))
                 .thenReturn(Collections.singletonList(vaccinePetResponse));
 
@@ -102,7 +105,7 @@ public class VaccinePetControllerTest {
     }
 
     @Test
-    void testAddVaccineToPet() throws Exception {
+    void addVaccineToPet() throws Exception {
         Mockito.when(vaccinePetService.addVaccineToPet(any(VaccinePetRequest.class)))
                 .thenReturn(vaccinePetResponse);
 
@@ -118,6 +121,50 @@ public class VaccinePetControllerTest {
                 .andExpect(jsonPath("$.result.stingDate").value("2024-08-18"))
                 .andExpect(jsonPath("$.result.reStingDate").value("2025-08-18"));
     }
+
+    @Test
+    void addVaccineToPet_PetNotFound() throws Exception {
+        Mockito.when(vaccinePetService.addVaccineToPet(any(VaccinePetRequest.class)))
+                .thenThrow(new RuntimeException("Pet not found"));
+        String requestJson = objectMapper.writeValueAsString(vaccinePetRequest);
+
+        mockMvc.perform(post("/v1/vaccines-pet")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Pet not found"));
+    }
+
+    @Test
+    void addVaccineToPet_VaccineNotFound() throws Exception {
+        Mockito.when(vaccinePetService.addVaccineToPet(any(VaccinePetRequest.class)))
+                .thenThrow(new RuntimeException("Vaccine not found"));
+        String requestJson = objectMapper.writeValueAsString(vaccinePetRequest);
+
+        mockMvc.perform(post("/v1/vaccines-pet")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Vaccine not found"));
+    }
+
+    @Test
+    void getVaccinePetByPetId_PetNotFound() throws Exception {
+        Mockito.when(vaccinePetService.getVaccinePetByPetId(anyString()))
+                .thenThrow(new RuntimeException("Pet not found"));
+        String requestJson = objectMapper.writeValueAsString(vaccinePetRequest);
+
+        mockMvc.perform(get("/v1/vaccines-pet/{petId}/pets","invalid-id")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Pet not found"));
+    }
+
+
 
     private String getAuthToken() throws Exception {
         String username = "admin@group07.com";

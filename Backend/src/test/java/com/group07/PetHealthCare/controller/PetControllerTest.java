@@ -166,7 +166,6 @@ public class PetControllerTest {
     private String getAuthToken() throws Exception {
         String username = "customer@gmail.com";
         String password = "customerpass";
-
         String response = mockMvc.perform(post("/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
