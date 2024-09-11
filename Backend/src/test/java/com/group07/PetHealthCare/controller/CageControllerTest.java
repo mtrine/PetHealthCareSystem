@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -54,11 +55,11 @@ public class CageControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void getAllCages() throws Exception {
         Mockito.when(cagesService.getAllCages()).thenReturn(cageResponseList);
 
         mockMvc.perform(get("/v1/cages")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -67,6 +68,7 @@ public class CageControllerTest {
                 .andExpect(jsonPath("$.result[0].unitPrice").value(50.00));
     }
     @Test
+    @WithMockUser("STAFF")
     void createCage() throws Exception {
         CageRequest cageRequest = new CageRequest();
         cageRequest.setStatus(true);
@@ -81,7 +83,6 @@ public class CageControllerTest {
         Mockito.when(cagesService.addCage(any(CageRequest.class))).thenReturn(cageResponse);
 
         mockMvc.perform(post("/v1/cages")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cageRequest)))
                 .andExpect(status().isOk())
@@ -92,6 +93,7 @@ public class CageControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void getCageById() throws Exception {
         CageRequest cageRequest = new CageRequest();
         cageRequest.setStatus(true);
@@ -107,7 +109,6 @@ public class CageControllerTest {
         Mockito.when(cagesService.changeStatusCage(anyInt())).thenReturn(cageResponse);
 
         mockMvc.perform(get("/v1/cages/{id}", cageResponse.getCageNumber())
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cageRequest)))
                 .andExpect(status().isOk())
@@ -120,23 +121,7 @@ public class CageControllerTest {
 
 
 
-    private String getAuthToken() throws Exception {
-        String username = "mtriS@gmail.com";
-        String password = "123456";
 
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        // Print the response to debug
-        System.out.println("Login Response: " + response);
-
-        // Adjust parsing based on the actual structure
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
-    }
 
 
 

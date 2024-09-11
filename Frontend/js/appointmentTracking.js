@@ -115,7 +115,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 document.getElementById("confirm-cancel").addEventListener('click', async function () {
     const appointmentId = document.getElementById('modal-appointment-id').value;
-    const price = document.getElementById('modal-appointment-price').value;
     const data = await fetchWithToken(`${API_BASE_URL}/v1/payments/refund`, {
         method: 'POST',
         headers: {
@@ -123,7 +122,6 @@ document.getElementById("confirm-cancel").addEventListener('click', async functi
         },
         body: JSON.stringify({
             appointmentId: appointmentId,
-            amount: price
         })
     })
 
