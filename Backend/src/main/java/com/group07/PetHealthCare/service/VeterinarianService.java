@@ -70,10 +70,9 @@ public class VeterinarianService {
                 // Kiểm tra nếu có Appointment với status = "Paid"
                 appointments.stream().anyMatch(appointment ->
                         appointment.getSession().getId() == session.getId() && "Paid".equals(appointment.getStatus())) ||
-                        // Kiểm tra nếu có VisitSchedule với isPublished = false
                         visitScheduleRepository.findByVeterinarianIdAndVisitDateAndSessionId(veterinarianId, appointmentDate, session.getId())
                                 .map(visitSchedule -> !visitSchedule.isStatus())
-                                .orElse(false) // Nếu không có VisitSchedule thì session vẫn rảnh
+                                .orElse(false)
         );
 
         return sessionsMapper.toSessionResponseList(allSessions);

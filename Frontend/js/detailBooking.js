@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     }
 
-    if( document.querySelector('#choose-veterinarian')!=null){
+    if (document.querySelector('#choose-veterinarian') != null) {
         document.querySelector('#choose-veterinarian').addEventListener('click', async function () {
             const selectedOption = document.querySelector('#doctor-select .selected-option');
             const veterinarianId = selectedOption.getAttribute('data-value');
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     veterinarianId: veterinarianId
                 })
             });
-    
+
             if (dataAppointment.code == 1000) {
                 alert("Chọn bác sĩ thành công");
                 location.reload();
@@ -152,13 +152,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             'Content-Type': 'application/json'
         }
     })
-    if(dataServices.code=1000){
-        const services=dataServices.result;
-        const serviceSelect=document.querySelector('#service-select');
-        serviceSelect.innerHTML=`
+    if (dataServices.code = 1000) {
+        const services = dataServices.result;
+        const serviceSelect = document.querySelector('#service-select');
+        serviceSelect.innerHTML = `
             <div class="selected-option">Chọn dịch vụ<i class='bx bx-chevron-down'></i></div>
             <div class="options">
-                ${services.map(service=>`
+                ${services.map(service => `
                     <div data-value="${service.id}">${service.name}</div>
                 `).join('')}
             </div>
@@ -181,13 +181,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
         });
 
-        document.addEventListener('click', function (event) {   
+        document.addEventListener('click', function (event) {
             if (!event.target.closest('#service-select')) {
                 document.querySelector('#service-select').classList.remove('open');
             }
         });
     }
-    else{
+    else {
         alert("Đã có lỗi xảy ra: ", dataServices.message);
     }
 
@@ -226,4 +226,25 @@ document.getElementById('payment').addEventListener('click', async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const appointmentId = urlParams.get('id');
     window.location.href = 'paymentMethodsForStaff.html?id=' + appointmentId;
+})
+
+document.getElementById('confirm-delete').addEventListener('click', async function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const appointmentId = urlParams.get('id');
+    const data = await fetchWithToken(`${API_BASE_URL}/v1/payments/refund`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            appointmentId: appointmentId,
+        })
+    })
+
+    if (data && data.code === 1000) {
+        alert('Hủy lịch hẹn thành công');
+        window.location.href = 'index.html';
+    } else {
+        alert('Đã xảy ra lỗi: ' + data.message);
+    }
 })

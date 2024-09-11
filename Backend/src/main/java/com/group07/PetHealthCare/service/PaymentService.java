@@ -213,7 +213,6 @@ public class PaymentService {
             } else if (numberOfDays<=2) {
                 existPayment.setTotalAmount(0.0);
             }
-
             appointment.setStatus("Cancelled");
             appointmentRepository.save(appointment);
         }

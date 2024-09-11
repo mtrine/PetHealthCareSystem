@@ -174,7 +174,8 @@ async function navigateRole() {
                     window.location.href = '/Doctor/index.html'; // Customer page
                     break;
                 default:
-                    window.location.href = 'index.html'; // Default page if role is not identified
+                    break;
+                     // Default page if role is not identified
             }
         }
     } else {
