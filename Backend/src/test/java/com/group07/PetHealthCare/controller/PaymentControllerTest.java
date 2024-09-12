@@ -4,9 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.group07.PetHealthCare.dto.request.PaymentRequest;
 import com.group07.PetHealthCare.dto.request.RefundRequest;
+import com.group07.PetHealthCare.dto.request.SessionsRequest;
 import com.group07.PetHealthCare.dto.response.*;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +21,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 import java.util.Map;
 
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -40,6 +47,7 @@ public class PaymentControllerTest {
     private PaymentRequest paymentRequestforHos;
     private PaymentRequest paymentRequestforAppointment;
     private PaymentResponse paymentResponse;
+    private PaymentRequest invalidPaymentRequest;
     private RefundRequest refundRequest;
     private VNPayResponse vnPayResponse;
     private Map<LocalDate, Double> dailyRevenue;
@@ -73,6 +81,12 @@ public class PaymentControllerTest {
                 .status("SUCCESS")
                 .totalAmount(100.0)
                 .build();
+
+        invalidPaymentRequest = new PaymentRequest();
+        invalidPaymentRequest.setPaymentDate(LocalDate.of(2024, 8, 28));
+        invalidPaymentRequest.setTypePayment("Invalid Payment Type");
+        invalidPaymentRequest.setHospitalizationId("123");
+
 
         refundRequest = new RefundRequest();
         refundRequest.setAmount(100);
@@ -175,6 +189,98 @@ public class PaymentControllerTest {
                 .andExpect(jsonPath("$.result['2023']").value(10000.0))
                 .andExpect(jsonPath("$.result['2024']").value(20000.0));
     }
+
+    @Test
+    void createVnPayPayment_NotFound() throws Exception {
+        when(paymentService.createVnPayPayment(any(HttpServletRequest.class),any(PaymentRequest.class)))
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+        String requestJson = objectMapper.writeValueAsString(paymentRequestforAppointment);
+
+        mockMvc.perform(post("/v1/payments/vnpay")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound());
+    }
+    @Test
+    void payCallbackHandle_NotFound() throws Exception {
+
+        doThrow(new AppException(ErrorCode.NOT_FOUND))
+                .when(paymentService).payCallbackHandler(any(HttpServletRequest.class), any(HttpServletResponse.class), anyString());
+
+
+        // Tạo đối tượng JSON cho yêu cầu
+        String requestJson = objectMapper.writeValueAsString(paymentRequestforAppointment);
+
+        // Thực hiện yêu cầu POST
+        mockMvc.perform(post("/v1/payments/vnpay")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void createVnPayPayment_InvalidPaymentType() throws Exception {
+        when(paymentService.createVnPayPayment(any(HttpServletRequest.class),any(PaymentRequest.class)))
+                .thenThrow(new IllegalStateException("Unexpected value:" + invalidPaymentRequest.getTypePayment()));
+
+        String requestJson = objectMapper.writeValueAsString(invalidPaymentRequest);
+
+        mockMvc.perform(post("/v1/payments/vnpay")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void createCashPayment_NotFound() throws Exception {
+        when(paymentService.createCashPayment(any(PaymentRequest.class)))
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+        String requestJson = objectMapper.writeValueAsString(paymentRequestforAppointment);
+
+        mockMvc.perform(post("/v1/payments/cash")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void refund_NotFound() throws Exception {
+        when(paymentService.refund(any(RefundRequest.class)))
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+        String requestJson = objectMapper.writeValueAsString(paymentRequestforAppointment);
+
+        mockMvc.perform(post("/v1/payments/refund")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void refund_InvalidStatus() throws Exception {
+        when(paymentService.refund(any(RefundRequest.class)))
+                .thenThrow(new RuntimeException("This status invalid"));
+
+        String requestJson = objectMapper.writeValueAsString(paymentRequestforAppointment);
+
+        mockMvc.perform(post("/v1/payments/refund")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("This status invalid"));
+    }
+
+
+
+
 
     private String getAuthToken() throws Exception {
         String username = "customer@gmail.com";
