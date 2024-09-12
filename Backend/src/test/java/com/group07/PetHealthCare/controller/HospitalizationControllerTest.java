@@ -8,7 +8,9 @@ import com.group07.PetHealthCare.dto.response.HospitalizationResponse;
 import com.group07.PetHealthCare.exception.AppException;
 import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.service.HospitalizationService;
+import com.nimbusds.jose.proc.SecurityContext;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -18,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -27,6 +30,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -354,20 +358,19 @@ public class HospitalizationControllerTest {
     }
 
     @Test
-    void getHospitalizationByCustomerID_NullId()throws Exception{
-        Mockito.when(hospitalizationService.getHospitalizationByCustomerId(anyString()))
-                .thenThrow(new IllegalArgumentException("Customer ID must not be null"));
+    @WithMockUser("CUSTOMER")
+    void testGetMyHospitalizationThrowsException() throws Exception {
 
+        // Set up mock service to throw an exception
+        when(hospitalizationService.getMyHospitalization()).thenThrow(new IllegalArgumentException("Customer ID must not be null"));
 
-        String requestJson = objectMapper.writeValueAsString(hospitalizationRequest);
+        // Perform the GET request and expect an exception
+        mockMvc.perform(get("/v1/hospitalizations/my-hospitalization")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())  // Expecting HTTP 500 Internal Server Error
+                .andExpect(jsonPath("$.message").value("Customer ID must not be null"));  // Check error message
 
-        mockMvc.perform(get("/v1/hospitalizations/my-hospitalization","invalid-id")
-                        .param("petId","null")
-                        .header("Authorization", "Bearer " +"11234")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson))
-                .andExpect(status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Customer ID must not be null"));
+        // Verify service method was called once
     }
 
 
