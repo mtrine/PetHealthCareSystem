@@ -1,8 +1,12 @@
 package com.group07.PetHealthCare.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.group07.PetHealthCare.dto.request.UserRequest;
+import com.group07.PetHealthCare.dto.request.VaccineRequest;
 import com.group07.PetHealthCare.dto.response.UserResponse;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,16 +47,22 @@ public class UserControllerTest {
 
     private UserRequest request;
     private UserResponse userResponse;
+    private ObjectMapper objectMapper;
     private List<UserResponse> userResponseList;
     private UserResponse userResponse1;
     private UserResponse userResponse2;
+    private UserRequest userRequest;
 
 
 
     @BeforeEach
     void initData(){
+
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
         String userId = "10a6a291-5bd4-4fea-ab04-ef4ecaa83086";
-        UserRequest userRequest = new UserRequest();
+        userRequest = new UserRequest();
         userRequest.setName("Jane Doe");
         userRequest.setEmail("jane.doe@example.com");
         userRequest.setPhoneNumber("0987654321");
@@ -250,5 +260,68 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.role").value("ADMIN"));
     }
 
+    @Test
+    void updateInfoUser_UserNotFound() throws Exception {
+        Mockito.when(userService.updateMyInfo(any(UserRequest.class)))
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
 
+
+        String requestJson = objectMapper.writeValueAsString(userRequest);
+
+        mockMVC.perform(patch("/v1/users/my-info","invalid-id")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Not found"));
+    }
+
+
+    @Test
+    void deleteUser_UserNotFound() throws Exception {
+        Mockito.doThrow(new AppException(ErrorCode.NOT_FOUND))
+                .when(userService).deleteUser(anyString());
+
+
+        String requestJson = objectMapper.writeValueAsString(userRequest);
+
+        mockMVC.perform(delete("/v1/users/{userId}","invalid-id")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Not found"));
+    }
+
+    @Test
+    void getMyInfo_UserNotFound() throws Exception {
+        Mockito.when(userService.getMyInfo())
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+
+        String requestJson = objectMapper.writeValueAsString(userRequest);
+
+        mockMVC.perform(get("/v1/users/my-info","invalid-id")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Not found"));
+    }
+
+    @Test
+    void updateMyInfo_UserNotFound() throws Exception {
+        Mockito.when(userService.updateMyInfo(any(UserRequest.class)))
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+
+        String requestJson = objectMapper.writeValueAsString(userRequest);
+
+        mockMVC.perform(patch("/v1/users/my-info","invalid-id")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Not found"));
+    }
 }

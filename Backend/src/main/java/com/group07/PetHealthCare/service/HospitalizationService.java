@@ -43,7 +43,7 @@ public class HospitalizationService {
     @PreAuthorize("hasAnyRole('VETERINARIAN','STAFF')")
     public HospitalizationResponse createHospitalization(HospitalizationRequest request) {
         if (request.getCageNumber() == null) {
-            throw new IllegalArgumentException("Cage number  must not be null");
+            throw new IllegalArgumentException("Cage number must not be null");
         }
     if (request.getPetID()==null){
         throw new IllegalArgumentException("Pet ID must not be null");

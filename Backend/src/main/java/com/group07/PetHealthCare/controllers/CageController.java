@@ -33,7 +33,7 @@ public class CageController {
     @GetMapping("/{id}")
     public ApiResponse<CageResponse> getCageById(@PathVariable Integer id) {
         ApiResponse<CageResponse> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(cagesService.changeStatusCage(id));
+        apiResponse.setResult(cagesService.getCageById(id));
         return apiResponse;
     }
 }
