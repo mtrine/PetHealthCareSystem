@@ -12,11 +12,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -85,13 +87,13 @@ public class CustomerControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     public void getAllCustomers() throws Exception {
         List<CustomerResponse> customers = Arrays.asList(customerResponse1, customerResponse2);
-        when(customerService.getAllCustomers()).thenReturn(customers);
+        Mockito.when(customerService.getAllCustomers()).thenReturn(customers);
 
         mockMvc.perform(get("/v1/customers")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + getAuthToken()))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result[0].id").value("36cc9494-2e25-4527-b5c1-a5080cbdb614"))
                 .andExpect(jsonPath("$.result[0].name").value("Customer"))
@@ -103,12 +105,12 @@ public class CustomerControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     public void getCustomerById() throws Exception {
         when(customerService.getCustomerById(customerResponse1.getId())).thenReturn(customerResponse1);
 
         mockMvc.perform(get("/v1/customers/"+customerResponse1.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + getAuthToken()))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.id").value("36cc9494-2e25-4527-b5c1-a5080cbdb614"))
                 .andExpect(jsonPath("$.result.name").value("Customer"))
@@ -122,30 +124,17 @@ public class CustomerControllerTest {
 
 
     @Test
+    @WithMockUser("ADMIN")
     public void getCustomerById_CustomerNotFound() throws Exception {
         String invalidUserId = "invalid-id";
         when(customerService.getCustomerById(invalidUserId))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
 
         mockMvc.perform(get("/v1/customers/" + invalidUserId)
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().json("{\"message\":\"Not found\"}"));
     }
 
-    private String getAuthToken() throws Exception {
-        String username = "admin@group07.com";
-        String password = "admin123";
 
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        return objectMapper.readTree(response).get("result").get("token").asText();
-    }
 }

@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -65,18 +66,19 @@ public class SessionsControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     public void addSession() throws Exception {
         when(sessionsService.createSession(sessionsRequest)).thenReturn(sessionResponse);
 
         mockMvc.perform(post("/v1/sessions")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .content(objectMapper.writeValueAsString(sessionsRequest)))
                 .andExpect(status().isOk());
 
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void createSession_InvalidTime() throws Exception {
         when(sessionsService.createSession(any(SessionsRequest.class)))
         .thenThrow(new RuntimeException("Start time must be before end time"));
@@ -84,7 +86,6 @@ public class SessionsControllerTest {
         String requestJson = objectMapper.writeValueAsString(sessionsRequest);
 
         mockMvc.perform(post("/v1/sessions")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -92,13 +93,13 @@ public class SessionsControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     public void getAllSessions() throws Exception {
         List<SessionResponse> sessionResponses = Collections.singletonList(sessionResponse);
 
         when(sessionsService.getAllSession()).thenReturn(sessionResponses);
 
         mockMvc.perform(get("/v1/sessions")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result[0].id").value("123e4567-e89b-12d3-a456-426614174000"))
@@ -106,18 +107,5 @@ public class SessionsControllerTest {
                 .andExpect(jsonPath("$.result[0].endTime").value("10:00:00"));
     }
 
-    private String getAuthToken() throws Exception {
-        String username = "admin@group07.com";
-        String password = "admin123";
 
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
-    }
 }

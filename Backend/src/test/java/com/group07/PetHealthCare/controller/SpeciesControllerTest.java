@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
@@ -56,48 +57,29 @@ public class SpeciesControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getAllSpecies() throws Exception {
         // Mocking the service layer to return the speciesResponseList
         when(speciesService.getAllSpecies()).thenReturn(speciesResponseList);
 
         // Performing the GET request and verifying the response
-        mockMvc.perform(get("/v1/species")  // Ensure this is the correct endpoint
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + getAuthToken()))
+        mockMvc.perform(get("/v1/species")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result[0].id").value("1"))
                 .andExpect(jsonPath("$.result[0].name").value("Dog"));
     }
 
-    private String getAuthToken() throws Exception {
-        // Credentials for getting the auth token
-        String username = "admin@group07.com";
-        String password = "admin123";
-
-        // Sending a POST request to the login endpoint to retrieve the token
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        // Extracting the token from the response
-        return objectMapper.readTree(response).get("result").get("token").asText();
-    }
 
     @Test
+    @WithMockUser("ADMIN")
     public void createService() throws Exception {
         when(speciesService.addSpecies(any(SpeciesRequest.class))).thenReturn(speciesResponse);
         mockMvc.perform(post("/v1/species")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .content(objectMapper.writeValueAsString(speciesRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.id").value("1"))
                 .andExpect(jsonPath("$.result.name").value("Dog"));
-
-
     }
 }

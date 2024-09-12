@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -102,6 +103,7 @@ public class ReviewsControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     public void getAllReviewsTest() throws Exception {
 
         List<ReviewsResponse> reviewsResponseList = Collections.singletonList(reviewsResponse);
@@ -109,7 +111,6 @@ public class ReviewsControllerTest {
         Mockito.when(reviewsService.getAllReviews()).thenReturn(reviewsResponseList);
 
         mockMvc.perform(get("/v1/reviews")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result[0].customerresponse.name").value("Nguyen Ngoc Quynh Nhu"))
@@ -120,11 +121,11 @@ public class ReviewsControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void createReview() throws Exception {
         Mockito.when(reviewsService.createReview(any(ReviewsRequest.class))).thenReturn(reviewsResponse);
 
         mockMvc.perform(post("/v1/reviews")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reviewsRequest)))
                 .andExpect(status().isOk())
@@ -137,11 +138,11 @@ public class ReviewsControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void createMyReview() throws Exception {
         Mockito.when(reviewsService.createMyReview(any(ReviewsRequest.class))).thenReturn(reviewsResponse);
 
         mockMvc.perform(post("/v1/reviews/my-reviews")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reviewsRequest)))
                 .andExpect(status().isOk())
@@ -154,6 +155,7 @@ public class ReviewsControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void createReview_NotFound()throws Exception {
         Mockito.when(reviewsService.createReview(any(ReviewsRequest.class)))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -161,7 +163,6 @@ public class ReviewsControllerTest {
         String requestJson = objectMapper.writeValueAsString(reviewsRequest);
 
         mockMvc.perform(post("/v1/reviews")
-                .header("Authorization", "Bearer " + getAuthToken())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andExpect(status().isNotFound())
@@ -169,6 +170,7 @@ public class ReviewsControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void createMyReview_NotFound()throws Exception {
         Mockito.when(reviewsService.createMyReview(any(ReviewsRequest.class)))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -176,23 +178,10 @@ public class ReviewsControllerTest {
         String requestJson = objectMapper.writeValueAsString(reviewsRequest);
 
         mockMvc.perform(post("/v1/reviews/my-reviews")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Not found"));
     }
-    private String getAuthToken() throws Exception {
-        String username = "customer@gmail.com";
-        String password = "customerpass";
 
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
-    }
 }

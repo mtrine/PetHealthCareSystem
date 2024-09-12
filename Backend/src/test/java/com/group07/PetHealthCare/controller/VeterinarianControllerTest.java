@@ -21,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -90,11 +91,11 @@ public class VeterinarianControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void testGetAllVeterinarian() throws Exception {
         when(veterinarianService.getAllVeterinarian()).thenReturn(veterinarianResponseList);
 
         mockMvc.perform(get("/v1/veterinarians")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -108,11 +109,11 @@ public class VeterinarianControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getVeterinarianById() throws Exception {
         when(veterinarianService.getVeterinarianById(anyString())).thenReturn(veterinarianResponse);
 
         mockMvc.perform(get("/v1/veterinarians/{id}","a63c23e3-751c-49d2-974e-f21fa19aad22")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -126,6 +127,7 @@ public class VeterinarianControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getAvailableSession() throws Exception {
         // Mock the service to return the prepared sessionResponseList
         when(veterinarianService.getAvailableSessionsForVeterinarian(anyString(), any(LocalDate.class)))
@@ -134,7 +136,6 @@ public class VeterinarianControllerTest {
         // Perform the GET request and assert the expected response
         mockMvc.perform(get("/v1/veterinarians/{veterinarianID}/available-sessions", "a63c23e3-751c-49d2-974e-f21fa19aad22")
                         .param("date", "2024-08-24") // Set the date parameter
-                        .header("Authorization", "Bearer " + getAuthToken()) // Include the authorization header
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()) // Expect HTTP 200 OK
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON)) // Expect JSON response
@@ -144,6 +145,7 @@ public class VeterinarianControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getAvailableVeterinariansForSessionAndDate() throws Exception {
         // Mock the service to return the prepared veterinarianResponseList
         when(veterinarianService.getAvailableVeterinariansForSessionAndDate(anyInt(), any(LocalDate.class)))
@@ -152,7 +154,6 @@ public class VeterinarianControllerTest {
         // Perform the GET request and assert the expected response
         mockMvc.perform(get("/v1/veterinarians/{sessionId}/get-available-veterinarian-session", 1)
                         .param("date", "2024-08-24") // Set the date parameter
-                        .header("Authorization", "Bearer " + getAuthToken()) // Include the authorization header
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()) // Expect HTTP 200 OK
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON)) // Expect JSON response
@@ -165,24 +166,24 @@ public class VeterinarianControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void GetVeterinarianById_NotFound() throws Exception {
         when(veterinarianService.getVeterinarianById(anyString())).thenThrow(new AppException(ErrorCode.NOT_FOUND));
 
         mockMvc.perform(get("/v1/veterinarians/{id}", "invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Not found"));
     }
 
     @Test
+    @WithMockUser("VETERINARIAN")
     void GetAvailableSessionsForVeterinarian_NotFound() throws Exception {
         when(veterinarianService.getAvailableSessionsForVeterinarian(anyString(), any(LocalDate.class)))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
 
         mockMvc.perform(get("/v1/veterinarians/{veterinarianID}/available-sessions", "a63c23e3-751c-49d2-974e-f21fa19aad22")
                         .param("date", "2024-08-24")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound()) // Expect HTTP 404 NOT FOUND
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -190,12 +191,12 @@ public class VeterinarianControllerTest {
     }
 
     @Test
+    @WithMockUser("VETERINARIAN")
     void GetMyInfo_NotFound() throws Exception {
         when(veterinarianService.getMyInfo())
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
 
         mockMvc.perform(get("/v1/veterinarians/my-info")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -204,17 +205,5 @@ public class VeterinarianControllerTest {
 
 
 
-    private String getAuthToken() throws Exception {
-        String username = "admin@group07.com";
-        String password = "admin123";
 
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
-    }
 }

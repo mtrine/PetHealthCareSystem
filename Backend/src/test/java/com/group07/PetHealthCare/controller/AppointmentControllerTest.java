@@ -114,12 +114,12 @@ public class AppointmentControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void AddAppointmentBySession() throws Exception {
         Mockito.when(appointmentService.addAppointmentBySession(any(AppointmentRequest.class)))
                 .thenReturn(appointmentResponse);
 
         mockMvc.perform(post("/v1/appointments/addBySession")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(appointmentRequest)))
                 .andExpect(status().isOk())
@@ -149,12 +149,12 @@ public class AppointmentControllerTest {
     }
 
     @Test
+    @WithMockUser("VETERINARIAN")
     void GetAppointmentByVeterinarianId() throws Exception {
         Mockito.when(appointmentService.getAppointmentByVeterinarianId(anyString()))
                 .thenReturn(appointmentResponseList);
 
         mockMvc.perform(get("/v1/appointments/{veterinarianId}/veterinarians", "2c741f51-0a22-4e2f-8022-c8093fe46964")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -182,11 +182,11 @@ public class AppointmentControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void GetAllAppointments() throws Exception {
         Mockito.when(appointmentService.getAllAppointments()).thenReturn(appointmentResponseList);
 
         mockMvc.perform(get("/v1/appointments")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -216,12 +216,12 @@ public class AppointmentControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getAppointmentByCustomerId() throws Exception {
         Mockito.when(appointmentService.getAppointmentByCustomerId("36cc9494-2e25-4527-b5c1-a5080cbdb614"))
                 .thenReturn(appointmentResponseList);
 
         mockMvc.perform(get("/v1/appointments/{customerId}/customer", "36cc9494-2e25-4527-b5c1-a5080cbdb614")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -250,6 +250,7 @@ public class AppointmentControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getMyAppointmentForCustomer() throws Exception {
         // Mock the service layer to return a list of AppointmentResponse objects
         Mockito.when(appointmentService.getMyAppointmentForCustomer())
@@ -257,7 +258,6 @@ public class AppointmentControllerTest {
 
         // Perform a GET request to the endpoint and verify the response
         mockMvc.perform(get("/v1/appointments/my-appointment-for-customer")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -271,12 +271,12 @@ public class AppointmentControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getAppointmentByPetId() throws Exception {
         Mockito.when(appointmentService.getAppointmentByPetId("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9"))
                 .thenReturn(appointmentResponseList);
 
         mockMvc.perform(get("/v1/appointments/{petId}/pets", "f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -289,12 +289,12 @@ public class AppointmentControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getAppointmentByAppointmentId() throws Exception {
         Mockito.when(appointmentService.getAppointmentDetail("1"))
                 .thenReturn(appointmentResponse);
 
         mockMvc.perform(get("/v1/appointments/{appointmentId}", "1")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -304,12 +304,12 @@ public class AppointmentControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getMyAppointmentForVeterinarian() throws Exception {
         Mockito.when(appointmentService.getMyAppointmentForVeterinarian())
                 .thenReturn(appointmentResponseList);
 
         mockMvc.perform(get("/v1/appointments/my-appointment-for-veterinarian")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -338,42 +338,15 @@ public class AppointmentControllerTest {
     }
 
 
-    private String getAuthToken() throws Exception {
-        String username = "customer@gmail.com";
-        String password = "customerpass";
-
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
-    }
-
-    private String getAuthTokenForVet() throws Exception {
-        String username = "veterinarian@gmail.com";
-        String password = "veterinarianpass";
-
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
-    }
 
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getAppointmentByAppointmentIdNotFound() throws Exception {
         Mockito.when(appointmentService.getAppointmentDetail(anyString()))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
 
         mockMvc.perform(get("/v1/appointments/{appointmentId}", "non-existent-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Not found"));

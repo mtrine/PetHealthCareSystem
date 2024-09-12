@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -58,13 +59,13 @@ public class AdminControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getAllAdmin() throws Exception {
         // Mock the service response
         Mockito.when(adminService.getAllAdmins()).thenReturn(adminResponseList);
 
         // Perform the GET request and validate the response
         mockMvc.perform(get("/v1/admins")
-                        .header("Authorization", "Bearer " + getAuthToken()) // Add Authorization header
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -76,13 +77,13 @@ public class AdminControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getAdmin() throws Exception {
         // Mock the service response
         Mockito.when(adminService.getAdminById(anyString())).thenReturn(adminResponse);
 
         // Perform the GET request and validate the response
         mockMvc.perform(get("/v1/admins/{userId}", "1a2b3c4d")
-                        .header("Authorization", "Bearer " + getAuthToken()) // Add Authorization header
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -93,33 +94,17 @@ public class AdminControllerTest {
                 .andExpect(jsonPath("$.result.role").value("ADMIN"));
     }
 
-    private String getAuthToken() throws Exception {
-        String username = "admin@group07.com";
-        String password = "admin123";
 
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        // Print the response to debug
-        System.out.println("Login Response: " + response);
-
-        // Adjust parsing based on the actual structure
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
-    }
 
 
 
 
     @Test
+    @WithMockUser("ADMIN")
     void getAdminNotFound() throws Exception {
         Mockito.when(adminService.getAdminById(anyString())).thenThrow(new AppException(ErrorCode.NOT_FOUND));
 
         mockMvc.perform(get("/v1/admins/{userId}", "non-existent-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Not found"));

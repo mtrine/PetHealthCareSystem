@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -70,12 +71,12 @@ public class StaffControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getAllStaff() throws Exception {
         when(staffService.getAllStaff()).thenReturn(staffResponseList);
 
-        mockMvc.perform(get("/v1/staffs")  // Ensure this is the correct endpoint
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + getAuthToken()))
+        mockMvc.perform(get("/v1/staffs")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result[0].id").value("123"))
                 .andExpect(jsonPath("$.result[0].name").value("Staff"))
@@ -84,14 +85,15 @@ public class StaffControllerTest {
                 .andExpect(jsonPath("$.result[0].role").value("STAFF"))
                 .andExpect(jsonPath("$.result[0].phoneNumber").value("0969036238"))
                 .andExpect(jsonPath("$.result[0].password").value("staffpass"));
+
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getStaffById() throws Exception {
         when(staffService.getStaffById(staffResponse.getId())).thenReturn(staffResponse);
 
         mockMvc.perform(get("/v1/staffs/" + staffResponse.getId())
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.id").value("123"))
@@ -104,6 +106,7 @@ public class StaffControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getStaffById_StaffNotFound() throws Exception {
         Mockito.when(staffService.getStaffById(anyString()))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -111,27 +114,11 @@ public class StaffControllerTest {
         String requestJson = objectMapper.writeValueAsString(staffRequest);
 
         mockMvc.perform(get("/v1/staffs/{staffId}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Not found"));
     }
 
-    private String getAuthToken() throws Exception {
-        String username = "admin@group07.com";
-        String password = "admin123";
 
-        // Sending a POST request to the login endpoint to retrieve the token
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        // Extracting the token from the response
-        return objectMapper.readTree(response).get("result").get("token").asText();
-    }
 }

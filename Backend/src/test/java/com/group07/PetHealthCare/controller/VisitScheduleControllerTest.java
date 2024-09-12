@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -63,6 +64,7 @@ public class VisitScheduleControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void createVisitSchedule() throws Exception {
         Mockito.when(visitScheduleService.createVisitSchedule(any(VisitScheduleRequest.class)))
                 .thenReturn(visitScheduleResponse);
@@ -70,7 +72,6 @@ public class VisitScheduleControllerTest {
         String requestJson = objectMapper.writeValueAsString(visitScheduleRequest);
 
         mockMvc.perform(post("/v1/visitschedules")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -79,6 +80,7 @@ public class VisitScheduleControllerTest {
     }
 
     @Test
+    @WithMockUser("VETERINARIAN")
     void getMyVisitSchedule() throws Exception {
         VisitScheduleResponse response = VisitScheduleResponse.builder()
                 .visitScheduleId("vsc-123456")
@@ -91,7 +93,6 @@ public class VisitScheduleControllerTest {
                 .thenReturn(visitSchedules);
 
         mockMvc.perform(get("/v1/visitschedules/my-visit-schedule")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result[0].visitScheduleId").value("vsc-123456"))
@@ -99,6 +100,7 @@ public class VisitScheduleControllerTest {
     }
 
     @Test
+    @WithMockUser("VETERINARIAN")
     void updateVisitSchedule() throws Exception {
         String visitScheduleId = "vsc-123456";
         visitScheduleRequest.setVisitDate(LocalDate.of(2024, 8, 25)); // Change visit date for update
@@ -108,7 +110,6 @@ public class VisitScheduleControllerTest {
         String requestJson = objectMapper.writeValueAsString(visitScheduleRequest);
 
         mockMvc.perform(patch("/v1/visitschedules/" + visitScheduleId)
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -117,6 +118,7 @@ public class VisitScheduleControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void createVisitSchedule_HospitalizationNotFound() throws Exception {
         Mockito.when(visitScheduleService.createVisitSchedule(any(VisitScheduleRequest.class)))
                 .thenThrow(new RuntimeException("Hospitalization not found"));
@@ -124,7 +126,6 @@ public class VisitScheduleControllerTest {
         String requestJson = objectMapper.writeValueAsString(visitScheduleRequest);
 
         mockMvc.perform(post("/v1/visitschedules")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -132,6 +133,7 @@ public class VisitScheduleControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void createVisitSchedule_VeterinarianNotFound() throws Exception {
         Mockito.when(visitScheduleService.createVisitSchedule(any(VisitScheduleRequest.class)))
                 .thenThrow(new RuntimeException("Veterinarian not found"));
@@ -139,7 +141,6 @@ public class VisitScheduleControllerTest {
         String requestJson = objectMapper.writeValueAsString(visitScheduleRequest);
 
         mockMvc.perform(post("/v1/visitschedules")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -147,6 +148,7 @@ public class VisitScheduleControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void createVisitSchedule_SessionNotFound() throws Exception {
         Mockito.when(visitScheduleService.createVisitSchedule(any(VisitScheduleRequest.class)))
                 .thenThrow(new RuntimeException("Session not found"));
@@ -154,7 +156,6 @@ public class VisitScheduleControllerTest {
         String requestJson = objectMapper.writeValueAsString(visitScheduleRequest);
 
         mockMvc.perform(post("/v1/visitschedules")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -162,12 +163,12 @@ public class VisitScheduleControllerTest {
     }
 
     @Test
+    @WithMockUser("VETERINARIAN")
     void getMyVisitSchedule_VeterinarianNotFound() throws Exception {
         Mockito.when(visitScheduleService.getMyVisitSchedules())
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
 
         mockMvc.perform(get("/v1/visitschedules/my-visit-schedule")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Not found"));
@@ -175,6 +176,8 @@ public class VisitScheduleControllerTest {
 
 
     @Test
+    @WithMockUser("VETERINARIAN")
+
     void updateVisitSchedule_NotFound() throws Exception {
         Mockito.when(visitScheduleService.updateVisitSchedule(Mockito.anyString(), any(VisitScheduleRequest.class)))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -182,7 +185,6 @@ public class VisitScheduleControllerTest {
         String requestJson = objectMapper.writeValueAsString(visitScheduleRequest);
 
         mockMvc.perform(patch("/v1/visitschedules/vsc-123456")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound())
@@ -190,17 +192,5 @@ public class VisitScheduleControllerTest {
     }
 
 
-    private String getAuthToken() throws Exception {
-        String username = "staff@gmail.com";
-        String password = "staffpass";
 
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        return objectMapper.readTree(response).get("result").get("token").asText();
-    }
 }

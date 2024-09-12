@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -64,11 +65,11 @@ public class ServicesControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     public void createServiceTest() throws Exception {
         when(servicesService.createService(any(ServiceRequest.class))).thenReturn(servicesResponse);
         mockMvc.perform(post("/v1/services")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + getAuthToken())
                 .content(objectMapper.writeValueAsString(serviceRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.id").value(servicesResponse.getId()))
@@ -78,12 +79,12 @@ public class ServicesControllerTest {
     }
 
 
-        @Test
+    @Test
+    @WithMockUser("ADMIN")
     public void getAllServicesTest() throws Exception {
             when(servicesService.getAllServices()).thenReturn(servicesResponseList);
             mockMvc.perform(get("/v1/services")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .header("Authorization", "Bearer " + getAuthToken())
                             .content(objectMapper.writeValueAsString(serviceRequest)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.result[0].id").value(servicesResponse.getId()))
@@ -93,18 +94,4 @@ public class ServicesControllerTest {
 
         }
 
-    private String getAuthToken() throws Exception {
-        String username = "admin@group07.com";
-        String password = "admin123";
-
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
-    }
 }
