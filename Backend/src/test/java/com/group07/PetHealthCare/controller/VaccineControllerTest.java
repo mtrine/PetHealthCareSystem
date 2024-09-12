@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
@@ -57,11 +58,11 @@ public class VaccineControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void GetVaccine() throws Exception {
         Mockito.when(vaccineService.getVaccine(anyString())).thenReturn(vaccineResponse);
 
         mockMvc.perform(get("/v1/vaccines/{id}", vaccineResponse.getId())
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -70,10 +71,10 @@ public class VaccineControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void CreateVaccine() throws Exception {
         Mockito.when(vaccineService.createVaccine(any(VaccineRequest.class))).thenReturn(vaccineResponse);
         mockMvc.perform(post("/v1/vaccines")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(vaccineRequest)))
                 .andExpect(status().isOk())
@@ -83,11 +84,11 @@ public class VaccineControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void UpdateVaccine() throws Exception {
         Mockito.when(vaccineService.updateVaccine(anyString(), any(VaccineRequest.class))).thenReturn(vaccineResponse);
 
         mockMvc.perform(patch("/v1/vaccines/{id}","df797e5a-1707-41da-946f-201becfd1552")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(vaccineRequest)))
                 .andExpect(status().isOk())
@@ -97,22 +98,22 @@ public class VaccineControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void deleteVaccine() throws Exception {
         Mockito.doNothing().when(vaccineService).deleteVaccine(anyString());
         mockMvc.perform(delete("/v1/vaccines/{id}", vaccineResponse.getId())
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getAllVaccines() throws Exception {
         Mockito.when(vaccineService.getVaccines()).thenReturn(vaccineResponseList);
 
         String requestJson = objectMapper.writeValueAsString(vaccineRequest);
 
         mockMvc.perform(get("/v1/vaccines")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -122,6 +123,7 @@ public class VaccineControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void updateVaccine_VaccineNotFound() throws Exception {
         Mockito.when(vaccineService.updateVaccine(anyString(), any(VaccineRequest.class)))
                 .thenThrow(new RuntimeException("Vaccine not found"));
@@ -130,7 +132,6 @@ public class VaccineControllerTest {
         String requestJson = objectMapper.writeValueAsString(vaccineRequest);
 
         mockMvc.perform(patch("/v1/vaccines/{Vaccineid}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -138,19 +139,20 @@ public class VaccineControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void deleteVaccine_VaccineNotFound() throws Exception {
         // Dùng doThrow để mô phỏng hành vi ném ngoại lệ khi gọi phương thức deleteVaccine
         Mockito.doThrow(new RuntimeException("Vaccine not found"))
                 .when(vaccineService).deleteVaccine(anyString());
 
         mockMvc.perform(delete("/v1/vaccines/{vaccineid}", "invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Vaccine not found"));
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getVaccine_VaccineNotFound() throws Exception {
         Mockito.when(vaccineService.getVaccine(anyString()))
                 .thenThrow(new RuntimeException("Vaccine not found"));
@@ -159,28 +161,9 @@ public class VaccineControllerTest {
         String requestJson = objectMapper.writeValueAsString(vaccineRequest);
 
         mockMvc.perform(get("/v1/vaccines/{vaccine-id}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("Vaccine not found"));
-    }
-
-
-
-
-
-    private String getAuthToken() throws Exception {
-        String username = "admin@group07.com";
-        String password = "admin123";
-
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
     }
 }

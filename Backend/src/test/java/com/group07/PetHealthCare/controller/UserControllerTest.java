@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -99,13 +100,13 @@ public class UserControllerTest {
 
     
     @Test
+    @WithMockUser("ADMIN")
     void deleteUser() throws Exception {
 
         String userId = "dcad4277-0d82-4a5e-a3fe-8dee26dc3462";
         Mockito.doNothing().when(userService).deleteUser(anyString());
 
         mockMVC.perform(delete("/v1/users/{id}", userId)
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -113,11 +114,11 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getAllUsers() throws Exception {
         Mockito.when(userService.getAllUser()).thenReturn(userResponseList);
 
         mockMVC.perform(get("/v1/users")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result[0].name").value("Jane Doe"))
@@ -129,22 +130,9 @@ public class UserControllerTest {
     }
 
 
-    private String getAuthToken() throws Exception {
-
-        String username = "admin@group07.com";
-        String password = "admin123";
-
-        String response = mockMVC.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
-    }
 
     @Test
+    @WithMockUser("ADMIN")
     void updateUser() throws Exception {
         String userId = "dcad4277-0d82-4a5e-a3fe-8dee26dc3462";
         UserRequest userRequest = new UserRequest();
@@ -171,7 +159,6 @@ public class UserControllerTest {
         String requestJson = new ObjectMapper().writeValueAsString(userRequest);
 
         mockMVC.perform(MockMvcRequestBuilders.patch("/v1/users/{userId}", userId)
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -184,6 +171,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void updateUserInfo() throws Exception {
         String userId = "dcad4277-0d82-4a5e-a3fe-8dee26dc3462";
         UserRequest userRequest = new UserRequest();
@@ -196,31 +184,20 @@ public class UserControllerTest {
         userRequest.setRole("ADMIN");
 
         UserResponse userResponse1 = new UserResponse();
-        userResponse.setId(userId);
-        userResponse.setName("Jane Doe");
-        userResponse.setEmail("jane.doe@example.com");
-        userResponse.setPhoneNumber("0987654321");
-        userResponse.setAddress("456 Another St");
-        userResponse.setSex(false);
-        userResponse.setPassword("hashednewpassword");
-        userResponse.setRole("ADMIN");
+        userResponse1.setId(userId);
+        userResponse1.setName("Jane Doe");
+        userResponse1.setEmail("jane.doe@example.com");
+        userResponse1.setPhoneNumber("0987654321");
+        userResponse1.setAddress("456 Another St");
+        userResponse1.setSex(false);
+        userResponse1.setPassword("hashednewpassword");
+        userResponse1.setRole("ADMIN");
 
-        UserResponse userResponse2 = new UserResponse();
-        userResponse.setId(userId);
-        userResponse.setName("Jane Doe");
-        userResponse.setEmail("jane.doe@example.com");
-        userResponse.setPhoneNumber("0987654321");
-        userResponse.setAddress("456 Another St");
-        userResponse.setSex(false);
-        userResponse.setPassword("hashednewpassword");
-        userResponse.setRole("ADMIN");
-
-        Mockito.when(userService.updateMyInfo(any(UserRequest.class))).thenReturn(userResponse);
+        Mockito.when(userService.updateMyInfo(any(UserRequest.class))).thenReturn(userResponse1);
 
         String requestJson = new ObjectMapper().writeValueAsString(userRequest);
 
         mockMVC.perform(MockMvcRequestBuilders.patch("/v1/users/my-info", userId)
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -232,7 +209,9 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.role").value("ADMIN"));
     }
 
+
     @Test
+    @WithMockUser("ADMIN")
     void getUserInfo() throws Exception {
         String userId = "10a6a291-5bd4-4fea-ab04-ef4ecaa83086"; // The user ID to test
         UserResponse userResponse = new UserResponse();
@@ -248,7 +227,6 @@ public class UserControllerTest {
         Mockito.when(userService.getMyInfo()).thenReturn(userResponse);
 
         mockMVC.perform(MockMvcRequestBuilders.get("/v1/users/my-info")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result.id").value(userId))
@@ -261,6 +239,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void updateInfoUser_UserNotFound() throws Exception {
         Mockito.when(userService.updateMyInfo(any(UserRequest.class)))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -269,7 +248,6 @@ public class UserControllerTest {
         String requestJson = objectMapper.writeValueAsString(userRequest);
 
         mockMVC.perform(patch("/v1/users/my-info","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound())
@@ -278,6 +256,7 @@ public class UserControllerTest {
 
 
     @Test
+    @WithMockUser("ADMIN")
     void deleteUser_UserNotFound() throws Exception {
         Mockito.doThrow(new AppException(ErrorCode.NOT_FOUND))
                 .when(userService).deleteUser(anyString());
@@ -286,7 +265,6 @@ public class UserControllerTest {
         String requestJson = objectMapper.writeValueAsString(userRequest);
 
         mockMVC.perform(delete("/v1/users/{userId}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound())
@@ -294,6 +272,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void getMyInfo_UserNotFound() throws Exception {
         Mockito.when(userService.getMyInfo())
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -302,7 +281,6 @@ public class UserControllerTest {
         String requestJson = objectMapper.writeValueAsString(userRequest);
 
         mockMVC.perform(get("/v1/users/my-info","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound())
@@ -310,6 +288,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser("ADMIN")
     void updateMyInfo_UserNotFound() throws Exception {
         Mockito.when(userService.updateMyInfo(any(UserRequest.class)))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -318,7 +297,6 @@ public class UserControllerTest {
         String requestJson = objectMapper.writeValueAsString(userRequest);
 
         mockMVC.perform(patch("/v1/users/my-info","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound())

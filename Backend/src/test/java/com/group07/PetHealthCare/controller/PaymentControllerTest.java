@@ -20,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -106,12 +107,12 @@ public class PaymentControllerTest {
 
 
     @Test
+    @WithMockUser("CUSTOMER")
     void cash() throws Exception {
         Mockito.when(paymentService.createCashPayment(Mockito.any(PaymentRequest.class)))
                 .thenReturn(paymentResponse);
 
         mockMvc.perform(post("/v1/payments/cash")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(paymentRequestforAppointment)))
                 .andExpect(status().isOk())
@@ -122,12 +123,12 @@ public class PaymentControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void refund() throws Exception {
         Mockito.when(paymentService.refund(Mockito.any(RefundRequest.class)))
                 .thenReturn(paymentResponse);
 
         mockMvc.perform(post("/v1/payments/refund")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(refundRequest)))
                 .andExpect(status().isOk())
@@ -140,12 +141,12 @@ public class PaymentControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getRevenueByDay() throws Exception {
         Mockito.when(paymentService.getRevenueByDay(Mockito.any(LocalDate.class), Mockito.any(LocalDate.class)))
                 .thenReturn(dailyRevenue);
 
         mockMvc.perform(get("/v1/payments/revenue/day")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .param("startDate", "2024-08-28")
                         .param("endDate", "2024-08-29"))
                 .andExpect(status().isOk())
@@ -155,6 +156,7 @@ public class PaymentControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getRevenueByMonth() throws Exception {
         Map<Integer, Double> monthlyRevenue = Map.of(
                 1, 1500.0,
@@ -164,7 +166,6 @@ public class PaymentControllerTest {
                 .thenReturn(monthlyRevenue);
 
         mockMvc.perform(get("/v1/payments/revenue/month")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .param("year", "2024"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -173,6 +174,7 @@ public class PaymentControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getRevenueByYear() throws Exception {
         Map<Integer, Double> yearlyRevenue = Map.of(
                 2023, 10000.0,
@@ -182,7 +184,6 @@ public class PaymentControllerTest {
                 .thenReturn(yearlyRevenue);
 
         mockMvc.perform(get("/v1/payments/revenue/year")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .param("endYear", "2024"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -191,6 +192,7 @@ public class PaymentControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void createVnPayPayment_NotFound() throws Exception {
         when(paymentService.createVnPayPayment(any(HttpServletRequest.class),any(PaymentRequest.class)))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -198,12 +200,12 @@ public class PaymentControllerTest {
         String requestJson = objectMapper.writeValueAsString(paymentRequestforAppointment);
 
         mockMvc.perform(post("/v1/payments/vnpay")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound());
     }
     @Test
+    @WithMockUser("CUSTOMER")
     void payCallbackHandle_NotFound() throws Exception {
 
         doThrow(new AppException(ErrorCode.NOT_FOUND))
@@ -215,13 +217,13 @@ public class PaymentControllerTest {
 
         // Thực hiện yêu cầu POST
         mockMvc.perform(post("/v1/payments/vnpay")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void createVnPayPayment_InvalidPaymentType() throws Exception {
         when(paymentService.createVnPayPayment(any(HttpServletRequest.class),any(PaymentRequest.class)))
                 .thenThrow(new IllegalStateException("Unexpected value:" + invalidPaymentRequest.getTypePayment()));
@@ -229,13 +231,13 @@ public class PaymentControllerTest {
         String requestJson = objectMapper.writeValueAsString(invalidPaymentRequest);
 
         mockMvc.perform(post("/v1/payments/vnpay")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void createCashPayment_NotFound() throws Exception {
         when(paymentService.createCashPayment(any(PaymentRequest.class)))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -243,13 +245,13 @@ public class PaymentControllerTest {
         String requestJson = objectMapper.writeValueAsString(paymentRequestforAppointment);
 
         mockMvc.perform(post("/v1/payments/cash")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void refund_NotFound() throws Exception {
         when(paymentService.refund(any(RefundRequest.class)))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -257,13 +259,13 @@ public class PaymentControllerTest {
         String requestJson = objectMapper.writeValueAsString(paymentRequestforAppointment);
 
         mockMvc.perform(post("/v1/payments/refund")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void refund_InvalidStatus() throws Exception {
         when(paymentService.refund(any(RefundRequest.class)))
                 .thenThrow(new RuntimeException("This status invalid"));
@@ -271,7 +273,6 @@ public class PaymentControllerTest {
         String requestJson = objectMapper.writeValueAsString(paymentRequestforAppointment);
 
         mockMvc.perform(post("/v1/payments/refund")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -282,17 +283,5 @@ public class PaymentControllerTest {
 
 
 
-    private String getAuthToken() throws Exception {
-        String username = "customer@gmail.com";
-        String password = "customerpass";
 
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
-    }
 }

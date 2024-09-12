@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
@@ -80,12 +81,12 @@ public class PetControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void createPet() throws Exception {
         when(petService.addPet(any(PetCreationRequest.class))).thenReturn(petResponse);
 
         mockMvc.perform(post("/v1/pets")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .content(objectMapper.writeValueAsString(petCreationRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -99,6 +100,7 @@ public class PetControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void updatePet() throws Exception {
         String requestJson = objectMapper.writeValueAsString(petUpdateRequest);
 
@@ -106,7 +108,6 @@ public class PetControllerTest {
 
         mockMvc.perform(patch("/v1/pets/{id}", "f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -120,11 +121,11 @@ public class PetControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getPetById() throws Exception {
         when(petService.getPetById("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9")).thenReturn(petResponse);
 
         mockMvc.perform(get("/v1/pets/{id}", "f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -138,23 +139,23 @@ public class PetControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void deletePet() throws Exception {
         Mockito.doNothing().when(petService).deletePet("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9");
 
         mockMvc.perform(delete("/v1/pets/{id}", "f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Pet deleted successfully"));
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getPetsByCustomerId() throws Exception {
         Set<PetResponse> petResponses = Collections.singleton(petResponse);
         when(petService.getPetsByCustomerId("e80bac44-998c-44db-b548-2d03b12e8a25")).thenReturn(petResponses);
 
         mockMvc.perform(get("/v1/pets/customers/{customerId}", "e80bac44-998c-44db-b548-2d03b12e8a25")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result[0].id").value("f7028ff2-2bbd-4943-8d1b-b3e3a4cac2e9"))
@@ -167,13 +168,13 @@ public class PetControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void addPet_SpecieNotFound() throws Exception{
         Mockito.when(petService.addPet(any(PetCreationRequest.class)))
                 .thenThrow(new RuntimeException("Species not found"));
 
         String requestJson = objectMapper.writeValueAsString(petCreationRequest);
         mockMvc.perform(post("/v1/pets")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -183,13 +184,13 @@ public class PetControllerTest {
 
 
     @Test
+    @WithMockUser("CUSTOMER")
     void addPet_CustomerNotFound() throws Exception{
         Mockito.when(petService.addPet(any(PetCreationRequest.class)))
                 .thenThrow(new RuntimeException("Customer not found"));
 
         String requestJson = objectMapper.writeValueAsString(petCreationRequest);
         mockMvc.perform(post("/v1/pets")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -197,13 +198,13 @@ public class PetControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getPetByCustomerId_CustomerNotFound() throws Exception{
         Mockito.when(petService.getPetsByCustomerId(anyString()))
                 .thenThrow(new RuntimeException("Customer not found"));
 
         String requestJson = objectMapper.writeValueAsString(petCreationRequest);
         mockMvc.perform(get("/v1/pets/customers/{customerId}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -211,13 +212,13 @@ public class PetControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void updatePet_PetNotFound() throws Exception{
         Mockito.when(petService.updatePet(anyString(),any(PetUpdateRequest.class)))
                 .thenThrow(new RuntimeException("Pet not found"));
 
         String requestJson = objectMapper.writeValueAsString(petCreationRequest);
         mockMvc.perform(patch("/v1/pets/{id}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -225,6 +226,7 @@ public class PetControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void deletePet_PetNotFound() throws Exception{
         Mockito.doThrow(new AppException(ErrorCode.NOT_FOUND))
                 .when(petService).deletePet(anyString());
@@ -232,14 +234,14 @@ public class PetControllerTest {
 
         String requestJson = objectMapper.writeValueAsString(petCreationRequest);
         mockMvc.perform(delete("/v1/pets/{id}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("Pet not found"));
+                .andExpect(jsonPath("$.message").value("Not found"));
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void addMyPet_CustomerNotFound() throws Exception{
         Mockito.when(petService.addMyPet(any(PetCreationRequest.class)))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -247,7 +249,6 @@ public class PetControllerTest {
 
         String requestJson = objectMapper.writeValueAsString(petCreationRequest);
         mockMvc.perform(post("/v1/pets/my-pet")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound())
@@ -255,6 +256,7 @@ public class PetControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void addMyPet_SpeciesNotFound() throws Exception{
         Mockito.when(petService.addMyPet(any(PetCreationRequest.class)))
                 .thenThrow(new IllegalArgumentException("Species not found"));
@@ -262,7 +264,6 @@ public class PetControllerTest {
 
         String requestJson = objectMapper.writeValueAsString(petCreationRequest);
         mockMvc.perform(post("/v1/pets/my-pet")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -270,6 +271,7 @@ public class PetControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getMyPetList_NotFound() throws Exception{
         Mockito.when(petService.getMyPetList())
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -277,7 +279,6 @@ public class PetControllerTest {
 
         String requestJson = objectMapper.writeValueAsString(petCreationRequest);
         mockMvc.perform(get("/v1/pets/my-pet")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound())
@@ -285,6 +286,7 @@ public class PetControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getPetById_NotFound() throws Exception{
         Mockito.when(petService.getPetById(anyString()))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -292,7 +294,6 @@ public class PetControllerTest {
 
         String requestJson = objectMapper.writeValueAsString(petCreationRequest);
         mockMvc.perform(get("/v1/pets/{id}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound())
@@ -300,6 +301,7 @@ public class PetControllerTest {
     }
 
     @Test
+    @WithMockUser("CUSTOMER")
     void getPetByCustomerEmail_NotFound() throws Exception{
         Mockito.when(petService.getPetByCustomerEmail(anyString()))
                 .thenThrow(new AppException(ErrorCode.NOT_FOUND));
@@ -307,27 +309,11 @@ public class PetControllerTest {
 
         String requestJson = objectMapper.writeValueAsString(petCreationRequest);
         mockMvc.perform(get("/v1/pets/customer-email/{email}","invalidemail")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Not found"));
     }
 
-    private String getAuthToken() throws Exception {
-        String username = "customer@gmail.com";
-        String password = "customerpass";
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
 
-        // Print the response to debug
-        System.out.println("Login Response: " + response);
-
-        // Adjust parsing based on the actual structure
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
-    }
 }

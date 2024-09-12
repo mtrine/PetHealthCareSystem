@@ -70,6 +70,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void createHospitalization() throws Exception {
         // GIVEN
         String requestJson = objectMapper.writeValueAsString(hospitalizationRequest);
@@ -78,7 +79,6 @@ public class HospitalizationControllerTest {
         when(hospitalizationService.createHospitalization(any(HospitalizationRequest.class))).thenReturn(hospitalizationResponse);
 
         mockMvc.perform(post("/v1/hospitalizations")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isOk())
@@ -93,6 +93,7 @@ public class HospitalizationControllerTest {
 
 
     @Test
+    @WithMockUser("STAFF")
     void updateHospitalization() throws Exception {
         // GIVEN
         String requestJson = objectMapper.writeValueAsString(hospitalizationRequest);
@@ -102,7 +103,6 @@ public class HospitalizationControllerTest {
 
         mockMvc.perform(patch("/v1/hospitalizations/hospitalization123")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -110,6 +110,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void getAllHospitalizations() throws Exception {
         // GIVEN
         List<HospitalizationResponse> hospitalizationList = new ArrayList<>();
@@ -119,7 +120,6 @@ public class HospitalizationControllerTest {
         when(hospitalizationService.getAllHospitalization()).thenReturn(hospitalizationList);
 
         mockMvc.perform(get("/v1/hospitalizations")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -127,10 +127,10 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void deleteHospitalization() throws Exception {
         // WHEN, THEN
         mockMvc.perform(delete("/v1/hospitalizations/hospitalization123")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -138,12 +138,12 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void getHospitalization() throws Exception {
         // WHEN, THEN
         when(hospitalizationService.getHospitalizationById(anyString())).thenReturn(hospitalizationResponse);
 
         mockMvc.perform(get("/v1/hospitalizations/hospitalization123")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -151,6 +151,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void getHospitalizationByPet() throws Exception {
         // GIVEN
         List<HospitalizationResponse> hospitalizationList = new ArrayList<>();
@@ -160,7 +161,6 @@ public class HospitalizationControllerTest {
         when(hospitalizationService.getHospitalizationByPetId(anyString())).thenReturn(hospitalizationList);
 
         mockMvc.perform(get("/v1/hospitalizations?petId=pet123")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -168,6 +168,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void createHospitalization_NullCageNumber()throws Exception{
         Mockito.when(hospitalizationService.createHospitalization(any(HospitalizationRequest.class)))
                 .thenThrow(new IllegalArgumentException("Cage number must not be null"));
@@ -176,7 +177,6 @@ public class HospitalizationControllerTest {
         String requestJson = objectMapper.writeValueAsString(hospitalizationRequest);
 
         mockMvc.perform(post("/v1/hospitalizations")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -184,6 +184,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void createHospitalization_NullPetId()throws Exception{
         Mockito.when(hospitalizationService.createHospitalization(any(HospitalizationRequest.class)))
                 .thenThrow(new IllegalArgumentException("Pet ID must not be null"));
@@ -192,7 +193,6 @@ public class HospitalizationControllerTest {
         String requestJson = objectMapper.writeValueAsString(hospitalizationRequest);
 
         mockMvc.perform(post("/v1/hospitalizations")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -200,6 +200,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void createHospitalization_CageNotFound()throws Exception{
         Mockito.when(hospitalizationService.createHospitalization(any(HospitalizationRequest.class)))
                 .thenThrow(new RuntimeException("Cage not found"));
@@ -208,13 +209,13 @@ public class HospitalizationControllerTest {
         String requestJson = objectMapper.writeValueAsString(hospitalizationRequest);
 
         mockMvc.perform(post("/v1/hospitalizations")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Cage not found"));
     }
     @Test
+    @WithMockUser("STAFF")
     void createHospitalization_PetNotFound()throws Exception{
         Mockito.when(hospitalizationService.createHospitalization(any(HospitalizationRequest.class)))
                 .thenThrow(new RuntimeException("Pet not found"));
@@ -223,7 +224,6 @@ public class HospitalizationControllerTest {
         String requestJson = objectMapper.writeValueAsString(hospitalizationRequest);
 
         mockMvc.perform(post("/v1/hospitalizations")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -231,6 +231,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void getHospitalizationById_NullId()throws Exception{
         Mockito.when(hospitalizationService.getHospitalizationById(anyString()))
                 .thenThrow(new IllegalArgumentException("ID must not be null"));
@@ -239,7 +240,6 @@ public class HospitalizationControllerTest {
         String requestJson = objectMapper.writeValueAsString(hospitalizationRequest);
 
         mockMvc.perform(get("/v1/hospitalizations/{hospitalizationId}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -247,6 +247,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void getHospitalizationById_NullID()throws Exception{
         Mockito.when(hospitalizationService.getHospitalizationById(anyString()))
                 .thenThrow(new RuntimeException("Hospitalization not found"));
@@ -255,7 +256,6 @@ public class HospitalizationControllerTest {
         String requestJson = objectMapper.writeValueAsString(hospitalizationRequest);
 
         mockMvc.perform(get("/v1/hospitalizations/{hospitalizationId}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -263,6 +263,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void updateHospitalization_NullId()throws Exception{
         Mockito.when(hospitalizationService.updateHospitalization(anyString(),any(HospitalizationRequest.class)))
                 .thenThrow(new RuntimeException("ID must not be null"));
@@ -271,7 +272,6 @@ public class HospitalizationControllerTest {
         String requestJson = objectMapper.writeValueAsString(hospitalizationRequest);
 
         mockMvc.perform(patch("/v1/hospitalizations/{hospitalizationId}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -279,6 +279,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void updateHospitalization_CageNotFound()throws Exception{
         Mockito.when(hospitalizationService.updateHospitalization(anyString(),any(HospitalizationRequest.class)))
                 .thenThrow(new RuntimeException("Cage number not found"));
@@ -287,7 +288,6 @@ public class HospitalizationControllerTest {
         String requestJson = objectMapper.writeValueAsString(hospitalizationRequest);
 
         mockMvc.perform(patch("/v1/hospitalizations/{hospitalizationId}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -295,6 +295,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void updateHospitalization_PetNotFound()throws Exception{
         Mockito.when(hospitalizationService.updateHospitalization(anyString(),any(HospitalizationRequest.class)))
                 .thenThrow(new RuntimeException("Pet not found"));
@@ -303,7 +304,6 @@ public class HospitalizationControllerTest {
         String requestJson = objectMapper.writeValueAsString(hospitalizationRequest);
 
         mockMvc.perform(patch("/v1/hospitalizations/{hospitalizationId}","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -311,19 +311,20 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void deleteHospitalization_NullID() throws Exception {
         Mockito.doThrow(new IllegalArgumentException("ID must not be null"))
                 .when(hospitalizationService).deleteHospitalization(Mockito.anyString());
 
         // Perform the delete request with an invalid ID
         mockMvc.perform(delete("/v1/hospitalizations/{hospitalizationId}", "null")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())  // Expect HTTP 400 Bad Request
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ID must not be null"));  // Expect the correct error message
     }
 
     @Test
+    @WithMockUser("STAFF")
     void getHospitalizationByPetID_PetNotFound()throws Exception{
         Mockito.when(hospitalizationService.getHospitalizationByPetId(anyString()))
                 .thenThrow(new RuntimeException("Pet not found"));
@@ -333,7 +334,6 @@ public class HospitalizationControllerTest {
 
         mockMvc.perform(get("/v1/hospitalizations","invalid-id")
                         .param("petId","invalid-id")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -341,6 +341,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
+    @WithMockUser("STAFF")
     void getHospitalizationByPetID_NullPetId()throws Exception{
         Mockito.when(hospitalizationService.getHospitalizationByPetId(anyString()))
                 .thenThrow(new RuntimeException("Pet ID must not be null"));
@@ -350,7 +351,6 @@ public class HospitalizationControllerTest {
 
         mockMvc.perform(get("/v1/hospitalizations","invalid-id")
                         .param("petId","null")
-                        .header("Authorization", "Bearer " + getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -358,7 +358,7 @@ public class HospitalizationControllerTest {
     }
 
     @Test
-    @WithMockUser("CUSTOMER")
+    @WithMockUser("STAFF")
     void testGetMyHospitalizationThrowsException() throws Exception {
 
         // Set up mock service to throw an exception
@@ -373,27 +373,4 @@ public class HospitalizationControllerTest {
         // Verify service method was called once
     }
 
-
-
-
-
-
-    private String getAuthToken() throws Exception {
-
-        String username = "admin@group07.com";
-        String password = "admin123";
-
-        String response = mockMvc.perform(post("/v1/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"email\": \"" + username + "\", \"password\": \"" + password + "\"}"))
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        // Print the response to debug
-        System.out.println("Login Response: " + response);
-
-        // Adjust parsing based on the actual structure
-        return new ObjectMapper().readTree(response).get("result").get("token").asText();
-    }
 }
