@@ -7,6 +7,8 @@ import com.group07.PetHealthCare.dto.response.AppointmentResponse;
 import com.group07.PetHealthCare.dto.response.CustomerResponse;
 import com.group07.PetHealthCare.dto.response.ReviewsResponse;
 import com.group07.PetHealthCare.dto.response.SessionResponse;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.service.ReviewsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -150,6 +153,35 @@ public class ReviewsControllerTest {
                 .andExpect(jsonPath("$.result.reviewDate").value(LocalDate.now().toString()));
     }
 
+    @Test
+    void createReview_NotFound()throws Exception {
+        Mockito.when(reviewsService.createReview(any(ReviewsRequest.class)))
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+        String requestJson = objectMapper.writeValueAsString(reviewsRequest);
+
+        mockMvc.perform(post("/v1/reviews")
+                .header("Authorization", "Bearer " + getAuthToken())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson))
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Not found"));
+    }
+
+    @Test
+    void createMyReview_NotFound()throws Exception {
+        Mockito.when(reviewsService.createMyReview(any(ReviewsRequest.class)))
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+        String requestJson = objectMapper.writeValueAsString(reviewsRequest);
+
+        mockMvc.perform(post("/v1/reviews/my-reviews")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Not found"));
+    }
     private String getAuthToken() throws Exception {
         String username = "customer@gmail.com";
         String password = "customerpass";

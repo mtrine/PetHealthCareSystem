@@ -33,7 +33,7 @@ public class CagesService {
     }
 
     @PreAuthorize("hasRole('STAFF')")
-    public CageResponse changeStatusCage(Integer id){
+    public CageResponse getCageById(Integer id){
         return cageMapper.toResponse(cagesRepository.findById(id).orElseThrow(()-> new AppException(ErrorCode.NOT_FOUND)));
     }
 }

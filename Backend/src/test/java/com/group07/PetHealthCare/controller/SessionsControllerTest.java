@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.group07.PetHealthCare.dto.request.ApiResponse;
 import com.group07.PetHealthCare.dto.request.SessionsRequest;
+import com.group07.PetHealthCare.dto.request.VisitScheduleRequest;
 import com.group07.PetHealthCare.dto.response.SessionResponse;
 import com.group07.PetHealthCare.service.SessionsService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +18,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -71,6 +74,21 @@ public class SessionsControllerTest {
                         .content(objectMapper.writeValueAsString(sessionsRequest)))
                 .andExpect(status().isOk());
 
+    }
+
+    @Test
+    void createSession_InvalidTime() throws Exception {
+        when(sessionsService.createSession(any(SessionsRequest.class)))
+        .thenThrow(new RuntimeException("Start time must be before end time"));
+
+        String requestJson = objectMapper.writeValueAsString(sessionsRequest);
+
+        mockMvc.perform(post("/v1/sessions")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Start time must be before end time"));
     }
 
     @Test

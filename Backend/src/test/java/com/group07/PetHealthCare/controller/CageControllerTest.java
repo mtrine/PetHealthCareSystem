@@ -3,6 +3,8 @@ package com.group07.PetHealthCare.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group07.PetHealthCare.dto.request.CageRequest;
 import com.group07.PetHealthCare.dto.response.CageResponse;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.service.CagesService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -106,7 +109,7 @@ public class CageControllerTest {
                 .build();
 
 
-        Mockito.when(cagesService.changeStatusCage(anyInt())).thenReturn(cageResponse);
+        Mockito.when(cagesService.getCageById(anyInt())).thenReturn(cageResponse);
 
         mockMvc.perform(get("/v1/cages/{id}", cageResponse.getCageNumber())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -119,12 +122,26 @@ public class CageControllerTest {
 
     }
 
+    @Test
+    @WithMockUser("ADMIN")
+    void getCageById_NotFound () throws Exception {
+        CageRequest cageRequest = new CageRequest();
+        cageRequest.setStatus(true);
+        cageRequest.setUnitPrice(BigDecimal.valueOf(200000));
+
+        CageResponse cageResponse = CageResponse.builder()
+                .cageNumber(1)
+                .status(true)
+                .unitPrice(BigDecimal.valueOf(200000))
+                .build();
 
 
+        Mockito.when(cagesService.getCageById(anyInt())).thenThrow(new AppException(ErrorCode.NOT_FOUND));
 
-
-
-
-
-
+        mockMvc.perform(get("/v1/cages/{id}",100)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(cageRequest)))
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Not found"));
+    }
 }

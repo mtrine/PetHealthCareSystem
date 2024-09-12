@@ -163,6 +163,11 @@ public class PetControllerTest {
                 .andExpect(jsonPath("$.result[0].customerResponse.name").value("Nguyen Ngoc Quynh Nhu"));
     }
 
+    @Test
+    void addPet_SpiecieNotFound() throws Exception{
+
+    }
+
     private String getAuthToken() throws Exception {
         String username = "customer@gmail.com";
         String password = "customerpass";

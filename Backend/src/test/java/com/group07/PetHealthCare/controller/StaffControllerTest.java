@@ -4,23 +4,28 @@ package com.group07.PetHealthCare.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group07.PetHealthCare.dto.request.UserRequest;
 import com.group07.PetHealthCare.dto.response.StaffResponse;
+import com.group07.PetHealthCare.exception.AppException;
+import com.group07.PetHealthCare.exception.ErrorCode;
 import com.group07.PetHealthCare.service.StaffService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -96,6 +101,21 @@ public class StaffControllerTest {
                 .andExpect(jsonPath("$.result.role").value("STAFF"))
                 .andExpect(jsonPath("$.result.phoneNumber").value("0969036238"))
                 .andExpect(jsonPath("$.result.password").value("staffpass"));
+    }
+
+    @Test
+    void getStaffById_StaffNotFound() throws Exception {
+        Mockito.when(staffService.getStaffById(anyString()))
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+        String requestJson = objectMapper.writeValueAsString(staffRequest);
+
+        mockMvc.perform(get("/v1/staffs/{staffId}","invalid-id")
+                        .header("Authorization", "Bearer " + getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Not found"));
     }
 
     private String getAuthToken() throws Exception {

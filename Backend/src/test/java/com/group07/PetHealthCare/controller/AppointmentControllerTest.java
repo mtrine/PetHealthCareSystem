@@ -15,7 +15,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -376,4 +378,66 @@ public class AppointmentControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("Not found"));
     }
+
+    @Test
+    @WithMockUser("ADMIN")
+    void addAppointmentByVeterinarian_VeterinarianNotFound() throws Exception {
+        Mockito.when(appointmentService.addAppointmentByVeterinarian(any(AppointmentRequest.class)))
+                .thenThrow(new RuntimeException("Veterinarian not found"));
+
+        String requestJson = objectMapper.writeValueAsString(appointmentRequest);
+
+        mockMvc.perform(post("/v1/appointments/addByVeterinarian")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Veterinarian not found"));
+    }
+
+    @Test
+    @WithMockUser("ADMIN")
+    void addAppointmentByVeterinarian_SessionNotFound() throws Exception {
+        Mockito.when(appointmentService.addAppointmentByVeterinarian(any(AppointmentRequest.class)))
+                .thenThrow(new RuntimeException("Session not found"));
+
+        String requestJson = objectMapper.writeValueAsString(appointmentRequest);
+
+        mockMvc.perform(post("/v1/appointments/addByVeterinarian")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Session not found"));
+    }
+
+    @Test
+    @WithMockUser("ADMIN")
+    void addAppointmentByVeterinarian_SessionNotAvailable() throws Exception {
+        Mockito.when(appointmentService.addAppointmentByVeterinarian(any(AppointmentRequest.class)))
+                .thenThrow(new RuntimeException("Veterinarian's session not available"));
+
+        String requestJson = objectMapper.writeValueAsString(appointmentRequest);
+
+        mockMvc.perform(post("/v1/appointments/addByVeterinarian")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("Veterinarian's session not available"));
+    }
+
+    @Test
+    @WithMockUser("ADMIN")
+    void getAppointmentByCustomerId_NotFound() throws Exception {
+        Mockito.when(appointmentService.getAppointmentByCustomerId(anyString()))
+                .thenThrow(new AppException(ErrorCode.NOT_FOUND));
+
+        String requestJson = objectMapper.writeValueAsString(appointmentRequest);
+
+        mockMvc.perform(get("/v1/appointments/{customerId}/customer","invalid-id")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isNotFound());
+    }
+
+
+
 }
