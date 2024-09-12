@@ -17,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -38,11 +39,10 @@ public class CustomerControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     private CustomerService customerService;
 
-    @InjectMocks
-    private CustomerController customerController;
+
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -50,7 +50,7 @@ public class CustomerControllerTest {
     private CustomerResponse customerResponse1;
     private CustomerResponse customerResponse2;
     private UserRequest customerRequest;
-
+    private List<CustomerResponse> customers;
     @BeforeEach
     public void initData() {
         MockitoAnnotations.openMocks(this);
@@ -84,12 +84,12 @@ public class CustomerControllerTest {
                 .phoneNumber("0969036238")
                 .sex(true)
                 .build();
+        customers = Arrays.asList(customerResponse1, customerResponse2);
     }
 
     @Test
     @WithMockUser("ADMIN")
     public void getAllCustomers() throws Exception {
-        List<CustomerResponse> customers = Arrays.asList(customerResponse1, customerResponse2);
         Mockito.when(customerService.getAllCustomers()).thenReturn(customers);
 
         mockMvc.perform(get("/v1/customers")
